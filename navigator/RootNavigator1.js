@@ -1,26 +1,21 @@
-import { View, ActivityIndicator } from 'react-native';
-import { TailwindProvider } from 'tailwind-rn';
-import utilities from './tailwind.json';
-import { NavigationContainer } from '@react-navigation/native';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './config/firebase';
 import React, { useState, createContext, useContext, useEffect } from 'react';
-import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AuthStack from './navigator/AuthStack';
+import { NavigationContainer } from '@react-navigation/native';
+import { View, ActivityIndicator } from 'react-native';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../config/firebase';
+import TabNavigator from './TabNavigator';
 
-const AuthenticatedUserContext = createContext({});
 const RootStack = createNativeStackNavigator();
 
-const AuthenticatedUserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+function AuthStack() {
   return (
-    <AuthenticatedUserContext.Provider value={{ user, setUser }}>
-      {children}
-    </AuthenticatedUserContext.Provider>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Login' component={Login} />
+      <Stack.Screen name='Signup' component={Signup} />
+    </Stack.Navigator>
   );
-};
-
+}
 
 function RootNavigator() {
 
@@ -55,23 +50,10 @@ function RootNavigator() {
   return (
     <RootStack.Navigator>
       <RootStack.Group>
-        <RootStack.Screen name="MainNavigator" component={TabNavigator} options={{ headerShown: false }} />
+        <RootStack.Screen name="MainNavigator" component={TabNavigator} options={{ headerShown: false }} /> 
       </RootStack.Group>
     </RootStack.Navigator>
   )
 }
 
-
-export default function App() {
-  return (
-    <TailwindProvider utilities={utilities}>
-      <NavigationContainer>
-        <AuthenticatedUserProvider>
-          <RootNavigator />
-        </AuthenticatedUserProvider>
-      </NavigationContainer>
-    </TailwindProvider>
-
-  );
-}
-
+export default RootNavigator
