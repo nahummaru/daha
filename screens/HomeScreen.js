@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useContext } from 'react';
 import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native'
 import { useTailwind } from 'tailwind-rn';
 import { NavigationContainer } from '@react-navigation/native';
 import TopTabNavigator from '../navigator/TopTabNavigator';
+import { user } from '../App';
 import { Input } from '@rneui/themed';
 
 

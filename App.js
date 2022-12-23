@@ -26,6 +26,7 @@ function RootNavigator() {
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
+  
   useEffect(() => {
     // onAuthStateChanged returns an unsubscriber
     const unsubscribeAuth = onAuthStateChanged(
@@ -47,18 +48,19 @@ function RootNavigator() {
     );
   }
 
-  if (!user) {
+  if (user) {
+    console.log(user.email)
     return (
-      <AuthStack />
+      <RootStack.Navigator>
+        <RootStack.Group>
+          <RootStack.Screen name="MainNavigator" component={TabNavigator} options={{ headerShown: false }} />
+        </RootStack.Group>
+      </RootStack.Navigator>
     )
-  }
-  return (
-    <RootStack.Navigator>
-      <RootStack.Group>
-        <RootStack.Screen name="MainNavigator" component={TabNavigator} options={{ headerShown: false }} />
-      </RootStack.Group>
-    </RootStack.Navigator>
+  } return (
+    <AuthStack />
   )
+  
 }
 
 

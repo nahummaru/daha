@@ -3,7 +3,7 @@ import Login from '../screens/LoginScreen';
 import Signup from '../screens/SignUpScreen';
 
 
-const AuthStack = ({navigation}) => {
+const AuthStack = ({}) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Login' component={Login} />
