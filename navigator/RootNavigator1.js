@@ -6,6 +6,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import TabNavigator from './TabNavigator';
 
+
 const RootStack = createNativeStackNavigator();
 
 function AuthStack() {

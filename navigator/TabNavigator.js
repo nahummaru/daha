@@ -1,15 +1,15 @@
 import React, { useLayoutEffect } from 'react'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/FontAwesome'
 import { View, Text, TouchableOpacity } from 'react-native'
-
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import Post from '../screens/PostScreen';
 import MessagesStack from './MessageStack';
-import PostScreen from '../screens/PostScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+import PostModal from '../screens/PostModal';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +20,7 @@ const TabNavigator = () => {
   // these props define the top header of each screen from the bottom navigator
   return (
     <Tab.Navigator screenOptions={{
+      title: '',
       tabBarOptions: {
         showIcon: true
       },
@@ -44,21 +45,24 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen}
         options={{
+          title: '',
           tabBarIcon: ({ }) => (
-            <Icon name="home" size={20} color="white" />
+            <Ionicons name="home" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
           )
         }} />
       <Tab.Screen name="Messages" component={MessagesStack}
         options={{
           tabBarIcon: ({ }) => (
-            <Icon name="home" size={20} color="white" />
+            <Ionicons name="chatbubble" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
           )
         }}
       />
-      <Tab.Screen name="PostScreen" component={PostScreen} options={({ navigation }) => ({
-        tabBarButton: (props) => (
 
-          <TouchableOpacity onPress={() => navigation.navigate(PostScreen)}
+      <Tab.Screen name="PostModal" component={PostModal} options={({ navigation }) => ({
+        presentation: 'modal',
+        tabBarButton: (props) => (
+          <TouchableOpacity
+            onPress={() => navigation.navigate(PostModal)}
             style={{
               borderWidth: 1,
               borderColor: 'rgba(0,0,0,0.2)',
@@ -68,26 +72,28 @@ const TabNavigator = () => {
               height: 70,
               backgroundColor: '#fff',
               borderRadius: 50,
-            }}
-          >
-            <Icon name={"plus"} size={35} color="#a5353a" />
+
+            }}>
+            <Ionicons name={"add"} size={50} color="#a5353a" />
           </TouchableOpacity>
-        ),
-      })} />
+        )
+      })}
+
+      />
+
       <Tab.Screen name="History" component={HistoryScreen}
         options={{
           tabBarIcon: ({ }) => (
-            <Icon name="home" size={20} color="white" />
+            <Ionicons name="newspaper" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
           )
         }} />
       <Tab.Screen name="Profile" component={ProfileScreen}
         options={{
           tabBarIcon: ({ }) => (
-            <Icon name="home" size={20} color="white" />
+            <Ionicons name="person" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
           )
         }}
       />
-
     </Tab.Navigator>
   )
 }
