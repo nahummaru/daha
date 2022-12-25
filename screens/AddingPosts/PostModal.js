@@ -10,16 +10,16 @@ const PostModal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text styles={styles.prefix}>Need a new outfit?</Text>
+      <Text style={styles.header}> Create Post</Text>
+      <Text style={styles.prefix}>Need a new outfit?</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddDaha')}>
-        <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>DAHA</Text>
+      <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 30 }}>DAHA</Text>
       </TouchableOpacity>
-      <Text styles={styles.prefix}>Cleaning out your closet?</Text>
-
+      <Text style={styles.bottom}>Cleaning out your closet?</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddDawa')}>
-        <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>DAWA</Text>
+      <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 30 }}>DAWA</Text>
       </TouchableOpacity>
-    </View>
+      </View>
   )
 }
 
@@ -29,27 +29,50 @@ export default PostModal
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 20,
     flex: 1,
     flexDirection: 'column',
     position: 'relative '
   },
   title: {
-    fontSize: 36,
+    fontSize: 70,
     fontWeight: 'bold',
     color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
   },
   prefix: {
-    fontSize: 36,
+    fontSize: 25,
+    top: 100,
+    fontWeight: 'bold',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+
+  bottom: {
+    top: 100,
+    fontSize: 25,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontWeight: 'bold'
+  },
+
+  header: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    fontSize: 20,
     fontWeight: 'bold',
   },
+
   button: {
     backgroundColor: "#a5353a",
-    height: 58,
+    height: 68,
+    width: 200,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 150,
+    marginTop: 120,
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
 })
