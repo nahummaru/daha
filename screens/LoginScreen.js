@@ -2,7 +2,6 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import {React, useState} from 'react';
 import { View, Text, Alert , StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity} from 'react-native';
 import { auth } from '../config/firebase';
-import SignUpScreen from './SignUpScreen';
 
 
 const backImage = require("../assets/icon.png");

@@ -9,6 +9,12 @@ const MessagesScreen = () => {
     const tailwind = useTailwind();
     const navigation = useNavigation();
 
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerTitle: "sup",
+        })
+    }, []);
+
     return (
         <ScrollView>
             <SafeAreaView>

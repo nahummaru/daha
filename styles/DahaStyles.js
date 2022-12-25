@@ -62,6 +62,7 @@ export const PostImg = styled.Image`
     /* margin-top: 15px; */
 `;
 
+
 export const InteractionWrapper = styled.View`
     flex-direction: row;
     justify-content: space-around;

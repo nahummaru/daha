@@ -18,6 +18,7 @@ const Posts = [
     liked: true,
     likes: '14',
     comments: '5',
+
   },
   {
     id: '2',

@@ -10,11 +10,11 @@ const PostModal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text styles={styles.prefix}>Hello</Text>
+      <Text styles={styles.prefix}>Need a new outfit?</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddDaha')}>
         <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>DAHA</Text>
       </TouchableOpacity>
-      <Text styles={styles.prefix}>Hello</Text>
+      <Text styles={styles.prefix}>Cleaning out your closet?</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddDawa')}>
         <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}>DAWA</Text>
