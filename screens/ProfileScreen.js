@@ -1,15 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useLayoutEffect} from 'react';
+import React, { useLayoutEffect } from 'react';
 //import { auth } from '../config/firebase';
 import { getAuth, signOut } from "firebase/auth";
 import { AntDesign } from '@expo/vector-icons';
-import { Button, SafeAreaView,ScrollView, Text, View, TouchableOpacity } from 'react-native'
-import {useTailwind} from 'tailwind-rn';
+import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity } from 'react-native'
+import { useTailwind } from 'tailwind-rn';
+import Login from './LoginScreen';
 
 
 const auth = getAuth();
 
-const MessagesScreen = ({}) => {
+const MessagesScreen = ({ }) => {
     const tailwind = useTailwind();
     const navigation = useNavigation();
     useLayoutEffect(() => {
@@ -18,7 +19,7 @@ const MessagesScreen = ({}) => {
                 <TouchableOpacity style={{
                     marginRight: 15
                 }}
-                    onPress={ signOutFunction }
+                    onPress={signOutFunction}
                 >
                     <AntDesign name="logout" size={24} color="white" />
                 </TouchableOpacity>
@@ -27,7 +28,7 @@ const MessagesScreen = ({}) => {
     }, [])
     const signOutFunction = () => {
         signOut(auth).then(() => {
-            navigation.replace('LoginScreen')
+            navigation.replace('Login')
         }).catch((error) => {
             //an error happened
         });
