@@ -8,7 +8,10 @@ import HistoryScreen from '../screens/HistoryScreen';
 import MessagesStack from './MessageStack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import PostModal from '../screens/PostModal';
+import PostModal from '../screens/AddingPosts/PostModal';
+import PostStack from './PostStack';
+
+
 
 
 const Tab = createBottomTabNavigator();
@@ -57,11 +60,13 @@ const TabNavigator = () => {
         }}
       />
 
-      <Tab.Screen name="PostModal" component={PostModal} options={({ navigation }) => ({
+      <Tab.Screen name="PostStack" component={PostStack} options={({ navigation }) => ({
         presentation: 'modal',
+        headerBackTitleVisible: true,  // this
+        headerBackTitle: "",  // add this
         tabBarButton: (props) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate(PostModal)}
+            onPress={() => navigation.navigate('PostStack')}
             style={{
               borderWidth: 1,
               borderColor: 'rgba(0,0,0,0.2)',

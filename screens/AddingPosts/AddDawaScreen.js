@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const PostModal = () => {
+const AddDawaScreen = () => {
   return (
     <View>
-      <Text> fuck</Text>
+      <Text>dawa</Text>
     </View>
   )
 }
 
-export default PostModal
+export default AddDawaScreen
