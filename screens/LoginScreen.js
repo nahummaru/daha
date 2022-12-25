@@ -2,7 +2,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import {React, useState} from 'react';
 import { View, Text, Alert , StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity} from 'react-native';
 import { auth } from '../config/firebase';
-import SignUp from './SignUpScreen';
+import SignUpScreen from './SignUpScreen';
+
 
 const backImage = require("../assets/icon.png");
 
@@ -51,7 +52,7 @@ const Login = ({navigation}) => {
           
           <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center'}}>
             <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate(SignUp)}>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
               <Text style={{color: '#f57c00', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
             </TouchableOpacity>
           </View>
