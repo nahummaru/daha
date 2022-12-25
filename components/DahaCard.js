@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 const DahaCard = ({ item }) => {
   return (
     <Card>
-      
+
       <TopLevel>
         <UserInfo>
           <UserImg source={item.userImg} />
@@ -28,6 +28,8 @@ const DahaCard = ({ item }) => {
 
       </TopLevel>
       <PostText>{item.post}</PostText>
+
+
     </Card>
   )
 }
