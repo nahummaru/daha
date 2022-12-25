@@ -13,7 +13,6 @@ import PostModal from '../screens/PostModal';
 
 const Tab = createBottomTabNavigator();
 
-
 const TabNavigator = () => {
   const navigation = useNavigation();
 
@@ -47,13 +46,13 @@ const TabNavigator = () => {
         options={{
           title: '',
           tabBarIcon: ({ }) => (
-            <Ionicons name="home" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
+            <Ionicons name="home" size={30} color="white" style={{ marginTop: 15, height: 30 }} />
           )
         }} />
       <Tab.Screen name="Messages" component={MessagesStack}
         options={{
           tabBarIcon: ({ }) => (
-            <Ionicons name="chatbubble" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
+            <Ionicons name="chatbubble" size={30} color="white" style={{ marginTop: 15, height: 30, left: -10 }} />
           )
         }}
       />
@@ -68,13 +67,15 @@ const TabNavigator = () => {
               borderColor: 'rgba(0,0,0,0.2)',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 70,
-              height: 70,
+              top: -14,
+              //left: -4.5,
+              width: 60,
+              height: 60,
               backgroundColor: '#fff',
-              borderRadius: 50,
+              borderRadius: 60,
 
             }}>
-            <Ionicons name={"add"} size={50} color="#a5353a" />
+            <Ionicons name={"add"} size={40} color="#a5353a" style={{right: -1.5, top: 1}} />
           </TouchableOpacity>
         )
       })}
@@ -84,13 +85,13 @@ const TabNavigator = () => {
       <Tab.Screen name="History" component={HistoryScreen}
         options={{
           tabBarIcon: ({ }) => (
-            <Ionicons name="newspaper" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
+            <Ionicons name="newspaper" size={30} color="white" style={{ marginTop: 15, height: 30, right: -10 }} />
           )
         }} />
       <Tab.Screen name="Profile" component={ProfileScreen}
         options={{
           tabBarIcon: ({ }) => (
-            <Ionicons name="person" size={30} color="white" style={{ marginTop: 0, height: 30 }} />
+            <Ionicons name="person" size={30} color="white" style={{ marginTop: 15, height: 30 }} />
           )
         }}
       />
