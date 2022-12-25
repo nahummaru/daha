@@ -2,7 +2,7 @@
 DAHA is a college-specific platform facilitating peer-to-peer borrowing and selling. instead of just listing items for rent or sale, like a traditional marketplace app, students can also request items they need.
 ## How to clone
 
-Clone the repo
+Clone the repo in the desired directory
 ```
 git clone https://github.com/muhan421/daha.git
 ```
