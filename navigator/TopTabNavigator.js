@@ -7,20 +7,21 @@ import Dawa from '../screens/DawaScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
-const TopTabNavigator = () => {
-  const navigation = useNavigation();
+const TopTabNavigator = ({navigation}) => {
 
-  // TODO: Update the tabBarIndicator to be the correct color
   return (
     <Tab.Navigator screenOptions= {( {route}) => ({
       headerShown: true,
       tabBarInactiveTintColor: "gray",
+
       tabBarLabelStyle: {
         fontSize: 17,
         fontWeight: "bold",
       },
       tabBarStyle: {
         borderLeftColor: "black", 
+        backgroundColor: "#F6F7FB"
+
         
       }, 
       tabBarIndicatorStyle: {
