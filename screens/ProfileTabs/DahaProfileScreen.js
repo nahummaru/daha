@@ -10,7 +10,7 @@ import DahaCard from '../../components/DahaCard';
 const Posts = [
   {
     id: '1',
-    userName: 'Jenny Doe',
+    userName: 'Nahum Maru',
     userImg: require('../../assets/users/user-3.jpg'),
     postTime: '4 mins ago',
     post:
