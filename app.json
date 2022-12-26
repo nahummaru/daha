@@ -11,6 +11,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "eas": {
+        "projectId": "a83c749f-b87f-4326-8940-74c08250680c"
+      }
+    }, 
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -18,16 +23,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.nahummaru.daha-app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.nahummaru.dahaapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "@react-native-firebase/app"
+    ]
   }
 }

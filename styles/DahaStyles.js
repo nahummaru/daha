@@ -14,7 +14,6 @@ export const Card = styled.View`
     border-radius: 5px;
 `;
 
-
 export const UserInfo = styled.View`
     flex-direction: row;
     justify-content: flex-start;
@@ -67,6 +66,7 @@ export const InteractionWrapper = styled.View`
     flex-direction: row;
     justify-content: space-around;
     align-self: flex-end;
+    align-items: end;
     padding: 15px;
     padding-right: 10px;
 
@@ -75,6 +75,7 @@ export const InteractionWrapper = styled.View`
 export const Interaction = styled.TouchableOpacity`
     flex-direction: row;
     justify-content: center;
+    
     border-radius: 5px;
     padding: 2px 5px;
     background-color: 'transparent';
@@ -85,6 +86,7 @@ export const InteractionText = styled.Text`
     font-size: 12px;
     font-weight: bold;
     color: ${props => props.active ? '#a5353a' : '#333'};
+
     margin-top: 5px;
     margin-left: 5px;
 `;

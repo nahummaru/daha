@@ -19,18 +19,32 @@ export default {
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      "@react-native-firebase/app",
+      [
+       "expo-build-properties",
+        {
+         "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.nahummaru.daha-app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.nahummaru.dahaapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }, 
+    },
     extra: {
       apiKey: process.env.API_KEY,
       authDomain: process.env.AUTH_DOMAIN,
@@ -38,7 +52,10 @@ export default {
       storageBucket: process.env.STORAGE_BUCKET,
       messagingSenderId: process.env.MESSAGING_SENDER_ID,
       appId: process.env.APP_ID,
-      measurementId: process.env.MEASUREMENT_ID
+      measurementId: process.env.MEASUREMENT_ID, 
+      "eas": {
+        "projectId": "a83c749f-b87f-4326-8940-74c08250680c"
+      }
     }
   }
 }

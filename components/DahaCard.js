@@ -27,6 +27,7 @@ const DahaCard = ({ item }) => {
         </InteractionWrapper>
 
       </TopLevel>
+      
       <PostText>{item.post}</PostText>
 
 
