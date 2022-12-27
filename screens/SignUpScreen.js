@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
+import Login from './LoginScreen';
+
 
 const backImage = require("../assets/icon.png");
 
@@ -10,10 +12,10 @@ export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onHandleSignup = () => {
+  const onHandleSignup = ({navigation}) => {
     if (email !== '' && password !== '') {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => console.log('Signup success'))
+        .then(() => {navigation.navigate('Login')})
         .catch((err) => Alert.alert("Login error", err.message));
     }
   };
