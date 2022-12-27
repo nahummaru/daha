@@ -49,10 +49,7 @@ function RootNavigator() {
   }
 
   if (user) {
-
-    console.log(user.uid)
-    console.log(user.email)
-
+    console.log(user)
     return (
       <RootStack.Navigator>
         <RootStack.Group>
