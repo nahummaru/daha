@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect } from 'react';
+import React, { useContext } from 'react';
 //import { auth } from '../config/firebase';
 import { getAuth, signOut } from "firebase/auth";
 import { AntDesign, Entypo } from '@expo/vector-icons';
@@ -13,7 +13,7 @@ import {
 } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Settings from './SettingsScreen';
-import TopTabNavigator from '../navigator/TopTabNavigator';
+import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
 
 
@@ -24,6 +24,10 @@ const auth = getAuth();
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
+    const {user, setUser} = useContext(AuthenticatedUserContext);
+
+    console.log(user)
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -54,6 +58,7 @@ const ProfileScreen = () => {
                         />
                     </View>
                 </View>
+                <Text>This is the UID: {user.uid}</Text>
             </View>
 
 
