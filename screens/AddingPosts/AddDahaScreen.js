@@ -4,7 +4,7 @@ import { AuthenticatedUserContext } from '../../App.js';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
 
 
-import { database } from '../../config/firebase.js';
+import { db } from '../../config/firebase.js';
 
 
 
@@ -19,7 +19,7 @@ const AddDahaScreen = ({ navigation }) => {
 
   async function postDaha(user, postText) {
     navigation.navigate('Home')
-    const docRef = await addDoc(collection(database, "dahas"), {
+    const docRef = await addDoc(collection(db, "dahas"), {
       uidUser: user.uid,
       postText: postText,
       postTime: Timestamp.now()
