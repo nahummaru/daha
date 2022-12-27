@@ -39,7 +39,8 @@ export default {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
+      }, 
+      "googleServicesFile": "./google-services.json",
       "package": "com.nahummaru.dahaapp"
     },
     "web": {

@@ -49,7 +49,7 @@ const Login = ({navigation}) => {
             <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}> Log In</Text>
           </TouchableOpacity>
           
-          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center'}}>
+          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'flex-end', alignSelf: 'center'}}>
             <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
               <Text style={{color: '#f57c00', fontWeight: '600', fontSize: 14}}> Sign Up</Text>

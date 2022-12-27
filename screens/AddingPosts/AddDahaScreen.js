@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: "black",
-    alignSelf: "left",
+    alignSelf: "flex-start",
     marginTop: 30,
     paddingBottom: 12,
   },
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-    justifyContent: 'top',
+    justifyContent: 'flex-start',
     marginHorizontal: 30,
   },
   button: {

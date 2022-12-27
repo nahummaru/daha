@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "529087395137",
+    "project_id": "chat-app-41b05",
+    "storage_bucket": "chat-app-41b05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529087395137:android:b5d69bafb440fd9ac69dc0",
+        "android_client_info": {
+          "package_name": "com.nahummaru.dahaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529087395137-kphkq6n7n9r8b1hcdledg07e4c9sn5bu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVD7j6DE3p2TVTLJ7-UfdoIgKunwFriu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529087395137-kphkq6n7n9r8b1hcdledg07e4c9sn5bu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "529087395137-4ssh7cmt7pcf69etjeb3tis2lrbnr1d7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nahummaru.daha-app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

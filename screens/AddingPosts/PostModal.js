@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flex: 1,
     flexDirection: 'column',
-    position: 'relative '
+    position: 'relative'
   },
   title: {
     fontSize: 70,

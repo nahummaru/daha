@@ -66,7 +66,7 @@ export const InteractionWrapper = styled.View`
     flex-direction: row;
     justify-content: space-around;
     align-self: flex-end;
-    align-items: end;
+    align-items: flex-end;
     padding: 15px;
     padding-right: 10px;
 
