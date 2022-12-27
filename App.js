@@ -9,7 +9,8 @@ import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigator/AuthStack';
 
-const AuthenticatedUserContext = createContext({});
+
+export const AuthenticatedUserContext = createContext({});
 const RootStack = createNativeStackNavigator();
 
 const AuthenticatedUserProvider = ({ children }) => {
@@ -49,6 +50,7 @@ function RootNavigator() {
   }
 
   if (user) {
+    console.log(user.uid)
     console.log(user.email)
     return (
       <RootStack.Navigator>

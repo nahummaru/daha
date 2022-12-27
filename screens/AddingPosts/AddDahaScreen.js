@@ -1,9 +1,14 @@
-import React from 'react'
+import React, {useContext, useState} from 'react'
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity } from 'react-native';
+import {AuthenticatedUserContext} from '../../App.js';
 
 
 
 const AddDahaScreen = () => {
+
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+  console.log(user)
+
 
 
   return (

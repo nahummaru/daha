@@ -9,6 +9,8 @@ import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSh
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { signOut } from '@firebase/auth';
+import { auth } from '../config/firebase';
 
 
 
@@ -32,6 +34,10 @@ const ProfileStack = ({ navigation }) => {
           <TouchableOpacity style={{ marginRight: 15 }}
             onPress={() => { navigation.navigate("Settings") }} >
             <AntDesign name="setting" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity style={{ marginRight: 15 }}
+            onPress={ signOutFunction} >
+            <AntDesign name="home" size={24} color="white" />
           </TouchableOpacity>
         </HeaderButtons>
       ),

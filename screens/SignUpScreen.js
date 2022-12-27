@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
 import Login from './LoginScreen';
 
 const backImage = require("../assets/icon.png");
+import { AuthenticatedUserContext} from '../App.js'
 
 
 const addUserToDatabase = () => {
@@ -12,6 +13,9 @@ const addUserToDatabase = () => {
 }
 
 export default function SignUpScreen({ navigation }) {
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+
+
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
