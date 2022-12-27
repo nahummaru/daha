@@ -10,10 +10,10 @@ import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSh
 import { AntDesign } from '@expo/vector-icons';
 
 import { createStackNavigator } from '@react-navigation/stack';
+
+import { signOut } from '@firebase/auth';
+import { auth } from '../config/firebase';
 import Login from '../screens/LoginScreen';
-
-
-
 const Stack = createStackNavigator();
 const auth = getAuth();
 
@@ -28,12 +28,18 @@ const ProfileStack = ({ navigation }) => {
             onPress={() => { navigation.navigate("Settings") }} >
             <AntDesign name="setting" size={24} color="white" />
           </TouchableOpacity>
+
+          <TouchableOpacity style={{ marginRight: 15 }}
+            onPress={ signOutFunction} >
+            <AntDesign name="home" size={24} color="white" />
+
           <TouchableOpacity style={{
             marginRight: 15
           }}
             onPress={signOutFunction}
           >
             <AntDesign name="logout" size={24} color="white" />
+
           </TouchableOpacity>
         </HeaderButtons>
       ),
