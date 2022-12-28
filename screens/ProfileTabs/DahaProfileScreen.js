@@ -1,17 +1,17 @@
-import { Input } from '@rneui/themed'
 import React from 'react'
-import { View, Text, ScrollView, SafeAreaView, Button, FlatList } from 'react-native'
-import { useTailwind } from 'tailwind-rn'
-import { Container } from '../styles/DahaStyles'
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DahaCard from '../components/DahaCard'
+import { View, Text, FlatList } from 'react-native'
+import { Container } from '../../styles/DahaStyles';
+import DahaCard from '../../components/DahaCard';
+
+
+
 
 
 const Posts = [
   {
     id: '1',
     userName: 'Nahum Maru',
-    userImg: require('../assets/users/user-3.jpg'),
+    userImg: require('../../assets/users/user-3.jpg'),
     postTime: '4 mins ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
@@ -23,7 +23,7 @@ const Posts = [
   {
     id: '2',
     userName: 'John Doe',
-    userImg: require('../assets/users/user-1.jpg'),
+    userImg: require('../../assets/users/user-1.jpg'),
     postTime: '2 hours ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
@@ -32,7 +32,7 @@ const Posts = [
   {
     id: '3',
     userName: 'Ken William',
-    userImg: require('../assets/users/user-4.jpg'),
+    userImg: require('../../assets/users/user-4.jpg'),
     postTime: '1 hours ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
@@ -42,7 +42,7 @@ const Posts = [
   {
     id: '4',
     userName: 'Selina Paul',
-    userImg: require('../assets/users/user-6.jpg'),
+    userImg: require('../../assets/users/user-6.jpg'),
     postTime: '1 day ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
@@ -52,7 +52,7 @@ const Posts = [
   {
     id: '5',
     userName: 'Christy Alex',
-    userImg: require('../assets/users/user-7.jpg'),
+    userImg: require('../../assets/users/user-7.jpg'),
     postTime: '2 days ago',
     post:
       'Hey there, this is my test for a post of my social app in React Native.',
@@ -61,7 +61,7 @@ const Posts = [
 ];
 
 
-const DahaScreen = () => {
+const DahaProfileScreen = () => {
 
   return (
     <Container>
@@ -69,11 +69,11 @@ const DahaScreen = () => {
         data={Posts}
         renderItem={({ item }) => <DahaCard item={item} />}
         keyExtractor={item => item.id}
-        showsHorizontalScrollIndicator ={false}
+        showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
     </Container>
   )
 }
 
-export default DahaScreen
+export default DahaProfileScreen

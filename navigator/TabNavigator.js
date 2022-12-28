@@ -7,9 +7,8 @@ import ProfileScreen from '../screens/ProfileScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import MessagesStack from './MessageStack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import PostModal from '../screens/AddingPosts/PostModal';
 import PostStack from './PostStack';
+import ProfileStack from './ProfileStack';
 
 
 
@@ -93,7 +92,7 @@ const TabNavigator = () => {
             <Ionicons name="newspaper" size={30} color="white" style={{ marginTop: 15, height: 30, right: -10 }} />
           )
         }} />
-      <Tab.Screen name="Profile" component={ProfileScreen}
+      <Tab.Screen name="Profile" component={ProfileStack}
         options={{
           tabBarIcon: ({ }) => (
             <Ionicons name="person" size={30} color="white" style={{ marginTop: 15, height: 30 }} />

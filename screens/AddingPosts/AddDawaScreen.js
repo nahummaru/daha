@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
@@ -252,7 +253,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10,
   },
-
 
   whiteSheet: {
     width: '100%',

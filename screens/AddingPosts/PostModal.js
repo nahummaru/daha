@@ -10,7 +10,6 @@ const PostModal = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}> Create Post</Text>
       <Text style={styles.prefix}>Need a new outfit?</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddDaha')}>
       <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 30 }}>DAHA</Text>
