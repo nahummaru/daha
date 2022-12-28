@@ -6,7 +6,7 @@ import Login from './LoginScreen';
 
 
 const backImage = require("../assets/icon.png");
-import { AuthenticatedUserContext} from '../App.js'
+import { AuthenticatedUserContext } from '../App.js'
 
 
 const addUserToDatabase = () => {
@@ -21,11 +21,15 @@ export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const onHandleSignup = ({navigation}) => {
+  const onHandleSignup = ({ navigation }) => {
     if (email !== '' && password !== '') {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {navigation.navigate('Login')})
+        .then(() => { navigation.navigate('Login') })
         .catch((err) => Alert.alert("Login error", err.message));
+
+      // CALL A FUNCTION THAT CREATES A USER
+      // WE CAN ACCESS UID, EMAIL AND THAT'LL BE THE USER
+      // THEN IN THE NEXT PAGE WE WILL A CREATE PROFILE PAGE
     }
   };
 
