@@ -44,7 +44,6 @@ const AddDahaScreen = ({ navigation }) => {
           textContentType="emailAddress"
           autoFocus={true}
           onChangeText={(text) => setPostText(text)}
-
         />
 
         <TouchableOpacity style={styles.button} onPress={() => postDaha(user, postText)}>
