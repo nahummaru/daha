@@ -196,7 +196,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexShrink: 1,
     backgroundColor: "#fff",
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center'
   },
 
   item: {
@@ -269,17 +270,14 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    flexGrow: 1,
     bottom: 10,
     backgroundColor: "#a5353a",
     height: 58,
-    width: 400,
+    width: '90%',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    left: '3%'
+    alignSelf: 'center'
   },
 
   iconButton: {
