@@ -16,7 +16,12 @@ const data = [
 function AddDawaScreen() {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
-  const [isTrue, setIsTrue] = useState(true);
+  const [isNew, setIsNew] = useState(false);
+  const [isUsed, setIsUsed] = useState(false);
+  const [isRental, setIsRental] = useState(false);
+  const [isBuy, setIsBuy] = useState(false);
+  const [isPickup, setIsPickup] = useState(false);
+  const [isDropOff, setIsDropOff] = useState(false);
   const [buttonColor, setButtonColor] = useState('transparent');
   
   const IconButton = ({onPress, icon }) => (
@@ -37,7 +42,39 @@ function AddDawaScreen() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     } 
+
   };
+
+  const newFunc = () => {
+    setIsNew(!isNew);
+    isUsed ? setIsUsed(!isUsed) : setIsUsed(isUsed);
+  };
+
+  const usedFunc = () => {
+    setIsUsed(!isUsed);
+    isNew ? setIsNew(!isNew) : setIsNew(isNew);
+  };
+
+  const rentalFunc = () => {
+    setIsRental(!isRental);
+    isBuy ? setIsBuy(!isBuy) : setIsBuy(isBuy);
+  };
+
+  const buyFunc = () => {
+    setIsBuy(!isBuy);
+    isRental ? setIsRental(!isRental) : setIsRental(isRental);
+  };
+
+  const pickupFunc = () => {
+    setIsPickup(!isPickup);
+    isDropOff ? setIsDropOff(!isDropOff) : setIsDropOff(isDropOff);
+  };
+
+  const dropOffFunc = () => {
+    setIsDropOff(!isDropOff);
+    isPickup ? setIsPickup(!isPickup) : setIsPickup(isPickup);
+  };
+
 
   return (
     <View style={styles.container}>
@@ -53,18 +90,15 @@ function AddDawaScreen() {
           textContentType="emailAddress"
           autoFocus={true} />
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> List it!</Text>
-        </TouchableOpacity>
+      
 
         <Text style={styles.photo}> ADD A PHOTO </Text>
 
         <StatusBar hidden={true} />
         {image && <Image source={{uri:image}} style={{width:100,height:100}} />} 
-        <IconButton
-        onPress={pickImage}
-        icon={<Ionicons name={"add"} size={20} color="#a5353a" style={{top: -2.5, right: 1}} />}
-/>
+        <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
+      <Ionicons name={"add"} size={20} color="#a5353a" style={{top: -3, right: 1}} />
+    </TouchableOpacity>
         <StatusBar style="auto" />
 
         <Text style={styles.category}> CATEGORY </Text>
@@ -93,26 +127,26 @@ function AddDawaScreen() {
 
       <Text style={styles.condition}> CONDITION </Text>
 
-      <TouchableOpacity style={[styles.newButton, {backgroundColor: buttonColor}]}
+      <TouchableOpacity onPress={newFunc} style={[styles.newButton, { backgroundColor: isNew ? "#a5353a" : "transparent" }]}
          >
-      <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 10 }}>NEW</Text>
+      <Text style={{fontWeight: 'bold', color: isNew ? 'white' : 'black' , fontSize: 10 }}>NEW</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.usedButton, {backgroundColor: buttonColor}]}
+      <TouchableOpacity onPress={usedFunc} style={[styles.usedButton, {backgroundColor: isUsed  ? "#a5353a" : "transparent" }]}
          >
-      <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 10 }}>USED</Text>
+      <Text style={{ fontWeight: 'bold', color: isUsed ? 'white' : 'black', fontSize: 10 }}>USED</Text>
       </TouchableOpacity>
 
       <Text style={styles.listingType}> LISTING TYPE </Text>
 
-      <TouchableOpacity style={[styles.buyButton, {backgroundColor: buttonColor}]}
+      <TouchableOpacity onPress={rentalFunc} style={[styles.rentButton, { backgroundColor: isRental ? "#a5353a" : "transparent" }]}
          >
-      <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 10 }}>RENT</Text>
+      <Text style={{ fontWeight: 'bold', color: isRental ? 'white' : 'black', fontSize: 10 }}>RENT</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.rentButton, {backgroundColor: buttonColor}]}
+      <TouchableOpacity onPress={buyFunc} style={[styles.buyButton, {backgroundColor: isBuy ? "#a5353a" : "transparent"}]}
          >
-      <Text style={{ fontWeight: 'bold', color: 'black', fontSize: 10 }}>BUY</Text>
+      <Text style={{ fontWeight: 'bold', color: isBuy ? 'white' : 'black', fontSize: 10 }}>BUY</Text>
       </TouchableOpacity>
 
       <Text style={styles.listingType}> PRICE </Text>
@@ -123,19 +157,35 @@ function AddDawaScreen() {
           textContentType="emailAddress"
           autoFocus={true} />
 
-      <Text style={styles.listingType}> DESCRIPTION </Text>
+      <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
       <TextInput
-          style={styles.priceInput}
+          multiline
+          style={styles.descriptionInput}
           autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoFocus={true} />
-
+          keyboardType="default"
+          autoFocus={true} 
+          />
       
+      <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
+
+      <TouchableOpacity onPress={pickupFunc} style={[styles.pickUpButton, {backgroundColor: isPickup ? "#a5353a" : "transparent"}]}
+         >  
+         <Text style={{ fontWeight: 'bold', color: isPickup ? 'white' : 'black', fontSize: 10 }}> PICK UP </Text>
+         </TouchableOpacity>
+      
+      <TouchableOpacity onPress={dropOffFunc} style={[styles.dropOffButton, {backgroundColor: isDropOff ? "#a5353a" : "transparent"}]}
+         >
+      <Text style={{ fontWeight: 'bold', color: isDropOff ? 'white' : 'black', fontSize: 10 }}> DROP OFF</Text>
+      </TouchableOpacity>
 
 
       </SafeAreaView>
       </ScrollView>
+
+      <TouchableOpacity style={styles.button}>
+          <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> List it!</Text>
+        </TouchableOpacity>
+      
     </View>
   );
 }
@@ -143,22 +193,25 @@ function AddDawaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexShrink: 1,
     backgroundColor: "#fff",
+    flexDirection: 'row'
   },
+
   item: {
     fontSize: 20,
     fontWeight: 'bold',
     color: "black",
     alignSelf: "left",
-    marginTop: 30,
-    paddingBottom: 12,
+    top: 30,
+    paddingBottom: 20,
   },
   photo: {
     fontSize: 20,
     fontWeight: 'bold',
     color: "black",
     alignSelf: "left",
-    marginTop: -550,
+    marginTop: 15,
     paddingBottom: 12,
   },
 
@@ -167,7 +220,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "black",
     alignSelf: "left",
-    top: -20
+    marginTop: 30,
+    marginBottom: 10,
   },
 
   listingType: {
@@ -175,7 +229,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "black",
     alignSelf: "left",
-    top: 20
+    marginTop: 20,
+    marginBottom: 10
   },
 
   itemInput: {
@@ -185,15 +240,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: 10,
     padding: 12,
+    marginBottom: 10,
+    marginTop: 20
   },
 
   photoInput: {
     backgroundColor: "#F6F7FB",
-    height: 78,
+    height: 50,
     marginBottom: 20,
     fontSize: 16,
     borderRadius: 10,
-    padding: 12,
+    padding: 10,
   },
 
 
@@ -211,15 +268,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    //position: 'absolute',
+    position: 'absolute',
     flexGrow: 1,
-    //justifyContent: 'flex-end',
+    bottom: 10,
     backgroundColor: "#a5353a",
     height: 58,
+    width: 400, 
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 500,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    left: '3%'
   },
 
   iconButton: {
@@ -229,10 +289,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    bottomMargin: 10,
     padding: 12,
-    right: -150,
-    top: -43
   },
   dropdown: {
       height: 50,
@@ -269,11 +327,11 @@ const styles = StyleSheet.create({
     },
 
     condition: {
-        paddingVertical:30,
         fontSize: 20,
         fontWeight: 'bold',
         color: "black",
         alignSelf: "left",
+        marginTop: 20,
     },
     newButton: {
         borderColor: 'black',
@@ -283,7 +341,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: -15,
+        marginTop: 15,
     },
 
     usedButton: {
@@ -298,7 +356,7 @@ const styles = StyleSheet.create({
       right: -90,
     },
 
-    buyButton: {
+     buyButton: {
       borderColor: 'black',
       borderWidth: 1,
       height: 38,
@@ -306,8 +364,9 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 30,
-      right: -87,
+      marginBottom: -35,
+      left: 87,
+      bottom: 38,
     },
 
     rentButton: {
@@ -318,7 +377,7 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: -38,
+      marginTop: 0,
   },
 
   freeButton: {
@@ -348,13 +407,65 @@ borrowButton: {
 priceInput: {
   backgroundColor: "#F6F7FB",
   height: 48,
-  marginBottom: 150,
   fontSize: 16,
   borderRadius: 10,
   padding: 12,
-  bottom: -30,
+  marginTop: 10,
 },
 
+descriptionHeader: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: "black",
+  alignSelf: "left",
+  marginTop: 20
+},
+
+descriptionInput: {
+  backgroundColor: "#F6F7FB",
+  height: 100,
+  fontSize: 16,
+  borderRadius: 10,
+  padding: 12,
+  marginTop: 10,
+  marginBottom: 20,
+  flexWrap: "wrap",
+  overflow: "scroll",
+  flexShrink: 1
+},
+
+deliveryTitle: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  color: "black",
+  alignSelf: "left",
+  marginTop: 20,
+  marginBottom: 10
+},
+
+pickUpButton: {
+  borderColor: 'black',
+  borderWidth: 1,
+  height: 38,
+  width: 80,
+  borderRadius: 20,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+dropOffButton: {
+  borderColor: 'black',
+  borderWidth: 1,
+  height: 38,
+  width: 80,
+  borderRadius: 20,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 0,
+  marginBottom: 100,
+  left: 87,
+  top: -38
+},
     
 })
 
