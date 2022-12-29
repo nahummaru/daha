@@ -1,6 +1,5 @@
 import React from 'react'
 import { View, Text, FlatList } from 'react-native'
-import { Container } from '../../styles/DahaStyles';
 import DahaCard from '../../components/DahaCard';
 
 
@@ -64,7 +63,8 @@ const Posts = [
 const DahaProfileScreen = () => {
 
   return (
-    <Container>
+    <View style={{ flex: 1, backgroundColor: '#fff', padding: 15, borderRadius: 5 }}>
+
       <FlatList
         data={Posts}
         renderItem={({ item }) => <DahaCard item={item} />}
@@ -72,7 +72,7 @@ const DahaProfileScreen = () => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-    </Container>
+    </View>
   )
 }
 
