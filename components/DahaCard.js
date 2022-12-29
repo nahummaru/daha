@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
 
@@ -20,13 +20,13 @@ const DahaCard = ({ item }) => {
         </View>
 
         <View style={{ flexDirection: 'row', paddingTop: 15 }}>
-          <View>
+          <TouchableOpacity>
             <Ionicons name="arrow-undo-outline" size={25} />
-          </View>
+          </TouchableOpacity>
 
-          <View style={{ paddingLeft: 10 }} active={item.bookmarked}>
+          <TouchableOpacity style={{ paddingLeft: 10 }} active={item.bookmarked}>
             <Ionicons name="bookmark" size={25} color="#a5353a" />
-          </View>
+          </TouchableOpacity>
         </View>
 
       </View>

@@ -19,16 +19,22 @@ const DahaScreen = () => {
   const [posts, setPosts, postsReff] = useState([]);
 
   useEffect(() => {
+    // get info user info
     fetchPosts();
   }, []);
 
+  // ORDER POSTS BY MOST RECENT, ADD CATEGORIES TO DAHAS
 
+  // 
   const fetchPosts = async () => {
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
         const { postText, postTime, uidUser } = doc.data();
         list.push({
-          id: doc.id,
+          //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?
+          // THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
+          // id; doc.id,
+          id: list.length,
           userName: uidUser,
           userImg: require('../assets/users/user-7.jpg'),
           postTime: '2 days ago',
