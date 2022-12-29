@@ -1,42 +1,74 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { Container, Card, UserInfo, TopLevel, UserImg, UserName, UserInfoText, PostTime, PostImg, PostText, InteractionWrapper, InteractionText, Interaction } from '../styles/DahaStyles'
+import { View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Stars from 'react-native-stars';
+import { Timestamp, toDate } from 'firebase/firestore';
 import { Entypo } from '@expo/vector-icons';
+import Stars from 'react-native-stars';
+
+
+// using the item.uidUser, we can then query for the profile picture
 
 const ReviewCard = ({ item }) => {
-  return (
-    <Card>
 
-      <TopLevel>
-        <UserInfo>
-          <UserImg source={item.userImg} />
-          <UserInfoText>
-            <UserName>{item.userName}</UserName>
-          </UserInfoText>
-          <Stars
-                            default={2.5}
+  return (
+    <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
+      <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+        <View style={{ flexDirection: 'row', width: '80%' }}>
+          <Image style={{ width: 50, borderRadius: 25, height: 50 }} source={require('../assets/users/user-2.jpg')} />
+          <View pointerEvents="none" style={{ flexDirection: 'column', marginLeft: 10 }}>
+
+            <Text style={{ fontWeight: 'bold', marginBottom: 3, fontSize: 15 }}>{item.userName}</Text>
+            <Stars
+                            
+                            default={item.rating}
                             count={5}
                             half={true}
-                            starSize={20000}
+                            starSize={120}
 
 
-                            fullStar={<Entypo name={'star'} size={20} style={[styles.myfirstStarStyle]} />}
-                            emptyStar={<Entypo name={'star'} size={20} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-                            halfStar={<Entypo name={'star'} size={20} style={[styles.myStarStyle]} />}
+                            fullStar={<Entypo name={'star'} size ={30} style={[styles.myStarStyle]} />}
+                            emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
+                            halfStar={<Entypo name={'star'} size= {30} style={[styles.myStarStyle]} />}
                         />
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', paddingTop: 15, paddingLeft: 30  }}>
+          <TouchableOpacity>
+            <Ionicons name="arrow-undo-outline" size={25}  />
+          </TouchableOpacity>
+        </View>
+
+      </View>
+      <Text style={{ fontSize: 18, padding: 15 }}>{item.post}</Text>
+
+    </View>
+  )
+
+
+  return (
+    <Card>
+      <TopLevel>
+        <UserInfo>
+          <UserImg source={require('../assets/users/user-2.jpg')} />
+          <UserInfoText>
+            <UserName>asdf</UserName>
+            <PostTime>{item.postTime}</PostTime>
+          </UserInfoText>
         </UserInfo>
 
         <InteractionWrapper>
           <Interaction>
             <Ionicons name="arrow-undo-outline" size={25} />
           </Interaction>
+
+          <View style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }} active={item.bookmarked}>
+            <Ionicons name="bookmark" size={25} color="#a5353a" />
+          </View>
         </InteractionWrapper>
 
       </TopLevel>
       <PostText>{item.post}</PostText>
-
 
     </Card>
   )
@@ -44,73 +76,21 @@ const ReviewCard = ({ item }) => {
 
 export default ReviewCard
 
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-  },
-  userInfoSection: {
-      paddingHorizontal: 30,
-      marginBottom: 25,
-  },
-  title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-  },
-  caption: {
-      fontSize: 14,
-      lineHeight: 14,
-      fontWeight: '500',
-  },
-  row: {
-      flexDirection: 'row',
-      marginBottom: 10,
-  },
-  infoBoxWrapper: {
-      borderBottomColor: '#dddddd',
-      borderBottomWidth: 1,
-      borderTopColor: '#dddddd',
-      borderTopWidth: 1,
-      flexDirection: 'row',
-      height: 100,
-  },
-  infoBox: {
-      width: '50%',
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
-  menuWrapper: {
-      marginTop: 10,
-  },
-  menuItem: {
-      flexDirection: 'row',
-      paddingVertical: 15,
-      paddingHorizontal: 30,
-  },
-  menuItemText: {
-      color: '#777777',
-      marginLeft: 20,
-      fontWeight: '600',
-      fontSize: 16,
-      lineHeight: 26,
-  },
+const styles = StyleSheet.create({ 
   myStarStyle: {
       color: '#ffd700',
 
       backgroundColor: 'transparent',
 
       textShadowRadius: 0,
-      borderRadius: 5,
+      borderRadius: 5
   },
-  myfirstStarStyle: {
-    color: '#ffd700',
-
-    backgroundColor: 'transparent',
-
-    textShadowRadius: 0,
-    borderRadius: 5,
-    marginLeft: '0%'
-},
   myEmptyStarStyle: {
       color: 'white',
   }
 });
+
+
+
+
+

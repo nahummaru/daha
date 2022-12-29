@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 //import { auth } from '../config/firebase';
 import { getAuth, signOut } from "firebase/auth";
 import { Entypo } from '@expo/vector-icons';
@@ -16,7 +16,7 @@ import Settings from './SettingsScreen';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
 import { Touchable } from 'react-native-web';
-//import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 
 
@@ -30,9 +30,9 @@ const ProfileScreen = () => {
 
     console.log(user)
 
-    //const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null);
 
-    /*const pickImage = async () => {
+    const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -43,7 +43,7 @@ const ProfileScreen = () => {
         setImage(result.assets[0].uri);
       }
   
-    };*/
+    };
 
 
     return (
@@ -51,15 +51,15 @@ const ProfileScreen = () => {
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <TouchableOpacity >
+                    <TouchableOpacity onPress={pickImage} >
                     <Avatar.Image 
-                        //source={{
-                          //  uri: 
-                        //}}
+                        source={{
+                            uri:  image
+                        }}
                         size={100}
                     />
                     </TouchableOpacity>
-                    <View style={{ marginLeft: 20 }}>
+                    <View pointerEvents="none" style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
