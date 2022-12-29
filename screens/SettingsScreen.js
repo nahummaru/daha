@@ -15,6 +15,8 @@ const SettingsScreen = () => {
   }
   return (
     <View>
+      <ScrollView style={styles.ScrollView}>
+      <SafeAreaView style={styles.form}>
       <TouchableOpacity style={styles.button} >
       <View style={{marginLeft: '5%', top: 12.5}} >
       <Ionicons name="moon" size={24} color="white"  />
@@ -81,12 +83,14 @@ const SettingsScreen = () => {
       <Text style={{ fontWeight: 'normal', color: '#fff', fontSize: 20, marginLeft: '15%', top: -12.5 }}>Log Out</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} >
+      <TouchableOpacity style={styles.lastButton} >
       <View style={{marginLeft: '5%', top: 12.5}} >
       <FontAwesome name="ban" size={24} color="white"  />
       </View>
       <Text style={{ fontWeight: 'normal', color: '#fff', fontSize: 20, marginLeft: '15%', top: -12.5 }}>Deactivate Account</Text>
       </TouchableOpacity>
+      </SafeAreaView>
+      </ScrollView>
     </View>
   )
 }
@@ -138,6 +142,19 @@ const styles = StyleSheet.create({
     alignSelf: 'left',
     marginTop: '15%',
     marginBottom: '-11%',
+    marginLeft: 'auto',
+    marginRight: 'auto'
+  },
+  lastButton: {
+    backgroundColor: "#a5353a",
+    height: 50,
+    width: '90%',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'left',
+    alignSelf: 'left',
+    marginTop: '15%',
+    marginBottom: '0%',
     marginLeft: 'auto',
     marginRight: 'auto'
   },

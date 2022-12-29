@@ -1,11 +1,13 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
+import * as ImagePicker from 'expo-image-picker';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Login from './LoginScreen';
 
 
-const backImage = require("../assets/icon.png");
+//const backImage = require("../assets/icon.png");
 import { AuthenticatedUserContext } from '../App.js'
 
 
@@ -17,9 +19,26 @@ export default function SignUpScreen({ navigation }) {
   const { user, setUser } = useContext(AuthenticatedUserContext);
 
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      allowsEditing: true
+    });
 
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+
+  };
+
+
+  const [image, setImage] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const[firstName, setFirstName] = useState('');
+  const[lastName, setLastName] = useState('');
+  const[userName, setUserName] = useState('');
 
   const onHandleSignup = ({ navigation }) => {
     if (email !== '' && password !== '') {
@@ -35,13 +54,41 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Image source={backImage} style={styles.backImage} />
+      
       <View style={styles.whiteSheet} />
+      <ScrollView style={styles.ScrollView}>
       <SafeAreaView style={styles.form}>
+
         <Text style={styles.title}>Sign Up</Text>
+
+        <StatusBar hidden={true} />
+          {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, left: '37%', marginBottom: '5%' }} />}
+          <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
+            <Ionicons name={"add"} size={20} color= "black" style={{ marginTop: '0%', marginBottom: '5%', left: '48%' }} />
+          </TouchableOpacity>
+          <StatusBar style="auto" />
+
         <TextInput
           style={styles.input}
-          placeholder="Enter email"
+          placeholder="First Name"
+          autoCapitalize="none"
+          autoFocus={true}
+          value={firstName}
+          onChangeText={(text) => setFirstName(text)}
+        />
+
+<TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          autoCapitalize="none"
+          autoFocus={true}
+          value={lastName}
+          onChangeText={(text) => setLastName(text)}
+        />
+        
+        <TextInput
+          style={styles.input}
+          placeholder="University Email"
           autoCapitalize="none"
           keyboardType="email-address"
           textContentType="emailAddress"
@@ -49,6 +96,17 @@ export default function SignUpScreen({ navigation }) {
           value={email}
           onChangeText={(text) => setEmail(text)}
         />
+
+<TextInput
+          style={styles.input}
+          placeholder="Username (20 Characters or less)"
+          autoCapitalize="none"
+          autoFocus={true}
+          value={userName}
+          onChangeText={(text) => setUserName(text)}
+          maxLength={20}
+        />
+
         <TextInput
           style={styles.input}
           placeholder="Enter password"
@@ -62,14 +120,15 @@ export default function SignUpScreen({ navigation }) {
         <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
           <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}> Sign Up</Text>
         </TouchableOpacity>
-        <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center' }}>
-          <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Don't have an account? </Text>
+        <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%'}}>
+          <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14 }}> Log In</Text>
+            <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
       <StatusBar barStyle="light-content" />
+      </ScrollView>
     </View>
   );
 }
@@ -84,6 +143,7 @@ const styles = StyleSheet.create({
     color: "orange",
     alignSelf: "center",
     paddingBottom: 24,
+    marginTop: '15%'
   },
   input: {
     backgroundColor: "#F6F7FB",
@@ -92,13 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: 10,
     padding: 12,
-  },
-  backImage: {
-    width: "100%",
-    height: 340,
-    position: "absolute",
-    top: 0,
-    resizeMode: 'cover',
   },
   whiteSheet: {
     width: '100%',
@@ -119,6 +172,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
   },
 });
