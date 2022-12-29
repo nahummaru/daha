@@ -45,7 +45,6 @@ export default function SignUpScreen({ navigation }) {
     if (email !== '' && password !== '' && lastName !== '' && firstName !== '' && userName !== '') {
       if ((/@stanford.edu/.test(email))) {
         createUserWithEmailAndPassword(auth, email, password)
-        .then(() => { navigation.navigate('Login') })
         .catch((err) => Alert.alert("Login error", err.message));
       }
       else{
