@@ -15,6 +15,8 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Settings from './SettingsScreen';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
+import { Touchable } from 'react-native-web';
+//import * as ImagePicker from 'expo-image-picker';
 
 
 
@@ -28,18 +30,35 @@ const ProfileScreen = () => {
 
     console.log(user)
 
+    //const [image, setImage] = useState(null);
+
+    /*const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        allowsEditing: true
+      });
+  
+      if (!result.canceled) {
+        setImage(result.assets[0].uri);
+      }
+  
+    };*/
+
 
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                    <Avatar.Image
-                        source={{
-                            uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
-                        }}
-                        size={80}
+                    <TouchableOpacity >
+                    <Avatar.Image 
+                        //source={{
+                          //  uri: 
+                        //}}
+                        size={100}
                     />
+                    </TouchableOpacity>
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,

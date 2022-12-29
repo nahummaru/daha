@@ -14,6 +14,8 @@ const data = [
 ];
 
 
+
+
 function AddDawaScreen() {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
@@ -23,7 +25,14 @@ function AddDawaScreen() {
   const [isBuy, setIsBuy] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
   const [isDropOff, setIsDropOff] = useState(false);
-  const [buttonColor, setButtonColor] = useState('transparent');
+
+  const [itemName, setItemName] = useState('');
+  const[itemCategoy, setCategory] = useState('');
+  const[itemCondition, setCondition] = useState('');
+  const[listType, setListType] = useState('');
+  const[itemPrice, setPrice] = useState('');
+  const[itemDescription, setDescription] = useState('');
+  const[itemDelivery, setDelivery] = useState('');
 
   const IconButton = ({ onPress, icon }) => (
     <TouchableOpacity style={styles.iconButton} onPress={onPress}>
@@ -48,32 +57,44 @@ function AddDawaScreen() {
 
   const newFunc = () => {
     setIsNew(!isNew);
-    isUsed ? setIsUsed(!isUsed) : setIsUsed(isUsed);
+    isUsed ? setIsUsed(false) : setIsUsed(false);
+    isNew ? setCondition('new') :  setCondition ('none');
+    console.log(itemCondition);
   };
 
   const usedFunc = () => {
     setIsUsed(!isUsed);
-    isNew ? setIsNew(!isNew) : setIsNew(isNew);
+    isNew ? setIsNew(false) : setIsNew(false);
+    isUsed ? setCondition('used') : setCondition('none');
+    console.log(itemCondition);
   };
 
   const rentalFunc = () => {
     setIsRental(!isRental);
     isBuy ? setIsBuy(!isBuy) : setIsBuy(isBuy);
+    isRental ? setListType('rental') : setListType('none');
+    console.log(listType);
   };
 
   const buyFunc = () => {
     setIsBuy(!isBuy);
     isRental ? setIsRental(!isRental) : setIsRental(isRental);
+    isBuy ? setListType('buy') : setListType('none');
+    console.log(listType);
   };
 
   const pickupFunc = () => {
     setIsPickup(!isPickup);
     isDropOff ? setIsDropOff(!isDropOff) : setIsDropOff(isDropOff);
+    isPickup ? setDelivery('pickup') : setDelivery('none');
+    console.log(itemDelivery);
   };
 
   const dropOffFunc = () => {
     setIsDropOff(!isDropOff);
     isPickup ? setIsPickup(!isPickup) : setIsPickup(isPickup);
+    isDropOff ? setDelivery('drop off') : setDelivery('none');
+    console.log(itemDelivery);
   };
 
 
@@ -87,13 +108,11 @@ function AddDawaScreen() {
           <TextInput
             style={styles.itemInput}
             autoCapitalize="none"
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoFocus={true} />
-
-
+            autoFocus={true}
+            onChangeText={newText => setItemName(newText)} />
 
           <Text style={styles.photo}> ADD A PHOTO </Text>
+
 
           <StatusBar hidden={true} />
           {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
@@ -122,6 +141,7 @@ function AddDawaScreen() {
             onBlur={() => setIsFocus(false)}
             onChange={item => {
               setValue(item.value);
+              setCategory(item.value); 
               setIsFocus(false);
             }}
           />
@@ -156,7 +176,8 @@ function AddDawaScreen() {
             autoCapitalize="none"
             keyboardType="email-address"
             textContentType="emailAddress"
-            autoFocus={true} />
+            autoFocus={true}
+            onChangeText={newText => setPrice(newText)} />
 
           <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
           <TextInput
@@ -165,6 +186,7 @@ function AddDawaScreen() {
             autoCapitalize="none"
             keyboardType="default"
             autoFocus={true}
+            onChangeText={newText => setDescription(newText)}
           />
 
           <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
@@ -188,6 +210,7 @@ function AddDawaScreen() {
       </TouchableOpacity>
 
     </View>
+
   );
 }
 

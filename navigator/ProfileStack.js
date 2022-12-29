@@ -18,25 +18,12 @@ const Stack = createStackNavigator();
 
 const ProfileStack = ({ navigation }) => {
 
-
-  const signOutFunction = () => {
-    signOut(auth).then(() => {
-      navigation.replace('Login')
-    }).catch((error) => {
-      //an error happened
-    });
-  }
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons>
           <TouchableOpacity style={{ marginRight: 15 }}
             onPress={() => { navigation.navigate("Settings") }} >
-            <AntDesign name="setting" size={24} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ marginRight: 15 }}
-            onPress={ signOutFunction} >
             <AntDesign name="setting" size={24} color="white" />
           </TouchableOpacity>
         </HeaderButtons>
