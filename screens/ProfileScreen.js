@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 //import { auth } from '../config/firebase';
 import { getAuth, signOut } from "firebase/auth";
-import { AntDesign, Entypo } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
 import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 import {
@@ -71,9 +71,9 @@ const ProfileScreen = () => {
                             starSize={120}
 
 
-                            fullStar={<Entypo name={'star'} style={[styles.myStarStyle]} />}
-                            emptyStar={<Entypo name={'star'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-                            halfStar={<Entypo name={'star'} style={[styles.myStarStyle]} />}
+                            fullStar={<Entypo name={'star'} size ={30} style={[styles.myStarStyle]} />}
+                            emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
+                            halfStar={<Entypo name={'star'} size= {30} style={[styles.myStarStyle]} />}
                         />
                     </View>
                 </View>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
         lineHeight: 26,
     },
     myStarStyle: {
-        color: '#FFFF66',
+        color: '#ffd700',
 
         backgroundColor: 'transparent',
 
