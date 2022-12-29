@@ -39,12 +39,20 @@ export default function SignUpScreen({ navigation }) {
   const[firstName, setFirstName] = useState('');
   const[lastName, setLastName] = useState('');
   const[userName, setUserName] = useState('');
+  const[error,setError] = useState(null);
 
   const onHandleSignup = ({ navigation }) => {
-    if (email !== '' && password !== '') {
-      createUserWithEmailAndPassword(auth, email, password)
+    if (email !== '' && password !== '' && lastName !== '' && firstName !== '' && userName !== '') {
+      if ((/@stanford.edu/.test(email))) {
+        createUserWithEmailAndPassword(auth, email, password)
         .then(() => { navigation.navigate('Login') })
         .catch((err) => Alert.alert("Login error", err.message));
+      }
+      else{
+        (err) => Alert.alert("please use stanford email", err.message);
+        setError("Please use a @stanford.edu email")
+        setEmail(null);
+      }
 
       // CALL A FUNCTION THAT CREATES A USER
       // WE CAN ACCESS UID, EMAIL AND THAT'LL BE THE USER
@@ -60,6 +68,8 @@ export default function SignUpScreen({ navigation }) {
       <SafeAreaView style={styles.form}>
 
         <Text style={styles.title}>Sign Up</Text>
+
+        <Text style={{ fontWeight: 'normal', color: 'red', fontSize: 18, marginLeft: 'auto', marginRight:'auto', marginBottom: '3%' }}> {error}</Text>
 
         <StatusBar hidden={true} />
           {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, left: '37%', marginBottom: '5%' }} />}
@@ -85,7 +95,6 @@ export default function SignUpScreen({ navigation }) {
           value={lastName}
           onChangeText={(text) => setLastName(text)}
         />
-        
         <TextInput
           style={styles.input}
           placeholder="University Email"
@@ -95,14 +104,15 @@ export default function SignUpScreen({ navigation }) {
           autoFocus={true}
           value={email}
           onChangeText={(text) => setEmail(text)}
+          
         />
-
 <TextInput
           style={styles.input}
           placeholder="Username (20 Characters or less)"
           autoCapitalize="none"
           autoFocus={true}
           value={userName}
+          secureTextEntry={false}
           onChangeText={(text) => setUserName(text)}
           maxLength={20}
         />
@@ -120,10 +130,11 @@ export default function SignUpScreen({ navigation }) {
         <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
           <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}> Sign Up</Text>
         </TouchableOpacity>
+        
         <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%'}}>
           <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
+            <Text style={{ color: '#a5353a', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -140,7 +151,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: "orange",
+    color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
     marginTop: '15%'
@@ -167,7 +178,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    backgroundColor: '#f57c00',
+    backgroundColor: '#a5353a',
     height: 58,
     borderRadius: 10,
     justifyContent: 'center',
