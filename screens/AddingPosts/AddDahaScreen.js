@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity } from 'react-native';
-import { AuthenticatedUserContext } from '../../App.js';
+// import { AuthenticatedUserContext } from '../../App.js';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
 
 
@@ -12,7 +12,7 @@ import { db } from '../../config/firebase.js';
 
 const AddDahaScreen = ({ navigation }) => {
 
-  const { user, setUser } = useContext(AuthenticatedUserContext);
+  // const { user, setUser } = useContext(AuthenticatedUserContext);
 
   const [postText, setPostText] = useState(null)
 

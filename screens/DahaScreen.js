@@ -77,7 +77,7 @@ const DahaScreen = () => {
   const list = [];
   const [posts, setPosts, postsReff] = useState([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     fetchPosts();
     console.log('GOD PLZ HELP ME I WANNA KMS')
   }, []);
@@ -93,7 +93,7 @@ const DahaScreen = () => {
           userImg: require('../assets/users/user-7.jpg'),
           postTime: '2 days ago',
           post: postText,
-          bookmarked: false,
+          bookmarked: true,
         });
       });
 
@@ -103,30 +103,28 @@ const DahaScreen = () => {
       console.log(postsReff.current)
       console.log(list)
     });
-    
+
     if (loading) {
       setLoading(false);
     }
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {loading ? (
-        <Text>hello</Text>
-      ) : (
-        <Container>
-          <FlatList
-            data={postsReff.current}
-            renderItem={({ item }) => console.log('hello what in the world') && console.log(posts) &&
-              <DahaCard item={item} />}
-            keyExtractor={item => item.id}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-          />
-        </Container>
-      )}
-    </SafeAreaView>
-  );
+    <Container>
+
+      <FlatList
+        data={postsReff.current}
+        renderItem={({ item }) => {
+          console.log(item)
+          return (<DahaCard item={item} />)
+        }}
+        keyExtractor={item => item.id}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      />
+      </Container>
+
+  )
 }
 
 export default DahaScreen

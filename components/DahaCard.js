@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text , StyleSheet} from 'react-native'
 import { Container, Card, UserInfo, TopLevel, UserImg, UserName, UserInfoText, PostTime, PostImg, PostText, InteractionWrapper, InteractionText, Interaction } from '../styles/DahaStyles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
@@ -12,9 +12,9 @@ const DahaCard = ({ item }) => {
     <Card>
       <TopLevel>
         <UserInfo>
-          <UserImg source={require('../assets/users/user-7.jpg')} />
+          <UserImg source={require('../assets/users/user-2.jpg')} />
           <UserInfoText>
-            <UserName>{item.userName}</UserName>
+            <UserName>asfd</UserName>
             <PostTime>{item.postTime}</PostTime>
           </UserInfoText>
         </UserInfo>
@@ -30,7 +30,7 @@ const DahaCard = ({ item }) => {
         </InteractionWrapper>
 
       </TopLevel>
-      <PostText>{item.post}</PostText>
+      <PostText>asdfasdfaasdfasdfasdfasdasdfasdfasasdfasdfaasdfasdfdafdssadfasdfadsssadfasasdfas</PostText>
 
 
     </Card>

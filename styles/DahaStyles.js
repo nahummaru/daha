@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.View`
   flex: 1;
   align-items: center;
+  justify-content: center;
   background-color: #fff;
   padding: 20px;
 `;
@@ -65,7 +66,7 @@ export const PostImg = styled.Image`
 
 export const InteractionWrapper = styled.View`
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-self: flex-end;
     padding: 15px;
     padding-right: 10px;
