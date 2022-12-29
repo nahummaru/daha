@@ -1,11 +1,10 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+
 
 const DawaScreen = () => {
   return (
-    <View>
-      <Text>wassup</Text>
-    </View>
+    <Text>dawa!!</Text>
   )
 }
 

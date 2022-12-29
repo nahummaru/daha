@@ -15,7 +15,7 @@ const RootStack = createNativeStackNavigator();
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   return (
-    <AuthenticatedUserContext.Provider value={ {user, setUser }}>
+    <AuthenticatedUserContext.Provider value={{ user, setUser }}>
       {children}
     </AuthenticatedUserContext.Provider>
   );
@@ -49,7 +49,8 @@ function RootNavigator() {
   }
 
   if (user) {
-
+    
+    console.log('user info: ')
     console.log(user.uid)
     console.log(user.email)
 

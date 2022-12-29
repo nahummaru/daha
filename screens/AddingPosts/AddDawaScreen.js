@@ -1,10 +1,11 @@
-
 import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
+import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
+
+
 
 const data = [
   { label: 'Apparel', value: '1' },
