@@ -11,13 +11,17 @@ import Login from './LoginScreen';
 import { AuthenticatedUserContext } from '../App.js'
 
 
-const addUserToDatabase = () => {
-  set(db)
-}
 
 export default function SignUpScreen({ navigation }) {
+
   const { user, setUser } = useContext(AuthenticatedUserContext);
 
+  const [image, setImage] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -33,18 +37,39 @@ export default function SignUpScreen({ navigation }) {
   };
 
 
-  const [image, setImage] = useState(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const[firstName, setFirstName] = useState('');
-  const[lastName, setLastName] = useState('');
-  const[userName, setUserName] = useState('');
+  async function addUserToDatabase(user, postText) {
+
+    const docRef = await addDoc(collection(db, "users"), {
+      uidUser: user.uid,
+      postText: postText,
+      postTime: Timestamp.now()
+    })
+    console.log("Document written with ID: ", docRef.id);
+    console.log("Daha Post has been added to the DB!!");
+    Alert.alert('DAHA posted successfully!!')
+    setPostText(null);
+
+    // resets the post screen
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PostStack' }],
+    });
+
+    // TODO: After they post, navigate them to the home screen
+    // navigation.navigate('Home');
+  }
 
   const onHandleSignup = ({ navigation }) => {
     if (email !== '' && password !== '') {
       createUserWithEmailAndPassword(auth, email, password)
-        .then(() => { navigation.navigate('Login') })
+        // .then(() => { navigation.navigate('Login') })
+        .then(() => console.log(image))
+        .then(() => console.log('nahum maru was here'))
+        .then(addUserToDatabase)
+
+
         .catch((err) => Alert.alert("Login error", err.message));
+
 
       // CALL A FUNCTION THAT CREATES A USER
       // WE CAN ACCESS UID, EMAIL AND THAT'LL BE THE USER
@@ -54,80 +79,80 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      
+
       <View style={styles.whiteSheet} />
       <ScrollView style={styles.ScrollView}>
-      <SafeAreaView style={styles.form}>
+        <SafeAreaView style={styles.form}>
 
-        <Text style={styles.title}>Sign Up</Text>
+          <Text style={styles.title}>Sign Up</Text>
 
-        <StatusBar hidden={true} />
+          <StatusBar hidden={true} />
           {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, left: '37%', marginBottom: '5%' }} />}
           <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
-            <Ionicons name={"add"} size={20} color= "black" style={{ marginTop: '0%', marginBottom: '5%', left: '48%' }} />
+            <Ionicons name={"add"} size={20} color="black" style={{ marginTop: '0%', marginBottom: '5%', left: '48%' }} />
           </TouchableOpacity>
           <StatusBar style="auto" />
 
-        <TextInput
-          style={styles.input}
-          placeholder="First Name"
-          autoCapitalize="none"
-          autoFocus={true}
-          value={firstName}
-          onChangeText={(text) => setFirstName(text)}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="First Name"
+            autoCapitalize="none"
+            autoFocus={true}
+            value={firstName}
+            onChangeText={(text) => setFirstName(text)}
+          />
 
-<TextInput
-          style={styles.input}
-          placeholder="Last Name"
-          autoCapitalize="none"
-          autoFocus={true}
-          value={lastName}
-          onChangeText={(text) => setLastName(text)}
-        />
-        
-        <TextInput
-          style={styles.input}
-          placeholder="University Email"
-          autoCapitalize="none"
-          keyboardType="email-address"
-          textContentType="emailAddress"
-          autoFocus={true}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Last Name"
+            autoCapitalize="none"
+            autoFocus={true}
+            value={lastName}
+            onChangeText={(text) => setLastName(text)}
+          />
 
-<TextInput
-          style={styles.input}
-          placeholder="Username (20 Characters or less)"
-          autoCapitalize="none"
-          autoFocus={true}
-          value={userName}
-          onChangeText={(text) => setUserName(text)}
-          maxLength={20}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="University Email"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            textContentType="emailAddress"
+            autoFocus={true}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Enter password"
-          autoCapitalize="none"
-          autoCorrect={false}
-          secureTextEntry={true}
-          textContentType="password"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
-          <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}> Sign Up</Text>
-        </TouchableOpacity>
-        <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%'}}>
-          <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Username (20 Characters or less)"
+            autoCapitalize="none"
+            autoFocus={true}
+            value={userName}
+            onChangeText={(text) => setUserName(text)}
+            maxLength={20}
+          />
+
+          <TextInput
+            style={styles.input}
+            placeholder="Enter password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry={true}
+            textContentType="password"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
+            <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}> Sign Up</Text>
           </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-      <StatusBar barStyle="light-content" />
+          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%' }}>
+            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={{ color: '#f57c00', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+        <StatusBar barStyle="light-content" />
       </ScrollView>
     </View>
   );

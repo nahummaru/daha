@@ -35,10 +35,6 @@ const AddDahaScreen = ({ navigation }) => {
 
     // TODO: After they post, navigate them to the home screen
     // navigation.navigate('Home');
-
-
-    
-
   }
 
   return (

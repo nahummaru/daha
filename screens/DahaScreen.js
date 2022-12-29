@@ -25,7 +25,6 @@ const DahaScreen = () => {
 
   // ORDER POSTS BY MOST RECENT, ADD CATEGORIES TO DAHAS
 
-  // 
   const fetchPosts = async () => {
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
@@ -56,7 +55,6 @@ const DahaScreen = () => {
       <FlatList
         data={postsReff.current}
         renderItem={({ item }) => {
-          console.log(item)
           return (<DahaCard item={item} />)
         }}
         keyExtractor={item => item.id}
