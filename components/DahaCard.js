@@ -1,7 +1,9 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
+import TimeAgo from '@andordavoti/react-native-timeago';
+
 
 // using the item.uidUser, we can then query for the profile picture
 
@@ -14,8 +16,8 @@ const DahaCard = ({ item }) => {
           <Image style={{ width: 50, borderRadius: 25, height: 50 }} source={require('../assets/users/user-2.jpg')} />
           <View style={{ flexDirection: 'column', marginLeft: 10 }}>
 
-            <Text style={{ fontWeight: 'bold', marginBottom: 3, fontSize: 15 }}>{item.userName}</Text>
-            <Text style={{ color: 'gray' }}>{item.postTime}</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 3, fontSize: 17 }}>{item.userName}</Text>
+            <TimeAgo dateTo={item.postTime} />
           </View>
         </View>
 
@@ -43,34 +45,6 @@ const DahaCard = ({ item }) => {
         <Text style={{ fontSize: 14 }}> December 2, 3pm </Text>
       </View>
     </View>
-  )
-
-
-  return (
-    <Card>
-      <TopLevel>
-        <UserInfo>
-          <UserImg source={require('../assets/users/user-2.jpg')} />
-          <UserInfoText>
-            <UserName>asdf</UserName>
-            <PostTime>{item.postTime}</PostTime>
-          </UserInfoText>
-        </UserInfo>
-
-        <InteractionWrapper>
-          <Interaction>
-            <Ionicons name="arrow-undo-outline" size={25} />
-          </Interaction>
-
-          <View style={{ position: "absolute", bottom: 0, alignSelf: "flex-end" }} active={item.bookmarked}>
-            <Ionicons name="bookmark" size={25} color="#a5353a" />
-          </View>
-        </InteractionWrapper>
-
-      </TopLevel>
-      <PostText>{item.post}</PostText>
-
-    </Card>
   )
 }
 

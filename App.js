@@ -4,22 +4,26 @@ import utilities from './tailwind.json';
 import { NavigationContainer } from '@react-navigation/native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebase';
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigator/AuthStack';
+
+
 
 export const AuthenticatedUserContext = createContext({});
 const RootStack = createNativeStackNavigator();
 
 const AuthenticatedUserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser, userRef] = useState(null);
   return (
     <AuthenticatedUserContext.Provider value={{ user, setUser }}>
       {children}
     </AuthenticatedUserContext.Provider>
   );
 };
+
+
 
 
 function RootNavigator() {
@@ -49,7 +53,6 @@ function RootNavigator() {
   }
 
   if (user) {
-    
     console.log('user info: ')
     console.log(user.uid)
     console.log(user.email)

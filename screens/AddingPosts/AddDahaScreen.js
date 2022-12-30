@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity } from 'react-native';
 import { AuthenticatedUserContext } from '../../App.js';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import {CommonActions} from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import { db } from '../../config/firebase.js';
 
 
@@ -26,19 +26,15 @@ const AddDahaScreen = ({ navigation }) => {
     console.log("Daha Post has been added to the DB!!");
     Alert.alert('DAHA posted successfully!!')
     setPostText(null);
-    
+
     // resets the post screen
     navigation.reset({
       index: 0,
-      routes: [{name: 'PostStack'}],
+      routes: [{ name: 'PostStack' }],
     });
 
     // TODO: After they post, navigate them to the home screen
     // navigation.navigate('Home');
-
-
-    
-
   }
 
   return (
