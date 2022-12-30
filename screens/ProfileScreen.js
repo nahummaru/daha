@@ -5,17 +5,12 @@ import { getAuth, signOut } from "firebase/auth";
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
 import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
-import {
-    Avatar,
-    Title,
-    Caption,
-    TouchableRipple,
-} from 'react-native-paper';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import Settings from './SettingsScreen';
+import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
-import { Touchable } from 'react-native-web';
+
+import useState from 'react-usestateref'
+
 //import * as ImagePicker from 'expo-image-picker';
 
 
@@ -26,9 +21,9 @@ const auth = getAuth();
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
-    const {user, setUser} = useContext(AuthenticatedUserContext);
+    const { user, setUser } = useContext(AuthenticatedUserContext);
 
-    console.log(user)
+    // console.log(user)
 
     //const [image, setImage] = useState(null);
 
@@ -52,12 +47,12 @@ const ProfileScreen = () => {
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <TouchableOpacity >
-                    <Avatar.Image 
-                        //source={{
-                          //  uri: 
-                        //}}
-                        size={100}
-                    />
+                        <Avatar.Image
+                            //source={{
+                            //  uri: 
+                            //}}
+                            size={100}
+                        />
                     </TouchableOpacity>
                     <View style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
@@ -77,7 +72,6 @@ const ProfileScreen = () => {
                         />
                     </View>
                 </View>
-                <Text>This is the UID: {user.uid}</Text>
             </View>
 
 
