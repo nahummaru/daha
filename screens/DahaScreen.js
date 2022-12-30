@@ -9,6 +9,7 @@ import useState from 'react-usestateref'
 
 // sets up db reference to 'dahas' collection
 const dbRefDahas = collection(db, "dahas");
+const dbRefUsers = collection(db, "users");
 
 // query for all the posts
 const DahaScreen = () => {
@@ -23,40 +24,60 @@ const DahaScreen = () => {
     fetchPosts();
   }, []);
 
-  // ORDER POSTS BY MOST RECENT, ADD CATEGORIES TO DAHAS
 
-  // 
+
+  const fetchUserInfo = async () => {
+    // create a object of userInfo to be accessed when fetching posts
+    const docsSnap = await getDocs(dbRefUsers);
+    const users = {};
+    docsSnap.forEach(doc => {
+      const { uidUser, username, timeCreated, profilePic } = doc.data();
+      users[uidUser] = {
+        username: username,
+        timeCreated: timeCreated,
+        profilePic: profilePic
+      }
+    })
+    return users
+  }
+
   const fetchPosts = async () => {
+    const userInfo = await fetchUserInfo();
+    console.log(userInfo)
+
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
         const { postText, postTime, uidUser } = doc.data();
         list.push({
-          //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?
-          // THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
+          //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
           id: list.length,
-          userName: uidUser,
+          userName: userInfo[uidUser].username,
           userImg: require('../assets/users/user-7.jpg'),
-          postTime: '2 days ago',
+          postTime: postTime.toDate(),
           post: postText,
           bookmarked: true,
         });
       });
 
-      setPosts(list);
+      // sorts posts with newest on the top
+      let sortedPosts = list.sort(
+          (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
+      
+      setPosts(sortedPosts);
     });
 
     if (loading) {
       setLoading(false);
     }
   }
-  // ADD A LOADING SCREEN 
+
+  // ADD A LOADING SCREEN??
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 15, borderRadius: 5 }}>
       <FlatList
         data={postsReff.current}
         renderItem={({ item }) => {
-          console.log(item)
           return (<DahaCard item={item} />)
         }}
         keyExtractor={item => item.id}
@@ -64,7 +85,6 @@ const DahaScreen = () => {
         showsVerticalScrollIndicator={false}
       />
     </View>
-
   )
 }
 
