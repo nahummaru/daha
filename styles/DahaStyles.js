@@ -78,7 +78,7 @@ export const Interaction = styled.TouchableOpacity`
     border-radius: 5px;
     padding: 2px 5px;
     background-color: 'transparent';
-
+    
 `;
 
 export const InteractionText = styled.Text`

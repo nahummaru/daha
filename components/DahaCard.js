@@ -4,6 +4,7 @@ import { Container, Card, UserInfo, TopLevel, UserImg, UserName, UserInfoText, P
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DahaCard = ({ item }) => {
+  bookIcon = item.bookmarked ? 'bookmark' : 'bookmark-outline';
   return (
     <Card>
 
@@ -17,13 +18,21 @@ const DahaCard = ({ item }) => {
         </UserInfo>
 
         <InteractionWrapper>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: 'flex-end'
+          }}
+        >
           <Interaction>
             <Ionicons name="arrow-undo-outline" size={25} />
           </Interaction>
 
           <Interaction active={item.bookmarked}>
-            <Ionicons name="bookmark" size={25} color="#a5353a" />
+            <Ionicons name={bookIcon} size={25} color="#a5353a" />
+          
           </Interaction>
+        </View>
         </InteractionWrapper>
 
       </TopLevel>
