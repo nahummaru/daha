@@ -35,6 +35,7 @@ export default function SignUpScreen({ navigation }) {
   const [image, setImage] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
@@ -66,16 +67,19 @@ export default function SignUpScreen({ navigation }) {
       })
   }
 
+
   const onHandleSignup = ({ navigation }) => {
     if (email !== '' && password !== '' && lastName !== '' && firstName !== '' && userName !== '') {
       if ((/@stanford.edu/.test(email))) {
         createUserWithEmailAndPassword(auth, email, password)
+
           .then(async userCredential => {
             addUserToDatabase(userCredential.user)
           })
           .catch((err) => Alert.alert("Login error", err.message));
 
       }
+
     }
     else {
       (err) => Alert.alert("please use stanford email", err.message);
@@ -98,14 +102,17 @@ export default function SignUpScreen({ navigation }) {
 
           <Text style={styles.title}>Sign Up</Text>
 
+
           <Text style={{ fontWeight: 'normal', color: 'red', fontSize: 18, marginLeft: 'auto', marginRight: 'auto', marginBottom: '3%' }}> {error}</Text>
 
           <StatusBar hidden={true} />
+
           {image && <Image source={{ uri: image }} style={{ width: 100, height: 100, left: '37%', marginBottom: '5%' }} />}
           <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
             <Ionicons name={"add"} size={20} color="black" style={{ marginTop: '0%', marginBottom: '5%', left: '48%' }} />
           </TouchableOpacity>
           <StatusBar style="auto" />
+
 
           <TextInput
             style={styles.input}
@@ -158,6 +165,7 @@ export default function SignUpScreen({ navigation }) {
           />
           <TouchableOpacity style={styles.button} onPress={onHandleSignup}>
             <Text style={{ fontWeight: 'bold', color: '#fff', fontSize: 18 }}> Sign Up</Text>
+
           </TouchableOpacity>
 
           <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%' }}>

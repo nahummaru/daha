@@ -1,17 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 //import { auth } from '../config/firebase';
 import { getAuth, signOut } from "firebase/auth";
-import { AntDesign, Entypo } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
 import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
 
-import useState from 'react-usestateref'
 
-//import * as ImagePicker from 'expo-image-picker';
+import useState from 'react-usestateref'
+import { Touchable } from 'react-native-web';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 
@@ -25,9 +27,9 @@ const ProfileScreen = () => {
 
     // console.log(user)
 
-    //const [image, setImage] = useState(null);
+    const [image, setImage] = useState(null);
 
-    /*const pickImage = async () => {
+    const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
@@ -38,7 +40,7 @@ const ProfileScreen = () => {
         setImage(result.assets[0].uri);
       }
   
-    };*/
+    };
 
 
     return (
@@ -46,6 +48,7 @@ const ProfileScreen = () => {
 
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
+
                     <TouchableOpacity >
                         <Avatar.Image
                             //source={{
@@ -53,8 +56,9 @@ const ProfileScreen = () => {
                             //}}
                             size={100}
                         />
+
                     </TouchableOpacity>
-                    <View style={{ marginLeft: 20 }}>
+                    <View pointerEvents="none" style={{ marginLeft: 20 }}>
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
@@ -66,9 +70,9 @@ const ProfileScreen = () => {
                             starSize={120}
 
 
-                            fullStar={<Entypo name={'star'} style={[styles.myStarStyle]} />}
-                            emptyStar={<Entypo name={'star'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-                            halfStar={<Entypo name={'star'} style={[styles.myStarStyle]} />}
+                            fullStar={<Entypo name={'star'} size ={30} style={[styles.myStarStyle]} />}
+                            emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
+                            halfStar={<Entypo name={'star'} size= {30} style={[styles.myStarStyle]} />}
                         />
                     </View>
                 </View>
@@ -136,7 +140,7 @@ const styles = StyleSheet.create({
         lineHeight: 26,
     },
     myStarStyle: {
-        color: '#FFFF66',
+        color: '#ffd700',
 
         backgroundColor: 'transparent',
 
