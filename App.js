@@ -8,6 +8,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigator/AuthStack';
+import { set } from '@firebase/database';
 
 
 
@@ -17,7 +18,7 @@ const RootStack = createNativeStackNavigator();
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser, userRef] = useState(null);
   return (
-    <AuthenticatedUserContext.Provider value={{ user, setUser }}>
+    <AuthenticatedUserContext.Provider value={{ user, setUser, userRef }}>
       {children}
     </AuthenticatedUserContext.Provider>
   );

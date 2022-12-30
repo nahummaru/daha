@@ -39,7 +39,7 @@ const DahaProfileScreen = () => {
         timeCreated: timeCreated,
         profilePic: profilePic
       }
-      console.log(users)
+      //console.log(users)
 
     })
     return users
@@ -68,8 +68,8 @@ const DahaProfileScreen = () => {
       // sorts posts with newest on the top
       let sortedPosts = list.sort(
         (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
-      console.log('yooooo')
-      console.log(sortedPosts)
+      //console.log('yooooo')
+      //console.log(sortedPosts)
       setPosts(sortedPosts);
     });
 
