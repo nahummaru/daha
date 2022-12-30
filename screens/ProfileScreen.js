@@ -10,6 +10,7 @@ import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSh
 import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
+
 import { Touchable } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
 
