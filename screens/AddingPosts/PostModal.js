@@ -42,15 +42,17 @@ const styles = StyleSheet.create({
   },
   prefix: {
     fontSize: 25,
-    top: 100,
+    marginTop: '15%',
+    marginBottom:'-5%',
     fontWeight: 'bold',
     marginLeft: 'auto',
     marginRight: 'auto'
   },
 
   bottom: {
-    top: 100,
     fontSize: 25,
+    marginTop: '5%',
+    marginBottom: '-5%',
     marginLeft: 'auto',
     marginRight: 'auto',
     fontWeight: 'bold'
@@ -70,7 +72,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 120,
+    marginTop: '10%',
+    marginBottom: '30%',
     marginLeft: 'auto',
     marginRight: 'auto'
   },

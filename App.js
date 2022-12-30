@@ -4,16 +4,18 @@ import utilities from './tailwind.json';
 import { NavigationContainer } from '@react-navigation/native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebase';
-import React, { useState, createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigator/AuthStack';
 
-const AuthenticatedUserContext = createContext({});
+
+
+export const AuthenticatedUserContext = createContext({});
 const RootStack = createNativeStackNavigator();
 
 const AuthenticatedUserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser, userRef] = useState(null);
   return (
     <AuthenticatedUserContext.Provider value={{ user, setUser }}>
       {children}
@@ -22,11 +24,13 @@ const AuthenticatedUserProvider = ({ children }) => {
 };
 
 
+
+
 function RootNavigator() {
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     // onAuthStateChanged returns an unsubscriber
     const unsubscribeAuth = onAuthStateChanged(
@@ -49,7 +53,10 @@ function RootNavigator() {
   }
 
   if (user) {
+    console.log('user info: ')
+    console.log(user.uid)
     console.log(user.email)
+
     return (
       <RootStack.Navigator>
         <RootStack.Group>
@@ -60,18 +67,21 @@ function RootNavigator() {
   } return (
     <AuthStack />
   )
-  
+
 }
 
 
 export default function App() {
   return (
     <TailwindProvider utilities={utilities}>
-      <NavigationContainer>
-        <AuthenticatedUserProvider>
+      <AuthenticatedUserProvider>
+
+        <NavigationContainer>
           <RootNavigator />
-        </AuthenticatedUserProvider>
-      </NavigationContainer>
+
+        </NavigationContainer>
+      </AuthenticatedUserProvider>
+
     </TailwindProvider>
 
   );

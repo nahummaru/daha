@@ -1,5 +1,6 @@
 import { Input } from '@rneui/themed'
 import React from 'react'
+<<<<<<< HEAD
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, Button, FlatList, TouchableOpacity } from 'react-native'
 import { useTailwind } from 'tailwind-rn'
 import { Container } from '../styles/DawaStyles'
@@ -87,6 +88,9 @@ const Posts = [
     starred: false,
   },
 ];
+=======
+import { View, Text, StyleSheet } from 'react-native'
+>>>>>>> bb3f2802625b2019051375761a733fe0c723dc0c
 
 
 const DawaScreen = () => {
@@ -117,9 +121,7 @@ export default DawaScreen
 
 /*const DawaScreen = () => {
   return (
-    <View>
-      <Text>wassup</Text>
-    </View>
+    <Text>dawa!!</Text>
   )
 }
 

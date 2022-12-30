@@ -9,21 +9,14 @@ import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSh
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { signOut, getAuth } from '@firebase/auth';
+import { auth } from '../config/firebase';
 
 
 
 const Stack = createStackNavigator();
 
 const ProfileStack = ({ navigation }) => {
-
-
-  const signOutFunction = () => {
-    signOut(auth).then(() => {
-      navigation.replace('Login')
-    }).catch((error) => {
-      //an error happened
-    });
-  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
