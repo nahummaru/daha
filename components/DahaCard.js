@@ -3,12 +3,12 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
 import TimeAgo from '@andordavoti/react-native-timeago';
+import { format } from 'date-fns'
 
 
 // using the item.uidUser, we can then query for the profile picture
 
 const DahaCard = ({ item }) => {
-
   return (
     <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
       <View style={{ flexDirection: 'row', paddingTop: 10 }}>
@@ -36,13 +36,13 @@ const DahaCard = ({ item }) => {
 
       <View style={{ flexDirection: 'row' }}>
         <Text style={{ color: "#a5353a", fontWeight: 'bold' }}>NEED BY </Text>
-        <Text style={{ fontSize: 14 }}> December 1st, 7pm </Text>
+        <Text style={{ fontSize: 14 }}> {item.needByDate}</Text>
       </View>
 
       <View style={{ flexDirection: 'row' }}>
         <Text style={{ color: "#a5353a", fontWeight: 'bold' }}>RETURN BY </Text>
 
-        <Text style={{ fontSize: 14 }}> December 2, 3pm </Text>
+        <Text style={{ fontSize: 14 }}> {item.returnByDate}</Text>
       </View>
     </View>
   )

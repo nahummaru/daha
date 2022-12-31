@@ -1,6 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 //import { auth } from '../config/firebase';
+import { db, auth, } from '../config/firebase';
+import { getDoc, doc, collection } from '@firebase/firestore';
 import { getAuth, signOut } from "firebase/auth";
 import { Entypo } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
@@ -9,37 +11,29 @@ import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
 
-
-//import useState from 'react-usestateref'
 import { Touchable } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
-
-
-
+import useState from 'react-usestateref'
+import { UserInfoContext } from '../App';
 
 // we should pass in the user and populate the page with their specifc stuff
-
-const auth = getAuth();
-
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const { user, setUser } = useContext(AuthenticatedUserContext);
-
-    // console.log(user)
-
+    const { userInfo, setUserInfo } = useContext(UserInfoContext)
     const [image, setImage] = useState(null);
+    //const [userInfo, setUserInfo, userInfoRef] = useState(null)
 
     const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        allowsEditing: true
-      });
-  
-      if (!result.canceled) {
-        setImage(result.assets[0].uri);
-      }
-  
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+            allowsEditing: true
+        });
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
     };
 
 
@@ -62,24 +56,22 @@ const ProfileScreen = () => {
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
-                        }]}>nahummaru</Title>
+                        }]}>{userInfo.username}</Title>
                         <Stars
                             default={2.5}
                             count={5}
                             half={true}
                             starSize={120}
-
-
-                            fullStar={<Entypo name={'star'} size ={30} style={[styles.myStarStyle]} />}
+                            fullStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}
                             emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-                            halfStar={<Entypo name={'star'} size= {30} style={[styles.myStarStyle]} />}
+                            halfStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}
                         />
                     </View>
                 </View>
             </View>
 
 
-            <ProfileTopTabNavigator>
+            <ProfileTopTabNavigator >
                 <Text>hello</Text>
             </ProfileTopTabNavigator>
 

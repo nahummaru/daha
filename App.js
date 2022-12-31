@@ -8,27 +8,37 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import TabNavigator from './navigator/TabNavigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStack from './navigator/AuthStack';
+import { set } from '@firebase/database';
 
 
 
 export const AuthenticatedUserContext = createContext({});
+export const UserInfoContext = createContext({});
+
 const RootStack = createNativeStackNavigator();
 
 const AuthenticatedUserProvider = ({ children }) => {
   const [user, setUser, userRef] = useState(null);
   return (
-    <AuthenticatedUserContext.Provider value={{ user, setUser }}>
+    <AuthenticatedUserContext.Provider value={{ user, setUser, userRef }}>
       {children}
     </AuthenticatedUserContext.Provider>
   );
 };
 
-
-
+const UserInfoProvider = ({ children }) => {
+  const [userInfo, setUserInfo] = useState(null)
+  return (
+    <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
+      {children}
+    </UserInfoContext.Provider>
+  );
+};
 
 function RootNavigator() {
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -51,6 +61,7 @@ function RootNavigator() {
       </View>
     );
   }
+
 
   if (user) {
     console.log('user info: ')
@@ -75,11 +86,11 @@ export default function App() {
   return (
     <TailwindProvider utilities={utilities}>
       <AuthenticatedUserProvider>
-
-        <NavigationContainer>
-          <RootNavigator />
-
-        </NavigationContainer>
+        <UserInfoProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </UserInfoProvider>
       </AuthenticatedUserProvider>
 
     </TailwindProvider>
