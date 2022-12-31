@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 //import { auth } from '../config/firebase';
 import { db, auth, } from '../config/firebase';
 import { getDoc, doc, collection } from '@firebase/firestore';
@@ -13,18 +13,17 @@ import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
 
 import { Touchable } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
-
-
-
+import useState from 'react-usestateref'
+import { UserInfoContext } from '../App';
 
 // we should pass in the user and populate the page with their specifc stuff
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const { user, setUser } = useContext(AuthenticatedUserContext);
-    const docRef = doc(db, "users", user.uid);
+    const { userInfo, setUserInfo } = useContext(UserInfoContext)
     const [image, setImage] = useState(null);
-    const [userInfo, setUserInfo] = useState(null)
-    
+    //const [userInfo, setUserInfo, userInfoRef] = useState(null)
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -35,22 +34,8 @@ const ProfileScreen = () => {
         if (!result.canceled) {
             setImage(result.assets[0].uri);
         }
-
     };
 
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const docSnap = await getDoc(docRef);
-                const data = docSnap.data()
-                setUserInfo(data);
-            } catch (error) {
-                console.log('error', error)
-            }
-        }
-        fetchUserInfo();
-
-    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -77,8 +62,6 @@ const ProfileScreen = () => {
                             count={5}
                             half={true}
                             starSize={120}
-
-
                             fullStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}
                             emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
                             halfStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}

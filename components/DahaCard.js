@@ -8,11 +8,6 @@ import TimeAgo from '@andordavoti/react-native-timeago';
 // using the item.uidUser, we can then query for the profile picture
 
 const DahaCard = ({ item }) => {
-<<<<<<< HEAD
-  bookIcon = item.bookmarked ? 'bookmark' : 'bookmark-outline';
-=======
-
->>>>>>> bb3f2802625b2019051375761a733fe0c723dc0c
   return (
     <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
       <View style={{ flexDirection: 'row', paddingTop: 10 }}>
@@ -25,35 +20,15 @@ const DahaCard = ({ item }) => {
           </View>
         </View>
 
-<<<<<<< HEAD
-        <InteractionWrapper>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: 'flex-end'
-          }}
-        >
-          <Interaction>
-=======
         <View style={{ flexDirection: 'row', paddingTop: 15 }}>
           <TouchableOpacity>
->>>>>>> bb3f2802625b2019051375761a733fe0c723dc0c
             <Ionicons name="arrow-undo-outline" size={25} />
           </TouchableOpacity>
 
-<<<<<<< HEAD
-          <Interaction active={item.bookmarked}>
-            <Ionicons name={bookIcon} size={25} color="#a5353a" />
-          
-          </Interaction>
-        </View>
-        </InteractionWrapper>
-=======
           <TouchableOpacity style={{ paddingLeft: 10 }} active={item.bookmarked}>
             <Ionicons name="bookmark" size={25} color="#a5353a" />
           </TouchableOpacity>
         </View>
->>>>>>> bb3f2802625b2019051375761a733fe0c723dc0c
 
       </View>
       <Text style={{ fontSize: 18, padding: 15 }}>{item.post}</Text>

@@ -1,6 +1,5 @@
 import { Input } from '@rneui/themed'
 import React from 'react'
-<<<<<<< HEAD
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, Button, FlatList, TouchableOpacity } from 'react-native'
 import { useTailwind } from 'tailwind-rn'
 import { Container } from '../styles/DawaStyles'
@@ -18,7 +17,7 @@ const Posts = [
     postDist: '< 1 mi away',
     StateText: 'BUY: $26',
     postImg: require('../assets/users/user-3.jpg'),
-    post:'Live laugh love',
+    post: 'Live laugh love',
     liked: true,
     likes: '14',
     comments: '5',
@@ -75,44 +74,41 @@ const Posts = [
     starred: true,
   },
   {
-  id: '6',
+    id: '6',
     userName: 'Nahum Maru',
     userImg: require('../assets/users/user-3.jpg'),
     postDist: '< 1 mi away',
     StateText: 'RENT: $20',
     postImg: require('../assets/users/user-3.jpg'),
-    post:'Live laugh love',
+    post: 'Live laugh love',
     liked: true,
     likes: '14',
     comments: '5',
     starred: false,
   },
 ];
-=======
-import { View, Text, StyleSheet } from 'react-native'
->>>>>>> bb3f2802625b2019051375761a733fe0c723dc0c
 
 
 const DawaScreen = () => {
-/*<View>
-<TouchableOpacity
-        style={styles.button}
-        onPress={onPress}
-      >
-        <Text>Press Here</Text>
-      </TouchableOpacity>
-</View>*/
+  /*<View>
+  <TouchableOpacity
+          style={styles.button}
+          onPress={onPress}
+        >
+          <Text>Press Here</Text>
+        </TouchableOpacity>
+  </View>*/
   return (
     //<Container>
-      <FlatList
-        numColumns={2}
-        key={2}
-        data={Posts}
-        renderItem={({ item }) => <DawaCard item={item} />}
-        keyExtractor={item => item.id}
-        showsHorizontalScrollIndicator ={false}
-        showsVerticalScrollIndicator={false}
-      />
+    <FlatList
+      numColumns={2}
+      key={2}
+      data={Posts}
+      renderItem={({ item }) => <DawaCard item={item} />}
+      keyExtractor={item => item.id}
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+    />
     //</Container>
   )
 }

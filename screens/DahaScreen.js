@@ -43,7 +43,7 @@ const DahaScreen = () => {
 
   const fetchPosts = async () => {
     const userInfo = await fetchUserInfo();
-    console.log(userInfo)
+    //console.log(userInfo)
 
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
@@ -62,8 +62,8 @@ const DahaScreen = () => {
 
       // sorts posts with newest on the top
       let sortedPosts = list.sort(
-          (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
-      
+        (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
+
       setPosts(sortedPosts);
     });
 

@@ -13,6 +13,8 @@ import { set } from '@firebase/database';
 
 
 export const AuthenticatedUserContext = createContext({});
+export const UserInfoContext = createContext({});
+
 const RootStack = createNativeStackNavigator();
 
 const AuthenticatedUserProvider = ({ children }) => {
@@ -24,12 +26,19 @@ const AuthenticatedUserProvider = ({ children }) => {
   );
 };
 
-
-
+const UserInfoProvider = ({ children }) => {
+  const [userInfo, setUserInfo] = useState(null)
+  return (
+    <UserInfoContext.Provider value={{ userInfo, setUserInfo }}>
+      {children}
+    </UserInfoContext.Provider>
+  );
+};
 
 function RootNavigator() {
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
+  const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +61,7 @@ function RootNavigator() {
       </View>
     );
   }
+
 
   if (user) {
     console.log('user info: ')
@@ -76,11 +86,11 @@ export default function App() {
   return (
     <TailwindProvider utilities={utilities}>
       <AuthenticatedUserProvider>
-
-        <NavigationContainer>
-          <RootNavigator />
-
-        </NavigationContainer>
+        <UserInfoProvider>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </UserInfoProvider>
       </AuthenticatedUserProvider>
 
     </TailwindProvider>
