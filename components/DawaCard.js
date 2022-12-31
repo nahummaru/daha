@@ -5,45 +5,42 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DawaCard = ({ item }) => {
 
-    starIcon = item.starred ? 'star' : 'star-outline';
-    return (
-      <Card>
-  
- 
-
-        <PostImg source={item.postImg} />
-        <InteractionWrapper>
+  starIcon = item.starred ? 'star' : 'star-outline';
+  return (
+    <Card>
+      <PostImg source={item.postImg} />
+      <InteractionWrapper>
         <View
-        style={{
+          style={{
             flexDirection: "row",
           }}>
-        <StateText>{item.StateText}</StateText>
+          <StateText>{item.StateText}</StateText>
         </View>
-        
-        
+
+
         <View
           style={{
             flexDirection: "row",
             alignItems: 'flex-end'
           }}
         >
-            
-            
-        <Ionicons name={starIcon} size={17} />
-          
+
+
+          <Ionicons name={starIcon} size={17} />
+
         </View>
-        </InteractionWrapper>
-    
-        <PostText>{item.post}</PostText>
-        
-        <LocationWrapper>
+      </InteractionWrapper>
+
+      <PostText>{item.post}</PostText>
+
+      <LocationWrapper>
         <Ionicons name="location-outline" size={25} />
-        
+
         <PostDist>{item.postDist}</PostDist>
-  
-        </LocationWrapper>
-      </Card>
-    )
-  }
-  
-  export default DawaCard
+
+      </LocationWrapper>
+    </Card>
+  )
+}
+
+export default DawaCard
