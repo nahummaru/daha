@@ -89,6 +89,7 @@ const DahaScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff', padding: 15, borderRadius: 5 }}>
       <FlatList
+
         data={postsReff.current}
         renderItem={({ item }) => {
           return (<DahaCard item={item} />)

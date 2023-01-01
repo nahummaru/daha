@@ -100,15 +100,19 @@ const DawaScreen = () => {
   </View>*/
   return (
     //<Container>
-    <FlatList
-      numColumns={2}
-      key={2}
-      data={Posts}
-      renderItem={({ item }) => <DawaCard item={item} />}
-      keyExtractor={item => item.id}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-    />
+    <View style={{ flex: 1, backgroundColor: '#fff', padding: 15, borderRadius: 5 }}>
+
+      <FlatList
+        numColumns={2}
+        key={2}
+        data={Posts}
+        renderItem={({ item }) => <DawaCard item={item} />}
+        keyExtractor={item => item.id}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      />
+    </View>
+
     //</Container>
   )
 }

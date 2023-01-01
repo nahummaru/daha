@@ -10,8 +10,8 @@ import { format } from 'date-fns'
 
 const DahaCard = ({ item }) => {
   return (
-    <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
-      <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+    <TouchableOpacity style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
+      <View style={{ flexDirection: 'row', paddingTop: 7 }}>
         <View style={{ flexDirection: 'row', width: '80%' }}>
           <Image style={{ width: 50, borderRadius: 25, height: 50 }} source={require('../assets/users/user-2.jpg')} />
           <View style={{ flexDirection: 'column', marginLeft: 10 }}>
@@ -44,7 +44,7 @@ const DahaCard = ({ item }) => {
 
         <Text style={{ fontSize: 14 }}> {item.returnByDate}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
