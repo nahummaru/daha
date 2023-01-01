@@ -77,6 +77,7 @@ const DahaScreen = () => {
 
       
       // console.log(sortedPosts[1])
+      console.log(sortedPosts.length)
       setPosts(sortedPosts);
     });
 
