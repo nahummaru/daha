@@ -17,7 +17,7 @@ const DawaCard = ({ item }) => {
 
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#f8f8f8', padding: 20, borderRadius: '10%', marginTop: 2.5, marginBottom: 2.5, marginLeft: 5, marginRight: 5 }}>
+    <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#f8f8f8', padding: 20, borderRadius: '10%', marginTop: 5, marginBottom: 5, marginLeft: 5, marginRight: 5 }}>
       <Image style={{ width: '100%', height: 250, marginTop: 5, borderRadius: '10%', marginBottom: '5%' }} source={item.postImg} />
       
       <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
