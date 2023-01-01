@@ -44,9 +44,7 @@ const AddDahaScreen = ({ navigation }) => {
     hideReturnByDatePicker();
   };
 
-
-
-  async function postDaha(user, postText) {
+  async function postDaha() {
     console.log(needByDate)
     console.log(returnByDate)
 
@@ -103,7 +101,7 @@ const AddDahaScreen = ({ navigation }) => {
           onCancel={hideReturnByDatePicker}
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => postDaha(user, postText)}>
+        <TouchableOpacity style={styles.button} onPress={postDaha}>
           <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> Post it!</Text>
         </TouchableOpacity>
 
