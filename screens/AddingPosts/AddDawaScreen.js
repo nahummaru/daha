@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-
-
+import { AuthenticatedUserContext } from '../../App';
+import { UserInfoContext } from '../../App';
+import { addDoc, Timestamp, collection } from '@firebase/firestore';
+import { db } from '../../config/firebase.js';
 
 const data = [
-  { label: 'Apparel', value: '1' },
-  { label: 'Tech', value: '2' },
-  { label: 'Dorm Essentials', value: '3' },
-  { label: 'Other', value: '4' },
+  { label: 'Apparel', value: '0' },
+  { label: 'Tech', value: '1' },
+  { label: 'Dorm Essentials', value: '2' },
+  { label: 'Other', value: '3' },
 ];
 
-
-
-
-function AddDawaScreen() {
+function AddDawaScreen({navigation}) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isNew, setIsNew] = useState(false);
@@ -28,12 +27,15 @@ function AddDawaScreen() {
   const [isDropOff, setIsDropOff] = useState(false);
 
   const [itemName, setItemName] = useState('');
-  const[itemCategoy, setCategory] = useState('');
-  const[itemCondition, setCondition] = useState('');
-  const[listType, setListType] = useState('');
-  const[itemPrice, setPrice] = useState('');
-  const[itemDescription, setDescription] = useState('');
-  const[itemDelivery, setDelivery] = useState('');
+  const [itemCategory, setItemCategory] = useState('');
+  // const [itemCondition, setItemCondition] = useState('');
+  // const [itemListType, setItemListType] = useState('');
+  const [itemPrice, setItemPrice] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  // const [itemDelivery, setItemDelivery] = useState('');
+
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+  // const { userInfo } = useContext(UserInfoContext)
 
   const IconButton = ({ onPress, icon }) => (
     <TouchableOpacity style={styles.iconButton} onPress={onPress}>
@@ -56,47 +58,62 @@ function AddDawaScreen() {
 
   };
 
+  // changes the calue of isNew to the opposite
   const newFunc = () => {
     setIsNew(!isNew);
     isUsed ? setIsUsed(false) : setIsUsed(false);
-    isNew ? setCondition('new') :  setCondition ('none');
-    console.log(itemCondition);
   };
 
   const usedFunc = () => {
     setIsUsed(!isUsed);
     isNew ? setIsNew(false) : setIsNew(false);
-    isUsed ? setCondition('used') : setCondition('none');
-    console.log(itemCondition);
   };
 
-  const rentalFunc = () => {
-    setIsRental(!isRental);
-    isBuy ? setIsBuy(!isBuy) : setIsBuy(isBuy);
-    isRental ? setListType('rental') : setListType('none');
-    console.log(listType);
-  };
 
-  const buyFunc = () => {
-    setIsBuy(!isBuy);
-    isRental ? setIsRental(!isRental) : setIsRental(isRental);
-    isBuy ? setListType('buy') : setListType('none');
-    console.log(listType);
-  };
+  async function postDawa() {
+    const listType = {
+      isRental: isRental,
+      isBuy: isBuy
+    }
 
-  const pickupFunc = () => {
-    setIsPickup(!isPickup);
-    isDropOff ? setIsDropOff(!isDropOff) : setIsDropOff(isDropOff);
-    isPickup ? setDelivery('pickup') : setDelivery('none');
-    console.log(itemDelivery);
-  };
+    const delivery = {
+      isPickup: isPickup,
+      isDropOff: isDropOff
+    }
 
-  const dropOffFunc = () => {
-    setIsDropOff(!isDropOff);
-    isPickup ? setIsPickup(!isPickup) : setIsPickup(isPickup);
-    isDropOff ? setDelivery('drop off') : setDelivery('none');
-    console.log(itemDelivery);
-  };
+    const condition = {
+      isNew: isNew,
+      isUsed: isUsed
+    }
+    
+    const docRef = await addDoc(collection(db, "dawas"), {
+      uidUser: user.uid,
+      itemName: itemName,
+      itemCondition: condition,
+      listType: listType,
+      // converts it to a string representing the category
+      itemCategory: data[Number(itemCategory)].label,
+      postTime: Timestamp.now(),
+      price: itemPrice,
+      description: itemDescription,
+      image: image
+    })
+
+    console.log("Document written with ID: ", docRef.id);
+    console.log("Dawa Post has been added to the DB!!");
+    Alert.alert('DAWA posted successfully!!')
+
+    // resets the post screen
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PostStack' }],
+    });
+
+
+    // TODO: After they post, navigate them to the home screen
+    // navigation.navigate('Home');
+    
+  }
 
 
   return (
@@ -142,7 +159,7 @@ function AddDawaScreen() {
             onBlur={() => setIsFocus(false)}
             onChange={item => {
               setValue(item.value);
-              setCategory(item.value); 
+              setItemCategory(item.value);
               setIsFocus(false);
             }}
           />
@@ -161,12 +178,12 @@ function AddDawaScreen() {
 
           <Text style={styles.listingType}> LISTING TYPE </Text>
 
-          <TouchableOpacity onPress={rentalFunc} style={[styles.rentButton, { backgroundColor: isRental ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity onPress={() => { setIsRental(!isRental) }} style={[styles.rentButton, { backgroundColor: isRental ? "#a5353a" : "transparent" }]}
           >
             <Text style={{ fontWeight: 'bold', color: isRental ? 'white' : 'black', fontSize: 10 }}>RENT</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={buyFunc} style={[styles.buyButton, { backgroundColor: isBuy ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity onPress={() => { setIsBuy(!isBuy) }} style={[styles.buyButton, { backgroundColor: isBuy ? "#a5353a" : "transparent" }]}
           >
             <Text style={{ fontWeight: 'bold', color: isBuy ? 'white' : 'black', fontSize: 10 }}>BUY</Text>
           </TouchableOpacity>
@@ -178,7 +195,7 @@ function AddDawaScreen() {
             keyboardType="email-address"
             textContentType="emailAddress"
             autoFocus={true}
-            onChangeText={newText => setPrice(newText)} />
+            onChangeText={newText => setItemPrice(newText)} />
 
           <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
           <TextInput
@@ -187,17 +204,17 @@ function AddDawaScreen() {
             autoCapitalize="none"
             keyboardType="default"
             autoFocus={true}
-            onChangeText={newText => setDescription(newText)}
+            onChangeText={newText => setItemDescription(newText)}
           />
 
           <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
 
-          <TouchableOpacity onPress={pickupFunc} style={[styles.pickUpButton, { backgroundColor: isPickup ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity onPress={() => { setIsPickup(!isPickup) }} style={[styles.pickUpButton, { backgroundColor: isPickup ? "#a5353a" : "transparent" }]}
           >
             <Text style={{ fontWeight: 'bold', color: isPickup ? 'white' : 'black', fontSize: 10 }}> PICK UP </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={dropOffFunc} style={[styles.dropOffButton, { backgroundColor: isDropOff ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity onPress={() => { setIsDropOff(!isDropOff) }} style={[styles.dropOffButton, { backgroundColor: isDropOff ? "#a5353a" : "transparent" }]}
           >
             <Text style={{ fontWeight: 'bold', color: isDropOff ? 'white' : 'black', fontSize: 10 }}> DROP OFF</Text>
           </TouchableOpacity>
@@ -206,7 +223,7 @@ function AddDawaScreen() {
         </SafeAreaView>
       </ScrollView>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={postDawa} >
         <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> List it!</Text>
       </TouchableOpacity>
 
