@@ -1,11 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../config/firebase';
+import { auth, db, storage } from '../config/firebase';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Login from './LoginScreen';
-import { doc, setDoc, collection, Timestamp } from '@firebase/firestore';
+import { doc, setDoc, Timestamp } from '@firebase/firestore';
+import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
+
 
 
 //const backImage = require("../assets/icon.png");
@@ -15,7 +16,7 @@ import { AuthenticatedUserContext } from '../App.js'
 
 export default function SignUpScreen({ navigation }) {
 
-  const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
+  // const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
   // console.log('-------------hello')
   // console.log(user)
 
@@ -40,10 +41,60 @@ export default function SignUpScreen({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [error, setError] = useState(null);
+  const [uploading, setUploading] = useState(null);
+  const [url, setUrl] = useState(null);
 
+
+  const uploadImage = async () => {
+    setUploading(true)
+    const filename = userName + '-profile-picture'
+    const reference = ref(storage, 'profile-pictures/' + filename)
+    const img = await fetch(image)
+    const bytes = await img.blob()
+
+    try {
+      await uploadBytes(reference, bytes)
+      return await getDownloadURL(reference)
+      /*
+              .then((snapshot) => {
+                getDownloadURL(reference)
+                /*
+                  .then((URL) => {
+                    console.log('WTFFFF---------HELLLLO' + URL)
+                    setDoc(doc(db, "users", user.uid), {
+                      profilePic: URL
+                    }, { merge: true });
+                    console.log('--------------what the hell')
+                  }); 
+              }) 
+      setUploading(false)
+      setImage(null)
+
+
+        .then((snapshot) => {
+          console.log('Profile picture has been uploaded!!');
+          
+        }) */
+    } catch {
+      console.log(console.error)
+    }
+
+    return
+    const url = await getDownloadURL(reference)
+    console.log('##################------ this is the url: ' + url)
+    return url
+
+  }
+  // do the getdoanlaodURL in the upload Image
   async function addUserToDatabase(user) {
+    const profilePic = await uploadImage();
+    console.log('-------------------------profilePic') 
+
+    console.log(profilePic) 
     // connects us to "users" in the a document with a key of the user.uid (unique)
     const docRef = doc(db, "users", user.uid);
+    const filename = userName + '-profile-picture'
+    const reference = ref(storage, 'profile-pictures/' + filename)
 
     // the userdata we are adding
     const userData = {
@@ -53,13 +104,14 @@ export default function SignUpScreen({ navigation }) {
       firstName: firstName,
       lastName: lastName,
       timeCreated: Timestamp.now(),
-      profilePic: image
+      profilePic: profilePic
     };
 
     // sets the doc we refernced with the data
-    setDoc(docRef, userData)
+    await setDoc(docRef, userData)
       .then(() => {
         console.log("Document has been added successfully");
+
         //console.log(userData)
       })
       .catch(error => {
@@ -73,12 +125,11 @@ export default function SignUpScreen({ navigation }) {
       if ((/@stanford.edu/.test(email))) {
         createUserWithEmailAndPassword(auth, email, password)
           .then(async userCredential => {
-            addUserToDatabase(userCredential.user)
+            await addUserToDatabase(userCredential.user)
           })
           .catch((err) => Alert.alert("Login error", err.message));
 
       }
-
     }
     else {
       (err) => Alert.alert("please use stanford email", err.message);

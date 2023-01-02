@@ -136,6 +136,10 @@ const DawaScreen = () => {
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
         const { itemCategory, postTime, uidUser, listType, price, itemName, itemCondition, image, description } = doc.data();
+        console.log('================')
+        console.log(uidUser)
+        
+        console.log(userInfo[uidUser].username)
         list.push({
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,

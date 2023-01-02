@@ -4,10 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { AuthenticatedUserContext } from '../../App';
-import { UserInfoContext } from '../../App';
+import { UserInfoContext, AuthenticatedUserContext } from '../../App';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import { db } from '../../config/firebase.js';
+import { db, storage } from '../../config/firebase.js';
+import { uploadBytes, ref } from '@firebase/storage';
 
 const data = [
   { label: 'Apparel', value: '0' },
@@ -16,7 +16,7 @@ const data = [
   { label: 'Other', value: '3' },
 ];
 
-function AddDawaScreen({navigation}) {
+function AddDawaScreen({ navigation }) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isNew, setIsNew] = useState(false);
@@ -32,6 +32,7 @@ function AddDawaScreen({navigation}) {
   // const [itemListType, setItemListType] = useState('');
   const [itemPrice, setItemPrice] = useState('');
   const [itemDescription, setItemDescription] = useState('');
+  const [uploading, setUploading] = useState(null);
   // const [itemDelivery, setItemDelivery] = useState('');
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
@@ -58,6 +59,26 @@ function AddDawaScreen({navigation}) {
 
   };
 
+  const uploadImage = async () => {
+    setUploading(true)
+    const filename = image.substring(image.lastIndexOf('/') + 1)
+    const reference = ref(storage, 'dawas' + filename)
+    const img = await fetch(image)
+    const bytes = await img.blob()
+
+    try {
+      uploadBytes(reference, bytes).then((snapshot) => {
+        console.log('Uploaded a blob or file!');
+        Alert.alert('Image has been uploaded!!')
+      });
+    } catch {
+      console.log(console.error)
+    }
+    setUploading(false)
+    setImage(null)
+
+  }
+
   // changes the calue of isNew to the opposite
   const newFunc = () => {
     setIsNew(!isNew);
@@ -71,6 +92,8 @@ function AddDawaScreen({navigation}) {
 
 
   async function postDawa() {
+    uploadImage()
+    return
     const listType = {
       isRental: isRental,
       isBuy: isBuy
@@ -85,7 +108,7 @@ function AddDawaScreen({navigation}) {
       isNew: isNew,
       isUsed: isUsed
     }
-    
+
     const docRef = await addDoc(collection(db, "dawas"), {
       uidUser: user.uid,
       itemName: itemName,
@@ -96,7 +119,8 @@ function AddDawaScreen({navigation}) {
       postTime: Timestamp.now(),
       price: itemPrice,
       description: itemDescription,
-      image: image
+      // gets the filename that it is being referenced 
+      image: image.substring(image.lastIndexOf('/') + 1)
     })
 
     console.log("Document written with ID: ", docRef.id);
@@ -112,7 +136,7 @@ function AddDawaScreen({navigation}) {
 
     // TODO: After they post, navigate them to the home screen
     // navigation.navigate('Home');
-    
+
   }
 
 

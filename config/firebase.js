@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
-import { initializeAuth, getReactNativePersistence, getAuth } from 'firebase/auth';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from '@firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 
@@ -13,7 +14,8 @@ const firebaseConfig = {
   messagingSenderId: Constants.manifest.extra.messagingSenderId,
   appId: Constants.manifest.extra.appId,
   databaseURL: Constants.manifest.extra.databaseURL,
-  measurementID: Constants.manifest.extra.measurementID
+  measurementID: Constants.manifest.extra.measurementID,
+
 };
 
 // initialize firebase
@@ -21,3 +23,4 @@ const app = initializeApp(firebaseConfig);
 // export const auth = getAuth();
 export const auth = initializeAuth(app, { persistence: getReactNativePersistence(AsyncStorage) });
 export const db = getFirestore();
+export const storage = getStorage();

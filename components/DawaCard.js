@@ -4,8 +4,8 @@ import { Container, Card, UserInfo, TopLevel, UserImg, UserName, UserInfoText, P
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DawaCard = ({ item }) => {
-  console.log('------------ this is an item')
-  console.log(item)
+  // console.log('------------ this is an item')
+  // console.log(item)
 
   starIcon = item.starred ? 'star' : 'star-outline';
 
