@@ -5,7 +5,7 @@ import { auth, db } from '../config/firebase';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Login from './LoginScreen';
-import { doc, setDoc, collection, Timestamp } from '@firebase/firestore';
+import { doc, setDoc, collection, Timestamp, query, where } from '@firebase/firestore';
 
 
 //const backImage = require("../assets/icon.png");
@@ -40,6 +40,7 @@ export default function SignUpScreen({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [error, setError] = useState(null);
+  const [unique, setUnique] = useState(null);
 
   async function addUserToDatabase(user) {
     // connects us to "users" in the a document with a key of the user.uid (unique)
@@ -67,15 +68,31 @@ export default function SignUpScreen({ navigation }) {
       })
   }
 
+  const checkName = async () => {
+    const coll = collection(db, "users");
+    const query_ = query(coll, where('username', '==', userName));
+    const snapshot = (await getCountFromServer(query_));
+    setUnique(snapshot.data().count);
+    }
+
+
 
   const onHandleSignup = ({ navigation }) => {
     if (email !== '' && password !== '' && lastName !== '' && firstName !== '' && userName !== '') {
       if ((/@stanford.edu/.test(email))) {
-        createUserWithEmailAndPassword(auth, email, password)
+        checkName();
+        if(unique == 0){
+          createUserWithEmailAndPassword(auth, email, password)
           .then(async userCredential => {
             addUserToDatabase(userCredential.user)
           })
           .catch((err) => Alert.alert("Login error", err.message));
+        }     
+        else{
+          (err) => Alert.alert("username in use", err.message);
+      setError("Username already in use")
+      setUserName(null);
+        }
 
       }
 
