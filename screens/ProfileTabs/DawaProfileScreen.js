@@ -133,4 +133,18 @@ const DawaProfileScreen = () => {
   }*/
 }
 
+const styles = StyleSheet.create({
+
+  button: {
+    backgroundColor: '#a5353a',
+    height: 58,
+    width: '60%',
+    borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+})
+
 export default DawaProfileScreen
