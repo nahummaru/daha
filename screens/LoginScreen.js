@@ -1,8 +1,10 @@
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import {React, useState} from 'react';
-import { View, Text, Alert , StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity} from 'react-native';
+import { View, KeyboardAvoidingView, Text, Alert , StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity} from 'react-native';
 import { auth, db } from '../config/firebase';
 import {set} from 'firebase/database'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -25,6 +27,8 @@ const Login = ({navigation}) => {
   };
 
   return (
+    <KeyboardAvoidingView style={{flex: 1}}>
+      <ScrollView contentContainerStyle={{flex: 1}}>
     <View style={styles.container}>
         <View style={styles.whiteSheet} />
         <SafeAreaView style={styles.form}>
@@ -49,11 +53,12 @@ const Login = ({navigation}) => {
             value={password}
             onChangeText={(text) => setPassword(text)}
           />
+          
           <TouchableOpacity style={styles.button} onPress={onHandleLogin}>
             <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18, }}> Log In</Text>
           </TouchableOpacity>
           
-          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center',}}>
+          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center', marginBottom: '50%'}}>
             <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
               <Text style={{color: '#a5353a', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
@@ -63,6 +68,8 @@ const Login = ({navigation}) => {
 
         </SafeAreaView>
     </View>
+    </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -77,6 +84,7 @@ const styles = StyleSheet.create({
     color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
+    marginTop: '40%'
   },
   input: {
     backgroundColor: "#F6F7FB",

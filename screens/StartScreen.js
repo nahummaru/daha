@@ -17,7 +17,7 @@ const StartScreen = ({navigation}) => {
     <View style={styles.container}>
         <View style={styles.whiteSheet} />
         <SafeAreaView style={styles.form}>
-          <Image source={require("../assets/logo.jpeg")} style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '-30%'}}/>
+          <Image source={require("../assets/logo2.png")} style={{marginLeft: 'auto', marginRight: 'auto', marginTop: '-30%', marginBottom: '5%'}}/>
           
           <TouchableOpacity  onPress={() => navigation.navigate("Login")} style={styles.button} >
             <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 25}}> LOG IN</Text>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#e1a2a5',
     //opacity: '50%',
     height: '10%',
-    width: '70%',
+    width: '60%',
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
