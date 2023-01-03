@@ -6,11 +6,10 @@ import { getDoc, doc, collection } from '@firebase/firestore';
 import { getAuth, signOut } from "firebase/auth";
 import { Entypo } from '@expo/vector-icons';
 import Stars from 'react-native-stars';
-import { Button, SafeAreaView, ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
+import { Button, SafeAreaView, Image, ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native'
 import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
-
 import { Touchable } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
 import useState from 'react-usestateref'
@@ -36,18 +35,13 @@ const ProfileScreen = () => {
         }
     };
 
-
     return (
         <SafeAreaView style={styles.container}>
-
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
-
                     <TouchableOpacity >
-                        <Avatar.Image
-                            //source={{
-                            //  uri: 
-                            //}}
+                        <Avatar.Image 
+                            source={{uri: userInfo.profilePic}}
                             size={100}
                         />
 
@@ -56,6 +50,7 @@ const ProfileScreen = () => {
                         <Title style={[styles.title, {
                             marginTop: 15,
                             marginBottom: 5,
+                            color: 'black'
                         }]}>{userInfo.username}</Title>
                         <Stars
                             default={2.5}

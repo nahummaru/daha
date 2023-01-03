@@ -44,11 +44,17 @@ const DahaScreen = () => {
 
   const fetchPosts = async () => {
     const userInfo = await fetchUserInfo();
+     
+    // console.log(userInfo)
     //console.log(userInfo)
 
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
         const { postText, postTime, uidUser, needByDate, returnByDate } = doc.data();
+        // console.log('-------------')
+        // console.log(uidUser)
+        // console.log(userInfo[uidUser].username)
+
         list.push({
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
@@ -60,6 +66,7 @@ const DahaScreen = () => {
           needByDate: needByDate,
           returnByDate: returnByDate,
           bookmarked: true,
+          profilePic: userInfo[uidUser].profilePic
         });
       });
 

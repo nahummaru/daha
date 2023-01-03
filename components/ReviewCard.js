@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
 import { Entypo } from '@expo/vector-icons';
@@ -19,23 +19,20 @@ const ReviewCard = ({ item }) => {
 
             <Text style={{ fontWeight: 'bold', marginBottom: 3, fontSize: 15 }}>{item.userName}</Text>
             <Stars
-                            
-                            default={item.rating}
-                            count={5}
-                            half={true}
-                            starSize={120}
-
-
-                            fullStar={<Entypo name={'star'} size ={30} style={[styles.myStarStyle]} />}
-                            emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-                            halfStar={<Entypo name={'star'} size= {30} style={[styles.myStarStyle]} />}
-                        />
+              default={item.rating}
+              count={5}
+              half={true}
+              starSize={120}
+              fullStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}
+              emptyStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
+              halfStar={<Entypo name={'star'} size={30} style={[styles.myStarStyle]} />}
+            />
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', paddingTop: 15, paddingLeft: 30  }}>
+        <View style={{ flexDirection: 'row', paddingTop: 15, paddingLeft: 30 }}>
           <TouchableOpacity>
-            <Ionicons name="arrow-undo-outline" size={25}  />
+            <Ionicons name="arrow-undo-outline" size={25} />
           </TouchableOpacity>
         </View>
 
@@ -76,17 +73,17 @@ const ReviewCard = ({ item }) => {
 
 export default ReviewCard
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   myStarStyle: {
-      color: '#ffd700',
+    color: '#ffd700',
 
-      backgroundColor: 'transparent',
+    backgroundColor: 'transparent',
 
-      textShadowRadius: 0,
-      borderRadius: 5
+    textShadowRadius: 0,
+    borderRadius: 5
   },
   myEmptyStarStyle: {
-      color: 'white',
+    color: 'white',
   }
 });
 

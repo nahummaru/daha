@@ -1,21 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../config/firebase';
+import { auth, db, storage } from '../config/firebase';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { doc, setDoc, Timestamp, where, getCountFromServer, query, collection, onSnapshot } from '@firebase/firestore';
+import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 import Login from './LoginScreen';
-import { doc, setDoc, collection, Timestamp, query, where } from '@firebase/firestore';
+
 
 
 //const backImage = require("../assets/icon.png");
 import { AuthenticatedUserContext } from '../App.js'
 
-
-
 export default function SignUpScreen({ navigation }) {
 
-  const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
+  // const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
   // console.log('-------------hello')
   // console.log(user)
 
@@ -40,11 +40,36 @@ export default function SignUpScreen({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [error, setError] = useState(null);
-  const [unique, setUnique] = useState(null);
+
+  const [uploading, setUploading] = useState(null);
+  const [url, setUrl] = useState(null);
+
+
+  const uploadImage = async () => {
+    setUploading(true)
+    const filename = userName + '-profile-picture'
+    const reference = ref(storage, 'profile-pictures/' + filename)
+    const img = await fetch(image)
+    const bytes = await img.blob()
+
+    try {
+      await uploadBytes(reference, bytes)
+      return await getDownloadURL(reference)
+    } catch {
+      console.log(console.error)
+    }
+    return
+  }
+  // do the getdoanlaodURL in the upload Image
 
   async function addUserToDatabase(user) {
+    const profilePic = await uploadImage();
+    console.log('-------------------------profilePic')
+
+    console.log(profilePic)
     // connects us to "users" in the a document with a key of the user.uid (unique)
     const docRef = doc(db, "users", user.uid);
+    const filename = userName + '-profile-picture'
 
     // the userdata we are adding
     const userData = {
@@ -54,11 +79,11 @@ export default function SignUpScreen({ navigation }) {
       firstName: firstName,
       lastName: lastName,
       timeCreated: Timestamp.now(),
-      profilePic: image
+      profilePic: profilePic
     };
 
     // sets the doc we refernced with the data
-    setDoc(docRef, userData)
+    await setDoc(docRef, userData)
       .then(() => {
         console.log("Document has been added successfully");
         //console.log(userData)
@@ -68,38 +93,49 @@ export default function SignUpScreen({ navigation }) {
       })
   }
 
-  const checkName = async () => {
-    const coll = collection(db, "users");
-    const query_ = query(coll, where('username', '==', userName));
-    const snapshot = (await getCountFromServer(query_));
-    setUnique(snapshot.data().count);
-    }
+
+  const isUsernameUnique = async () => {
+    const q = query(collection(db, "users"), where("username", "==", userName));
+    console.log('isUsernameUnique is being run')
+    const snapshot = await getCountFromServer(q);
+    console.log('count: ', snapshot.data().count);
+    return snapshot.data().count == 0
+
+  }
 
 
+  const hasWhiteSpace = (s) => {
+    return s.indexOf(' ') >= 0;
+  }
 
-  const onHandleSignup = ({ navigation }) => {
+  // handles sign up and makes sure that the inputed information is valid
+  const onHandleSignup = async ({ navigation }) => {
     if (email !== '' && password !== '' && lastName !== '' && firstName !== '' && userName !== '') {
-      if ((/@stanford.edu/.test(email))) {
-        checkName();
-        if(unique == 0){
-          createUserWithEmailAndPassword(auth, email, password)
-          .then(async userCredential => {
-            addUserToDatabase(userCredential.user)
-          })
-          .catch((err) => Alert.alert("Login error", err.message));
-        }     
-        else{
-          (err) => Alert.alert("username in use", err.message);
-      setError("Username already in use")
-      setUserName(null);
+      const isUnique = await isUsernameUnique();
+      if (isUnique) {
+        if (!hasWhiteSpace(userName)) {
+          if ((/@stanford.edu/.test(email))) {
+            createUserWithEmailAndPassword(auth, email, password)
+              .then(async userCredential => {
+                await addUserToDatabase(userCredential.user)
+              })
+              .catch((err) => Alert.alert("Login error", err.message));
+
+          } else {
+            (err) => Alert.alert("please use stanford email", err.message);
+            setError("Please use a @stanford.edu email")
+          }
+        } else {
+          (err) => Alert.alert("Username must have no spaces in it — try another one!", err.message);
+          setError("Username must have no spaces — try another one!")
         }
-
+      } else {
+        (err) => Alert.alert("Username is already in use — try another one!", err.message);
+        setError("Username is already in use — try another one!")
       }
-
-    }
-    else {
-      (err) => Alert.alert("please use stanford email", err.message);
-      setError("Please use a @stanford.edu email")
+    } else {
+      (err) => Alert.alert("Please fill out all fields!", err.message);
+      setError("Please fill out all fields!")
       setEmail(null);
     }
 
@@ -196,6 +232,8 @@ export default function SignUpScreen({ navigation }) {
     </View>
   );
 }
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

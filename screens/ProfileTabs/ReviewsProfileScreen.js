@@ -5,10 +5,6 @@ import useState from 'react-usestateref'
 import ReviewCard from '../../components/ReviewCard';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 
-
-
-
-
 const Posts = [
   {
     id: '1',
