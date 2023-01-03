@@ -12,8 +12,8 @@ const AddDahaScreen = ({ navigation }) => {
   const [isNeedByDatePickerVisible, setNeedByDatePickerVisible] = useState(false);
   const [isReturnByDatePickerVisible, setReturnByDatePickerVisible] = useState(false);
 
-  const [needByDate, setNeedByDate] = useState(null)
-  const [returnByDate, setReturnByDate] = useState(null)
+  const [needByDate, setNeedByDate] = useState(new Date())
+  const [returnByDate, setReturnByDate] = useState(new Date())
 
 
   const showNeedByDatePicker = () => {
