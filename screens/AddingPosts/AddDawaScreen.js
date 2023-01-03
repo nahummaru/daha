@@ -8,6 +8,7 @@ import { UserInfoContext, AuthenticatedUserContext } from '../../App';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
 import { db, storage } from '../../config/firebase.js';
 import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const categoryData = [
   { label: 'Apparel', value: '0' },
@@ -151,6 +152,7 @@ function AddDawaScreen({ navigation }) {
 
 
   return (
+    <KeyboardAwareScrollView style={{flex: 1}}>
     <View style={styles.container}>
 
       <View style={styles.whiteSheet} />
@@ -262,6 +264,7 @@ function AddDawaScreen({ navigation }) {
       </TouchableOpacity>
 
     </View>
+    </KeyboardAwareScrollView>
 
   );
 }

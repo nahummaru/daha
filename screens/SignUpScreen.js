@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Button, KeyboardAvoidingView, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db, storage } from '../config/firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,6 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { doc, setDoc, Timestamp, where, getCountFromServer, query, collection, onSnapshot } from '@firebase/firestore';
 import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 import Login from './LoginScreen';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 
@@ -146,7 +147,7 @@ export default function SignUpScreen({ navigation }) {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
 
       <View style={styles.whiteSheet} />
       <ScrollView style={styles.ScrollView}>
@@ -220,16 +221,16 @@ export default function SignUpScreen({ navigation }) {
 
           </TouchableOpacity>
 
-          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '-20%' }}>
-            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14 }}>Have an account? </Text>
+          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '100%' }}>
+            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14,  }}>Have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-              <Text style={{ color: '#a5353a', fontWeight: '600', fontSize: 14, marginBottom: '0%' }}> Log In</Text>
+              <Text style={{ color: '#a5353a', fontWeight: '600', fontSize: 14, }}> Log In</Text>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
         <StatusBar barStyle="light-content" />
       </ScrollView>
-    </View>
+    </KeyboardAwareScrollView>
   );
 }
 
