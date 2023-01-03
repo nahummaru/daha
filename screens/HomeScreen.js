@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect, useEffect, useContext } from 'react';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native'
 import { useTailwind } from 'tailwind-rn';
 import TopTabNavigator from '../navigator/TopTabNavigator';
 import { AuthenticatedUserContext } from '../App';
@@ -10,22 +9,9 @@ import { getDoc, doc } from '@firebase/firestore';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    const tailwind = useTailwind();
-    const { user } = useContext(AuthenticatedUserContext);
+    const { user, setUser } = useContext(AuthenticatedUserContext);
     const { userInfo, setUserInfo } = useContext(UserInfoContext)
     const docRef = doc(db, "users", user.uid);
-
-
-    const fetchUserInfo = async () => {
-        try {
-            const docSnap = await getDoc(docRef);
-            const data = docSnap.data()
-            return data
-            //setUserInfo(data);
-        } catch (error) {
-            console.log('error', error)
-        }
-    }
 
     // will place user data in Context
     useEffect(() => {
@@ -33,6 +19,10 @@ const HomeScreen = () => {
             try {
                 const docSnap = await getDoc(docRef);
                 const data = docSnap.data()
+                console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
+                console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
+                console.log(data)
+                console.log(user.uid)
                 setUserInfo(data)
             } catch (error) {
                 console.log('error', error)

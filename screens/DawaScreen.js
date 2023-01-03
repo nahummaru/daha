@@ -1,103 +1,14 @@
-import { Input } from '@rneui/themed'
 import React, { useEffect, useContext } from 'react'
 import { StyleSheet, View, Text, ScrollView, SafeAreaView, Button, FlatList, TouchableOpacity } from 'react-native'
-import { useTailwind } from 'tailwind-rn'
-import { Container } from '../styles/DawaStyles'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import DawaCard from '../components/DawaCard'
-import styled from 'styled-components';
-
 import { doc, onSnapshot, collection, getDocsFromServer, getDocs } from "firebase/firestore";
 import { AuthenticatedUserContext } from '../App.js';
 import { db } from '../config/firebase.js';
 import useState from 'react-usestateref'
-import { format } from 'date-fns';
 
-// sets up db reference to 'dahas' collection
+// sets up db reference to collections in firebase
 const dbRefDahas = collection(db, "dawas");
 const dbRefUsers = collection(db, "users");
-
-
-
-const Posts = [
-  {
-    id: '1',
-    userName: 'Nahum Maru',
-    userImg: require('../assets/users/user-3.jpg'),
-    postDist: '< 1 mi away',
-    StateText: 'BUY: $26',
-    postImg: require('../assets/users/user-3.jpg'),
-    post: 'Live laugh love',
-    liked: true,
-    likes: '14',
-    comments: '5',
-    starred: true,
-
-  },
-  {
-    id: '2',
-    userName: 'John Doe',
-    userImg: require('../assets/users/user-1.jpg'),
-    postDist: '1.2 mi away',
-    StateText: 'FREE',
-    postImg: require('../assets/users/user-1.jpg'),
-    post: 'Lit crazy movie',
-    bookmarked: false,
-    starred: false,
-  },
-  {
-    id: '3',
-    userName: 'Ken William',
-    userImg: require('../assets/users/user-4.jpg'),
-    postDist: '< 1 mi away',
-    StateText: 'BORROW: $15',
-    postImg: require('../assets/users/user-4.jpg'),
-    post:
-      'go card',
-    bookmarked: true,
-    comments: '0',
-    starred: true,
-  },
-  {
-    id: '4',
-    userName: 'Selina Paul',
-    userImg: require('../assets/users/user-6.jpg'),
-    postDist: '< 1 mi away',
-    StateText: 'BUY: $26 RENT: $12',
-    postImg: require('../assets/users/user-6.jpg'),
-    post:
-      '1loveie',
-    bookmarked: true,
-    starred: false,
-
-  },
-  {
-    id: '5',
-    userName: 'Christy Alex',
-    userImg: require('../assets/users/user-7.jpg'),
-    postDist: '1.1 mi away',
-    StateText: 'BUY: $10',
-    postImg: require('../assets/users/user-7.jpg'),
-    post:
-      'road to 4k projector',
-    bookmarked: false,
-    starred: true,
-  },
-  {
-    id: '6',
-    userName: 'Nahum Maru',
-    userImg: require('../assets/users/user-3.jpg'),
-    postDist: '< 1 mi away',
-    StateText: 'RENT: $20',
-    postImg: require('../assets/users/user-3.jpg'),
-    post: 'Live laugh love',
-    liked: true,
-    likes: '14',
-    comments: '5',
-    starred: false,
-  },
-];
-
 
 
 const DawaScreen = () => {
@@ -135,7 +46,13 @@ const DawaScreen = () => {
 
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
-        const { itemCategory, postTime, uidUser, listType, price, itemName, itemCondition, image, description } = doc.data();
+        const { itemCategory, postTime, uidUser, listType, price, itemName, itemCondition, itemImage, description } = doc.data();
+        // console.log('================')
+        // console.log(uidUser)
+
+        // console.log(userInfo[uidUser].username)
+        // get the profile pic of the poster
+
         list.push({
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
@@ -144,7 +61,6 @@ const DawaScreen = () => {
           itemName: itemName,
           listType: listType,
           price: price,
-          userImg: require('../assets/users/user-7.jpg'),
           postTime: postTime.toDate(),
           itemCategory: itemCategory,
           itemCondition: itemCondition,
@@ -152,6 +68,7 @@ const DawaScreen = () => {
           // returnByDate: returnByDate,
           description: description,
           postTime: postTime.toDate(),
+          itemImage: itemImage
 
         });
       });
@@ -185,8 +102,12 @@ const DawaScreen = () => {
     <FlatList
       numColumns={2}
       key={2}
-      data={Posts}
-      renderItem={({ item }) => <DawaCard item={item} />}
+      columnWrapperStyle={{ justifyContent: 'space-between', }}
+      data={posts}
+      renderItem={({ item }) =>
+        <View style={{ flex: .5, }}>
+          <DawaCard item={item} />
+        </View>}
       keyExtractor={item => item.id}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}

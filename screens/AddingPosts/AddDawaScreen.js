@@ -4,19 +4,19 @@ import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { AuthenticatedUserContext } from '../../App';
-import { UserInfoContext } from '../../App';
+import { UserInfoContext, AuthenticatedUserContext } from '../../App';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import { db } from '../../config/firebase.js';
+import { db, storage } from '../../config/firebase.js';
+import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 
-const data = [
+const categoryData = [
   { label: 'Apparel', value: '0' },
   { label: 'Tech', value: '1' },
   { label: 'Dorm Essentials', value: '2' },
   { label: 'Other', value: '3' },
 ];
 
-function AddDawaScreen({navigation}) {
+function AddDawaScreen({ navigation }) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isNew, setIsNew] = useState(false);
@@ -32,6 +32,7 @@ function AddDawaScreen({navigation}) {
   // const [itemListType, setItemListType] = useState('');
   const [itemPrice, setItemPrice] = useState('');
   const [itemDescription, setItemDescription] = useState('');
+  const [uploading, setUploading] = useState(null);
   // const [itemDelivery, setItemDelivery] = useState('');
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
@@ -48,7 +49,7 @@ function AddDawaScreen({navigation}) {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
+      quality: .2,
       allowsEditing: true
     });
 
@@ -57,6 +58,25 @@ function AddDawaScreen({navigation}) {
     }
 
   };
+
+  const uploadImage = async () => {
+    setUploading(true)
+    const filename = image.substring(image.lastIndexOf('/') + 1)
+    const reference = ref(storage, 'dawas/' + filename)
+    const img = await fetch(image)
+    const bytes = await img.blob()
+
+    try {
+      await uploadBytes(reference, bytes)
+      setUploading(false)
+      setImage(null)
+      const url = await getDownloadURL(reference)
+      console.log('---- url: ' + url)
+      return url
+    } catch {
+      console.log(console.error)
+    }
+  }
 
   // changes the calue of isNew to the opposite
   const newFunc = () => {
@@ -71,6 +91,8 @@ function AddDawaScreen({navigation}) {
 
 
   async function postDawa() {
+    const itemImage = await uploadImage()
+    console.log(itemImage)
     const listType = {
       isRental: isRental,
       isBuy: isBuy
@@ -85,19 +107,31 @@ function AddDawaScreen({navigation}) {
       isNew: isNew,
       isUsed: isUsed
     }
-    
-    const docRef = await addDoc(collection(db, "dawas"), {
+    console.log('#########-----------------------')
+    console.log(itemCategory)
+    console.log(Number(itemCategory))
+    console.log(categoryData[parseInt(itemCategory)].value)
+    // console.log(categoryData[Number(itemCategory)])
+
+    const data = {
       uidUser: user.uid,
       itemName: itemName,
       itemCondition: condition,
       listType: listType,
       // converts it to a string representing the category
-      itemCategory: data[Number(itemCategory)].label,
+      //itemCategory: categoryData[Number(itemCategory)].label,
+      itemCategory: itemCategory,
       postTime: Timestamp.now(),
       price: itemPrice,
       description: itemDescription,
-      image: image
-    })
+      // gets the filename that it is being referenced 
+      itemImage: itemImage
+    }
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(data)
+
+
+    const docRef = await addDoc(collection(db, "dawas"), data)
 
     console.log("Document written with ID: ", docRef.id);
     console.log("Dawa Post has been added to the DB!!");
@@ -112,7 +146,7 @@ function AddDawaScreen({navigation}) {
 
     // TODO: After they post, navigate them to the home screen
     // navigation.navigate('Home');
-    
+
   }
 
 
@@ -147,7 +181,7 @@ function AddDawaScreen({navigation}) {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
+            data={categoryData}
             search
             maxHeight={300}
             labelField="label"
