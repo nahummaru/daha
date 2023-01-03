@@ -1,14 +1,15 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, useState} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Timestamp, toDate } from 'firebase/firestore';
 import TimeAgo from '@andordavoti/react-native-timeago';
-import { format } from 'date-fns'
-
-
-// using the item.uidUser, we can then query for the profile picture
+import { format } from 'date-fns';
+import moment from 'moment';
 
 const DahaCard = ({ item }) => {
+  
+  //setSelectedDate(moment(item.needByDate).format('DD-MM-YYYY hh:mm A'));
+
   return (
     <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
       <View style={{ flexDirection: 'row', paddingTop: 10 }}>
@@ -36,13 +37,13 @@ const DahaCard = ({ item }) => {
 
       <View style={{ flexDirection: 'row' }}>
         <Text style={{ color: "#a5353a", fontWeight: 'bold' }}>NEED BY </Text>
-        <Text style={{ fontSize: 14 }}> {item.needByDate}</Text>
+        <Text style={{ fontSize: 14 }}> {moment(item.needByDate).format('MMMM D, YYYY hh:mma')}</Text>
       </View>
 
       <View style={{ flexDirection: 'row' }}>
         <Text style={{ color: "#a5353a", fontWeight: 'bold' }}>RETURN BY </Text>
 
-        <Text style={{ fontSize: 14 }}> {item.returnByDate}</Text>
+        <Text style={{ fontSize: 14 }}> {moment(item.returnByDate).format('MMMM D, YYYY hh:mma')}</Text>
       </View>
     </View>
   )

@@ -26,7 +26,6 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Image source= {backImage} style={styles.backImage}/>
         <View style={styles.whiteSheet} />
         <SafeAreaView style={styles.form}>
           <Text style={styles.title}> Login </Text>
@@ -51,13 +50,13 @@ const Login = ({navigation}) => {
             onChangeText={(text) => setPassword(text)}
           />
           <TouchableOpacity style={styles.button} onPress={onHandleLogin}>
-            <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18}}> Log In</Text>
+            <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18, }}> Log In</Text>
           </TouchableOpacity>
           
-          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center'}}>
+          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center',}}>
             <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-              <Text style={{color: '#f57c00', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
+              <Text style={{color: '#a5353a', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
             </TouchableOpacity>
           </View>
 
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: "orange",
+    color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
   },
@@ -108,12 +107,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   button: {
-    backgroundColor: '#f57c00',
+    backgroundColor: '#a5353a',
     height: 58,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 40,
   },
 })
 

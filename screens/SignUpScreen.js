@@ -6,13 +6,12 @@ import * as ImagePicker from 'expo-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { doc, setDoc, Timestamp, where, getCountFromServer, query, collection, onSnapshot } from '@firebase/firestore';
 import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
+import Login from './LoginScreen';
 
 
 
 //const backImage = require("../assets/icon.png");
 import { AuthenticatedUserContext } from '../App.js'
-
-
 
 export default function SignUpScreen({ navigation }) {
 
@@ -41,6 +40,7 @@ export default function SignUpScreen({ navigation }) {
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
   const [error, setError] = useState(null);
+
   const [uploading, setUploading] = useState(null);
   const [url, setUrl] = useState(null);
 
@@ -61,6 +61,7 @@ export default function SignUpScreen({ navigation }) {
     return
   }
   // do the getdoanlaodURL in the upload Image
+
   async function addUserToDatabase(user) {
     const profilePic = await uploadImage();
     console.log('-------------------------profilePic')
@@ -92,6 +93,7 @@ export default function SignUpScreen({ navigation }) {
       })
   }
 
+
   const isUsernameUnique = async () => {
     const q = query(collection(db, "users"), where("username", "==", userName));
     console.log('isUsernameUnique is being run')
@@ -100,6 +102,7 @@ export default function SignUpScreen({ navigation }) {
     return snapshot.data().count == 0
 
   }
+
 
   const hasWhiteSpace = (s) => {
     return s.indexOf(' ') >= 0;
