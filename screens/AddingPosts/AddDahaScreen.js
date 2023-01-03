@@ -2,26 +2,60 @@ import React, { useContext, useState } from 'react'
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity } from 'react-native';
 import { AuthenticatedUserContext } from '../../App.js';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import { CommonActions } from '@react-navigation/native';
 import { db } from '../../config/firebase.js';
-
-
-
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const AddDahaScreen = ({ navigation }) => {
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
-
   const [postText, setPostText] = useState(null)
+  const [isNeedByDatePickerVisible, setNeedByDatePickerVisible] = useState(false);
+  const [isReturnByDatePickerVisible, setReturnByDatePickerVisible] = useState(false);
+
+  const [needByDate, setNeedByDate] = useState(new Date())
+  const [returnByDate, setReturnByDate] = useState(new Date())
 
 
-  async function postDaha(user, postText) {
+  const showNeedByDatePicker = () => {
+    setNeedByDatePickerVisible(true);
+  };
+
+  const hideNeedByDatePicker = () => {
+    setNeedByDatePickerVisible(false);
+  };
+
+  const showReturnByDatePicker = () => {
+    setReturnByDatePickerVisible(true);
+  };
+
+  const hideReturnByDatePicker = () => {
+    setReturnByDatePickerVisible(false);
+  };
+
+  const handleConfirmNeedBy = (date) => {
+    console.warn("A need date has been picked: ", date);
+    setNeedByDate(date)
+    hideNeedByDatePicker();
+  };
+
+  const handleConfirmReturnBy = (date) => {
+    console.warn("A return date has been picked: ", date);
+    setReturnByDate(date)
+    hideReturnByDatePicker();
+  };
+
+  async function postDaha() {
+    console.log(needByDate)
+    console.log(returnByDate)
+
     const docRef = await addDoc(collection(db, "dahas"), {
       uidUser: user.uid,
       postText: postText,
-      postTime: Timestamp.now()
+      postTime: Timestamp.now(),
+      needByDate: needByDate.getTime(),
+      returnByDate: returnByDate.getTime()
     })
+
     console.log("Document written with ID: ", docRef.id);
     console.log("Daha Post has been added to the DB!!");
     Alert.alert('DAHA posted successfully!!')
@@ -52,7 +86,22 @@ const AddDahaScreen = ({ navigation }) => {
           onChangeText={(text) => setPostText(text)}
         />
 
-        <TouchableOpacity style={styles.button} onPress={() => postDaha(user, postText)}>
+        <Button title="I need it by..." onPress={showNeedByDatePicker} />
+        <DateTimePickerModal
+          isVisible={isNeedByDatePickerVisible}
+          mode='datetime'
+          onConfirm={handleConfirmNeedBy}
+          onCancel={hideNeedByDatePicker}
+        />
+        <Button title="I can return it by..." onPress={showReturnByDatePicker} />
+        <DateTimePickerModal
+          isVisible={isReturnByDatePickerVisible}
+          mode='datetime'
+          onConfirm={handleConfirmReturnBy}
+          onCancel={hideReturnByDatePicker}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={postDaha}>
           <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> Post it!</Text>
         </TouchableOpacity>
 

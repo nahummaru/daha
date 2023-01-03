@@ -6,6 +6,7 @@ import { doc, onSnapshot, collection, getDocsFromServer, getDocs } from "firebas
 import { AuthenticatedUserContext } from '../App.js';
 import { db } from '../config/firebase.js';
 import useState from 'react-usestateref'
+import { format } from 'date-fns';
 
 // sets up db reference to 'dahas' collection
 const dbRefDahas = collection(db, "dahas");
@@ -25,7 +26,7 @@ const DahaScreen = () => {
   }, []);
 
 
-
+  // we can start keeping track of what has been bookmared
   const fetchUserInfo = async () => {
     // create a object of userInfo to be accessed when fetching posts
     const docsSnap = await getDocs(dbRefUsers);
@@ -43,11 +44,11 @@ const DahaScreen = () => {
 
   const fetchPosts = async () => {
     const userInfo = await fetchUserInfo();
-    console.log(userInfo)
+    //console.log(userInfo)
 
     onSnapshot(dbRefDahas, docsSnap => {
       docsSnap.forEach(doc => {
-        const { postText, postTime, uidUser } = doc.data();
+        const { postText, postTime, uidUser, needByDate, returnByDate } = doc.data();
         list.push({
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
@@ -56,14 +57,27 @@ const DahaScreen = () => {
           userImg: require('../assets/users/user-7.jpg'),
           postTime: postTime.toDate(),
           post: postText,
+          needByDate: needByDate,
+          returnByDate: returnByDate,
           bookmarked: true,
         });
       });
 
       // sorts posts with newest on the top
       let sortedPosts = list.sort(
-          (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
+        (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
+      let v = sortedPosts[1].needByDate
+      let x = sortedPosts[1].returnByDate
+
+      const f = format(new Date(v), "LLLL Ko, hbb")
+      const d = format(v, "LLLL Ko, hbb")
+      //console.log(v)
+      //console.log(f)
+      //console.log(d)
+
       
+      // console.log(sortedPosts[1])
+      console.log(sortedPosts.length)
       setPosts(sortedPosts);
     });
 
