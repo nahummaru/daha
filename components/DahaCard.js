@@ -13,7 +13,7 @@ const DahaCard = ({ item }) => {
     <View style={{ flex: 1, alignItems: 'left', backgroundColor: '#f8f8f8', padding: 10, marginBottom: 15, borderRadius: 25, alignContent: 'stretch' }}>
       <View style={{ flexDirection: 'row', paddingTop: 10 }}>
         <View style={{ flexDirection: 'row', width: '80%' }}>
-          <Image style={{ width: 50, borderRadius: 25, height: 50 }} source={require('../assets/users/user-2.jpg')} />
+          <Image style={{ width: 50, borderRadius: 25, height: 50 }} source={{ uri: item.profilePic}} />
           <View style={{ flexDirection: 'column', marginLeft: 10 }}>
 
             <Text style={{ fontWeight: 'bold', marginBottom: 3, fontSize: 17 }}>{item.userName}</Text>

@@ -21,8 +21,6 @@ const HomeScreen = () => {
                 const data = docSnap.data()
                 console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
                 console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
-                console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
-                console.log('^^^^^^^^^^^^^^^^^^^^^^^^')
                 console.log(data)
                 console.log(user.uid)
                 setUserInfo(data)

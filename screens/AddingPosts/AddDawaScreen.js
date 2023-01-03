@@ -7,9 +7,9 @@ import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, 
 import { UserInfoContext, AuthenticatedUserContext } from '../../App';
 import { addDoc, Timestamp, collection } from '@firebase/firestore';
 import { db, storage } from '../../config/firebase.js';
-import { uploadBytes, ref } from '@firebase/storage';
+import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 
-const data = [
+const categoryData = [
   { label: 'Apparel', value: '0' },
   { label: 'Tech', value: '1' },
   { label: 'Dorm Essentials', value: '2' },
@@ -49,7 +49,7 @@ function AddDawaScreen({ navigation }) {
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
+      quality: .2,
       allowsEditing: true
     });
 
@@ -62,21 +62,20 @@ function AddDawaScreen({ navigation }) {
   const uploadImage = async () => {
     setUploading(true)
     const filename = image.substring(image.lastIndexOf('/') + 1)
-    const reference = ref(storage, 'dawas' + filename)
+    const reference = ref(storage, 'dawas/' + filename)
     const img = await fetch(image)
     const bytes = await img.blob()
 
     try {
-      uploadBytes(reference, bytes).then((snapshot) => {
-        console.log('Uploaded a blob or file!');
-        Alert.alert('Image has been uploaded!!')
-      });
+      await uploadBytes(reference, bytes)
+      setUploading(false)
+      setImage(null)
+      const url = await getDownloadURL(reference)
+      console.log('---- url: ' + url)
+      return url
     } catch {
       console.log(console.error)
     }
-    setUploading(false)
-    setImage(null)
-
   }
 
   // changes the calue of isNew to the opposite
@@ -92,8 +91,8 @@ function AddDawaScreen({ navigation }) {
 
 
   async function postDawa() {
-    uploadImage()
-    return
+    const itemImage = await uploadImage()
+    console.log(itemImage)
     const listType = {
       isRental: isRental,
       isBuy: isBuy
@@ -108,20 +107,31 @@ function AddDawaScreen({ navigation }) {
       isNew: isNew,
       isUsed: isUsed
     }
+    console.log('#########-----------------------')
+    console.log(itemCategory)
+    console.log(Number(itemCategory))
+    console.log(categoryData[parseInt(itemCategory)].value)
+    // console.log(categoryData[Number(itemCategory)])
 
-    const docRef = await addDoc(collection(db, "dawas"), {
+    const data = {
       uidUser: user.uid,
       itemName: itemName,
       itemCondition: condition,
       listType: listType,
       // converts it to a string representing the category
-      itemCategory: data[Number(itemCategory)].label,
+      //itemCategory: categoryData[Number(itemCategory)].label,
+      itemCategory: itemCategory,
       postTime: Timestamp.now(),
       price: itemPrice,
       description: itemDescription,
       // gets the filename that it is being referenced 
-      image: image.substring(image.lastIndexOf('/') + 1)
-    })
+      itemImage: itemImage
+    }
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    console.log(data)
+
+
+    const docRef = await addDoc(collection(db, "dawas"), data)
 
     console.log("Document written with ID: ", docRef.id);
     console.log("Dawa Post has been added to the DB!!");
@@ -171,7 +181,7 @@ function AddDawaScreen({ navigation }) {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            data={data}
+            data={categoryData}
             search
             maxHeight={300}
             labelField="label"
