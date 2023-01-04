@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, KeyboardAvoidingView, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView } from "react-native";
+import { StyleSheet, Text, View, Button, KeyboardAvoidingView, TextInput, Image, SafeAreaView, TouchableOpacity, StatusBar, Alert, ScrollView, Platform } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db, storage } from '../config/firebase';
 import * as ImagePicker from 'expo-image-picker';
@@ -147,10 +147,10 @@ export default function SignUpScreen({ navigation }) {
 
 
   return (
-    <KeyboardAwareScrollView style={styles.container}>
-
-      <View style={styles.whiteSheet} />
-      <ScrollView style={styles.ScrollView}>
+   
+      <ScrollView bounce={false} >
+    <View style={styles.container}>
+        <View style={styles.whiteSheet} />
         <SafeAreaView style={styles.form}>
 
           <Text style={styles.title}>Sign Up</Text>
@@ -221,16 +221,22 @@ export default function SignUpScreen({ navigation }) {
 
           </TouchableOpacity>
 
-          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '100%' }}>
+          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom:'50%' }}>
             <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14,  }}>Have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={{ color: '#a5353a', fontWeight: '600', fontSize: 14, }}> Log In</Text>
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
-        <StatusBar barStyle="light-content" />
-      </ScrollView>
-    </KeyboardAwareScrollView>
+
+
+          </SafeAreaView>
+    </View>
+    </ScrollView>
+   
+  
+       
+      
+    
   );
 }
 
@@ -246,7 +252,7 @@ const styles = StyleSheet.create({
     color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
-    marginTop: '15%'
+    marginTop: '20%'
   },
   input: {
     backgroundColor: "#F6F7FB",
@@ -258,7 +264,7 @@ const styles = StyleSheet.create({
   },
   whiteSheet: {
     width: '100%',
-    height: '75%',
+    height: '100%',
     position: "absolute",
     bottom: 0,
     backgroundColor: '#fff',

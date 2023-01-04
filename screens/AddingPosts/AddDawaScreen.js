@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Ionicons, FontAwesome} from 'react-native-vector-icons';
 import { Dropdown } from 'react-native-element-dropdown';
 import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
 import { UserInfoContext, AuthenticatedUserContext } from '../../App';
@@ -9,6 +9,7 @@ import { addDoc, Timestamp, collection } from '@firebase/firestore';
 import { db, storage } from '../../config/firebase.js';
 import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import BuyPrice from '../../components/BuyPrice'; 
 
 const categoryData = [
   { label: 'Apparel', value: '0' },
@@ -17,15 +18,22 @@ const categoryData = [
   { label: 'Other', value: '3' },
 ];
 
+const rentalOptions = [
+  { label: '  /hr', value2: '4' },
+  { label: '  /day', value2: '5' },
+];
+
 function AddDawaScreen({ navigation }) {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  const[isFocus2, setIsFocus2] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [isUsed, setIsUsed] = useState(false);
   const [isRental, setIsRental] = useState(false);
   const [isBuy, setIsBuy] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
   const [isDropOff, setIsDropOff] = useState(false);
+  const[value2, setValue2] = useState(null);
 
   const [itemName, setItemName] = useState('');
   const [itemCategory, setItemCategory] = useState('');
@@ -33,6 +41,7 @@ function AddDawaScreen({ navigation }) {
   // const [itemListType, setItemListType] = useState('');
   const [itemPrice, setItemPrice] = useState('');
   const [itemDescription, setItemDescription] = useState('');
+  const[timeFrame, setTimeFrame] = useState('');
   const [uploading, setUploading] = useState(null);
   // const [itemDelivery, setItemDelivery] = useState('');
 
@@ -89,6 +98,16 @@ function AddDawaScreen({ navigation }) {
     setIsUsed(!isUsed);
     isNew ? setIsNew(false) : setIsNew(false);
   };
+
+  const buyFunc = () => {
+    setIsBuy(!isBuy);
+    //isBuy && <BuyPrice/>;
+    
+  };
+
+  
+
+
 
 
   async function postDawa() {
@@ -219,19 +238,53 @@ function AddDawaScreen({ navigation }) {
             <Text style={{ fontWeight: 'bold', color: isRental ? 'white' : 'black', fontSize: 10 }}>RENT</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => { setIsBuy(!isBuy) }} style={[styles.buyButton, { backgroundColor: isBuy ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity onPress={buyFunc} style={[styles.buyButton, { backgroundColor: isBuy ? "#a5353a" : "transparent" }]}
           >
             <Text style={{ fontWeight: 'bold', color: isBuy ? 'white' : 'black', fontSize: 10 }}>BUY</Text>
           </TouchableOpacity>
 
           <Text style={styles.listingType}> PRICE </Text>
+
+          
+          
+          <Text style={styles.priceType}> RENTAL PRICE </Text>
+          <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
+          <FontAwesome name={"dollar"} size={20} color="#a5353a" />
           <TextInput
             style={styles.priceInput}
             autoCapitalize="none"
-            keyboardType="email-address"
-            textContentType="emailAddress"
+            keyboardType="number"
             autoFocus={true}
-            onChangeText={newText => setItemPrice(newText)} />
+            onChangeText={newText => setItemPrice(newText)}  />
+
+            <Text style={{fontWeight:'bold', marginLeft: 10, fontSize: 15} }>per</Text>
+            <Dropdown
+            style={{width: '40%', marginLeft: 5,   borderColor: 'gray',
+            borderWidth: 0.5,
+            borderRadius: 8, }}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={rentalOptions}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value2"
+            placeholder={!isFocus2 ? '  Time Frame' : '...'}
+            searchPlaceholder="Search..."
+            value2={value2}
+            onFocus={() => setIsFocus2(true)}
+            onBlur={() => setIsFocus2(false)}
+            onChange={item => {
+              setValue2(item.value2);
+              setTimeFrame(item.value2);
+              setIsFocus2(false);
+            }}
+          />
+            </View>
+
+            
 
           <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
           <TextInput
@@ -309,8 +362,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "black",
     alignSelf: "left",
-    marginTop: 20,
+    marginTop: 25,
     marginBottom: 10
+  },
+  priceType: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: "black",
+    alignSelf: "left",
+    marginTop: 10,
+    marginBottom: 10,
   },
 
   itemInput: {
@@ -486,7 +547,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderRadius: 10,
     padding: 12,
-    marginTop: 10,
+    marginTop: 0,
+    width: '20%',
+    marginBottom: '1%',
+    marginLeft: 5,
   },
 
   descriptionHeader: {

@@ -58,7 +58,7 @@ const Login = ({navigation}) => {
             <Text style={{fontWeight: 'bold', color: '#fff', fontSize: 18, }}> Log In</Text>
           </TouchableOpacity>
           
-          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center', marginBottom: '50%'}}>
+          <View style={{marginTop: 20, flexDirection: 'row', alignItems: 'left', alignSelf: 'center', marginBottom: '100%'}}>
             <Text style={{color: 'gray', fontWeight: '600', fontSize: 14}}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
               <Text style={{color: '#a5353a', fontWeight: '600', fontSize: 14}}> Sign Up</Text>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     color: "#a5353a",
     alignSelf: "center",
     paddingBottom: 24,
-    marginTop: '40%'
+    marginTop: '60%'
   },
   input: {
     backgroundColor: "#F6F7FB",
