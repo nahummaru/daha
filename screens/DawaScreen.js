@@ -86,7 +86,7 @@ const DawaScreen = () => {
       //console.log(f)
       //console.log(d)
 
-      console.log(sortedPosts)
+      // console.log(sortedPosts)
       console.log(sortedPosts.length)
 
       // console.log(sortedPosts[1])

@@ -7,11 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-
-
 const backImage = require("../assets/icon.png");
-
-
 
 const Login = ({navigation}) => {
 

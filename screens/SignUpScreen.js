@@ -11,7 +11,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 
-//const backImage = require("../assets/icon.png");
 import { AuthenticatedUserContext } from '../App.js'
 
 export default function SignUpScreen({ navigation }) {
@@ -48,22 +47,31 @@ export default function SignUpScreen({ navigation }) {
 
   const uploadImage = async () => {
     setUploading(true)
-    const filename = userName + '-profile-picture'
-    const reference = ref(storage, 'profile-pictures/' + filename)
+    const filename = image.substring(image.lastIndexOf('/') + 1)
+    const reference = ref(storage, 'dawas/' + filename)
     const img = await fetch(image)
-    const bytes = await img.blob()
+    const blob = await img.blob()
+    const newFile = new File([blob], `${filename}.jpeg`, {
+      type: 'image/jpeg',
+    })
 
     try {
-      await uploadBytes(reference, bytes)
-      return await getDownloadURL(reference)
+      await uploadBytes(reference, newFile)
+      setUploading(false)
+      setImage(null)
+      const url = await getDownloadURL(reference)
+      console.log('---- url: ' + url)
+      return url
     } catch {
       console.log(console.error)
     }
-    return
   }
+
   // do the getdoanlaodURL in the upload Image
 
   async function addUserToDatabase(user) {
+    console.log('getting -------------------------profilePic')
+
     const profilePic = await uploadImage();
     console.log('-------------------------profilePic')
 
@@ -80,13 +88,13 @@ export default function SignUpScreen({ navigation }) {
       firstName: firstName,
       lastName: lastName,
       timeCreated: Timestamp.now(),
-      profilePic: profilePic, 
+      profilePic: profilePic,
       reviews: {
         numStars: 5,
         numReviews: 0
       },
       bookmarks: {
-        dahas: [], 
+        dahas: [],
         dawas: []
       }
     };
@@ -127,6 +135,8 @@ export default function SignUpScreen({ navigation }) {
             createUserWithEmailAndPassword(auth, email, password)
               .then(async userCredential => {
                 await addUserToDatabase(userCredential.user)
+                .then(console.log('USER HAS BEEN ADDED'))
+                .catch(Alert.alert(error))
               })
               .catch((err) => Alert.alert("Login error", err.message));
 
@@ -147,6 +157,7 @@ export default function SignUpScreen({ navigation }) {
       setError("Please fill out all fields!")
       setEmail(null);
     }
+    console.log('---------------- this should be the last message of sign up')
 
     // CALL A FUNCTION THAT CREATES A USER
     // WE CAN ACCESS UID, EMAIL AND THAT'LL BE THE USER
@@ -155,9 +166,9 @@ export default function SignUpScreen({ navigation }) {
 
 
   return (
-   
-      <ScrollView bounce={false} >
-    <View style={styles.container}>
+
+    <ScrollView bounce={false} >
+      <View style={styles.container}>
         <View style={styles.whiteSheet} />
         <SafeAreaView style={styles.form}>
 
@@ -229,22 +240,22 @@ export default function SignUpScreen({ navigation }) {
 
           </TouchableOpacity>
 
-          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom:'50%' }}>
-            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14,  }}>Have an account? </Text>
+          <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center', alignSelf: 'center', marginBottom: '50%' }}>
+            <Text style={{ color: 'gray', fontWeight: '600', fontSize: 14, }}>Have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={{ color: '#a5353a', fontWeight: '600', fontSize: 14, }}> Log In</Text>
             </TouchableOpacity>
           </View>
 
 
-          </SafeAreaView>
-    </View>
+        </SafeAreaView>
+      </View>
     </ScrollView>
-   
-  
-       
-      
-    
+
+
+
+
+
   );
 }
 
