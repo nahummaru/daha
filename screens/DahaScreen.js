@@ -60,7 +60,6 @@ const DahaScreen = () => {
           // id; doc.id,
           id: list.length,
           userName: userInfo[uidUser].username,
-          userImg: require('../assets/users/user-7.jpg'),
           postTime: postTime.toDate(),
           post: postText,
           needByDate: needByDate,
