@@ -80,7 +80,15 @@ export default function SignUpScreen({ navigation }) {
       firstName: firstName,
       lastName: lastName,
       timeCreated: Timestamp.now(),
-      profilePic: profilePic
+      profilePic: profilePic, 
+      reviews: {
+        numStars: 5,
+        numReviews: 0
+      },
+      bookmarks: {
+        dahas: [], 
+        dawas: []
+      }
     };
 
     // sets the doc we refernced with the data

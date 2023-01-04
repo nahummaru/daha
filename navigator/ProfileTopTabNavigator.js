@@ -17,7 +17,7 @@ const ProfileTopTabNavigator = ({navigation}) => {
         fontSize: 17,
         fontWeight: "bold",
       },
-      tabBarStyle: {
+      tabBarStyle: { 
         borderLeftColor: "black", 
       },
 

@@ -10,7 +10,6 @@ import { Button, SafeAreaView, Image, ScrollView, Text, View, TouchableOpacity, 
 import { Avatar, Title, Caption, TouchableRipple } from 'react-native-paper';
 import { AuthenticatedUserContext } from '../App';
 import ProfileTopTabNavigator from '../navigator/ProfileTopTabNavigator';
-import { Touchable } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
 import useState from 'react-usestateref'
 import { UserInfoContext } from '../App';
@@ -40,8 +39,8 @@ const ProfileScreen = () => {
             <View style={styles.userInfoSection}>
                 <View style={{ flexDirection: 'row', marginTop: 15 }}>
                     <TouchableOpacity >
-                        <Avatar.Image 
-                            source={{uri: userInfo.profilePic}}
+                        <Avatar.Image
+                            source={{ uri: userInfo.profilePic }}
                             size={100}
                         />
 

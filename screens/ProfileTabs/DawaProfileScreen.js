@@ -120,7 +120,7 @@ const DawaProfileScreen = () => {
       />
       //</Container>
     )
-  } /*else {
+  } else {
     return (
       <View style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center' }}>
         <Text style={{ fontSize: 30, textAlign: 'center', fontWeight: 'bold', marginTop: 40, color: "#a5353a" }}>  You haven't posted any dahas yet! </Text>
@@ -130,7 +130,7 @@ const DawaProfileScreen = () => {
         </TouchableOpacity>
       </View>
     )
-  }*/
+  }
 }
 
 const styles = StyleSheet.create({
