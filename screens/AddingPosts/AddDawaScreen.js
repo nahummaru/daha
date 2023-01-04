@@ -43,6 +43,7 @@ function AddDawaScreen({ navigation }) {
   const [itemDescription, setItemDescription] = useState('');
   const[timeFrame, setTimeFrame] = useState('');
   const [uploading, setUploading] = useState(null);
+  const[isFree, setIsFree] = useState(false);
   // const [itemDelivery, setItemDelivery] = useState('');
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
@@ -245,7 +246,24 @@ function AddDawaScreen({ navigation }) {
 
           <Text style={styles.listingType}> PRICE </Text>
 
-          
+          <TouchableOpacity onPress={() => { setIsFree(!isFree) }} style={[styles.rentButton, { backgroundColor: isFree ? "#a5353a" : "transparent" }]}
+          >
+            <Text style={{ fontWeight: 'bold', color: isFree ? 'white' : 'black', fontSize: 10 }}>FREE</Text>
+          </TouchableOpacity>
+
+
+
+    <Text style={styles.priceType}> BUY PRICE </Text>
+    <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
+          <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+            <TextInput
+              style={styles.priceInput}
+              autoCapitalize="none"
+              keyboardType="number"
+              autoFocus={true}
+              onChangeText={newText => setItemPrice(newText)}  
+              backgroundColor={isFree ? '#696969' : '#f9f9f9'}/>
+              </View>
           
           <Text style={styles.priceType}> RENTAL PRICE </Text>
           <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
@@ -255,7 +273,9 @@ function AddDawaScreen({ navigation }) {
             autoCapitalize="none"
             keyboardType="number"
             autoFocus={true}
-            onChangeText={newText => setItemPrice(newText)}  />
+            onChangeText={newText => setItemPrice(newText)}
+             />
+         
 
             <Text style={{fontWeight:'bold', marginLeft: 10, fontSize: 15} }>per</Text>
             <Dropdown
