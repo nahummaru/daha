@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, Fragment } from 'react'
 import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons, FontAwesome } from 'react-native-vector-icons';
@@ -9,7 +9,6 @@ import { addDoc, Timestamp, collection } from '@firebase/firestore';
 import { db, storage } from '../../config/firebase.js';
 import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import BuyPrice from '../../components/BuyPrice';
 
 const categoryData = [
   { label: 'Apparel', value: '0' },
@@ -55,6 +54,7 @@ function AddDawaScreen({ navigation }) {
       {icon}
     </TouchableOpacity>
   );
+
 
   const [image, setImage] = useState(null);
 
@@ -104,11 +104,12 @@ function AddDawaScreen({ navigation }) {
     isNew ? setIsNew(false) : setIsNew(false);
   };
 
+
   const buyFunc = () => {
     setIsBuy(!isBuy);
-    //isBuy && <BuyPrice/>;
-
   };
+
+  
 
   async function postDawa() {
     console.log('--- FUNC HELLLLO')
@@ -188,8 +189,9 @@ function AddDawaScreen({ navigation }) {
   }
 
 
+
+
   return (
-    <KeyboardAwareScrollView style={{ flex: 1 }}>
       <View style={styles.container}>
 
         <View style={styles.whiteSheet} />
@@ -270,19 +272,25 @@ function AddDawaScreen({ navigation }) {
 
 
 
-            <Text style={styles.priceType}> BUY PRICE </Text>
-            <View style={{ flexDirection: 'row', marginLeft: 5, alignItems: 'center' }}>
-              <FontAwesome name={"dollar"} size={20} color="#a5353a" />
-              <TextInput
-                style={styles.priceInput}
-                keyboardType='numeric'
-                autoCapitalize="none"
-                keyboardType="number"
-                autoFocus={true}
-                onChangeText={newText => setItemBuyPrice(newText)}
-                backgroundColor={isFree ? '#696969' : '#f9f9f9'} />
-            </View>
-
+            {isBuy && !isFree &&
+        <Fragment>
+      <View style={{flex: 1}}>
+    <Text style={styles.priceType}> BUY PRICE </Text>
+    <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
+          <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+            <TextInput
+              style={styles.priceInput}
+              autoCapitalize="none"
+              keyboardType="number"
+              autoFocus={true}
+              onChangeText={newText => setItemPrice(newText)}  />
+              </View>
+              </View>
+    </Fragment>
+    }
+          {isRental && 
+          <Fragment>
+            <View style={{flex: 1}}>
             <Text style={styles.priceType}> RENTAL PRICE </Text>
             <View style={{ flexDirection: 'row', marginLeft: 5, alignItems: 'center' }}>
               <FontAwesome name={"dollar"} size={20} color="#a5353a" />
@@ -323,8 +331,10 @@ function AddDawaScreen({ navigation }) {
                 }}
               />
             </View>
+            </View>
+            </Fragment>
 
-
+              }
 
             <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
             <TextInput
@@ -357,7 +367,6 @@ function AddDawaScreen({ navigation }) {
         </TouchableOpacity>
 
       </View>
-    </KeyboardAwareScrollView>
 
   );
 }
