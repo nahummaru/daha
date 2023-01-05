@@ -1,18 +1,31 @@
-import React, { useEffect, useContext } from 'react'
-import { StyleSheet, View, Text, ScrollView, SafeAreaView, Button, FlatList, TouchableOpacity } from 'react-native'
-import DawaCard from '../components/DawaCard'
-import { doc, onSnapshot, collection, getDocsFromServer, getDocs } from "firebase/firestore";
-import { AuthenticatedUserContext } from '../App.js';
-import { db } from '../config/firebase.js';
-import useState from 'react-usestateref'
+import React, { useEffect, useContext } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  Button,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
+import DawaCard from "../components/DawaCard";
+import {
+  doc,
+  onSnapshot,
+  collection,
+  getDocsFromServer,
+  getDocs,
+} from "firebase/firestore";
+import { AuthenticatedUserContext } from "../App.js";
+import { db } from "../config/firebase.js";
+import useState from "react-usestateref";
 
 // sets up db reference to collections in firebase
 const dbRefDahas = collection(db, "dawas");
 const dbRefUsers = collection(db, "users");
 
-
 const DawaScreen = () => {
-
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true);
   const list = [];
@@ -23,30 +36,39 @@ const DawaScreen = () => {
     fetchPosts();
   }, []);
 
-
   // we can start keeping track of what has been bookmared
   const fetchUserInfo = async () => {
     // create a object of userInfo to be accessed when fetching posts
     const docsSnap = await getDocs(dbRefUsers);
     const users = {};
-    docsSnap.forEach(doc => {
+    docsSnap.forEach((doc) => {
       const { uidUser, username, timeCreated, profilePic } = doc.data();
       users[uidUser] = {
         username: username,
         timeCreated: timeCreated,
-        profilePic: profilePic
-      }
-    })
-    return users
-  }
+        profilePic: profilePic,
+      };
+    });
+    return users;
+  };
 
   const fetchPosts = async () => {
     const userInfo = await fetchUserInfo();
     //console.log(userInfo)
 
-    onSnapshot(dbRefDahas, docsSnap => {
-      docsSnap.forEach(doc => {
-        const { itemCategory, postTime, uidUser, listType, price, itemName, itemCondition, itemImage, description } = doc.data();
+    onSnapshot(dbRefDahas, (docsSnap) => {
+      docsSnap.forEach((doc) => {
+        const {
+          itemCategory,
+          postTime,
+          uidUser,
+          listType,
+          price,
+          itemName,
+          itemCondition,
+          itemImage,
+          description,
+        } = doc.data();
         // console.log('================')
         // console.log(uidUser)
 
@@ -68,14 +90,18 @@ const DawaScreen = () => {
           // returnByDate: returnByDate,
           description: description,
           postTime: postTime.toDate(),
-          itemImage: itemImage
-
+          itemImage: itemImage,
         });
       });
 
       // sorts posts with newest on the top
-      let sortedPosts = list.sort(
-        (p1, p2) => (p1.postTime.getTime() < p2.postTime.getTime()) ? 1 : (p1.postTime.getTime() > p2.postTime.getTime()) ? -1 : 0);
+      let sortedPosts = list.sort((p1, p2) =>
+        p1.postTime.getTime() < p2.postTime.getTime()
+          ? 1
+          : p1.postTime.getTime() > p2.postTime.getTime()
+          ? -1
+          : 0
+      );
 
       //  let v = sortedPosts[1].needByDate
       // let x = sortedPosts[1].returnByDate
@@ -87,7 +113,7 @@ const DawaScreen = () => {
       //console.log(d)
 
       // console.log(sortedPosts)
-      console.log(sortedPosts.length)
+      console.log(sortedPosts.length);
 
       // console.log(sortedPosts[1])
       setPosts(sortedPosts);
@@ -96,27 +122,28 @@ const DawaScreen = () => {
     if (loading) {
       setLoading(false);
     }
-  }
+  };
   return (
     //<Container>
     <FlatList
       numColumns={2}
       key={2}
-      columnWrapperStyle={{ justifyContent: 'space-between', }}
+      columnWrapperStyle={{ justifyContent: "space-between" }}
       data={posts}
-      renderItem={({ item }) =>
-        <View style={{ flex: .5, }}>
+      renderItem={({ item }) => (
+        <View style={{ flex: 0.5 }}>
           <DawaCard item={item} />
-        </View>}
-      keyExtractor={item => item.id}
+        </View>
+      )}
+      keyExtractor={(item) => item.id}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
     />
     //</Container>
-  )
-}
+  );
+};
 
-export default DawaScreen
+export default DawaScreen;
 
 /*const DawaScreen = () => {
   return (

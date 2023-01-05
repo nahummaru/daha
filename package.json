@@ -66,6 +66,7 @@
     "concurrently": "^7.5.0",
     "customize-cra": "^1.0.0",
     "postcss": "^8.4.19",
+    "prettier": "2.8.1",
     "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.2.4"
   },
