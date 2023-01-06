@@ -11,6 +11,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MessagesScreen from "../screens/MessagesScreen";
 import { useNavigation } from "@react-navigation/native";
 import ProfileScreen from "../screens/ProfileScreen";
+import GenericProfileTopTabNavigator from "../navigator/GenericProfileTopTabNavigator";
+import FeedStack from "../navigator/FeedStack";
 
 const DawaCard = ({ item }) => {
   const navigation = useNavigation();
@@ -20,8 +22,14 @@ const DawaCard = ({ item }) => {
   starIcon = item.starred ? "star" : "star-outline";
 
   const goToUserProfileScreen = (uidUser) => {
+    console.log('bruh')
+    return (
+      <FeedStack></FeedStack>
+    )
     console.log(uidUser);
+    console.log(item)
     navigation.navigate("Profile");
+    navigation.navigate('FeedNavigator', { screen: 'UserProfile' })
   };
 
   // if free
@@ -80,9 +88,9 @@ const DawaCard = ({ item }) => {
     );
   } else {
     const buyPrefix = item.price.buyPrice == null ? "" : "BUY";
-    const buyPrice = item.price.buyPrice + "$";
+    const buyPrice = item.price.buyPrice == null ? "" : item.price.buyPrice + "$";
     const rentPrefix = item.price.rentalPrice == null ? "" : "RENT";
-    const rentPrice =
+    const rentPrice = item.price.rentalPrice == null ? "" : 
       item.price.rentalPrice + "$" + "/" + item.price.rentalTimeframe + " ";
 
     return (
@@ -98,7 +106,7 @@ const DawaCard = ({ item }) => {
         }}
       >
         <View>
-          <TouchableOpacity onPress={() => console.log(item.uidUser)}>
+          <TouchableOpacity onPress={goToUserProfileScreen}>
             <Image
               style={{
                 alignSelf: "center",

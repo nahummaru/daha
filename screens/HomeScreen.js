@@ -38,7 +38,9 @@ const HomeScreen = () => {
     });
   }, []);
 
-  return <TopTabNavigator> </TopTabNavigator>;
+  return <TopTabNavigator>
+      
+  </TopTabNavigator>;
 };
 
 export default HomeScreen;

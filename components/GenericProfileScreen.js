@@ -4,7 +4,6 @@ import { AuthenticatedUserContext } from "../App";
 import ProfileTopTabNavigator from "../navigator/ProfileTopTabNavigator";
 import * as ImagePicker from "expo-image-picker";
 import useState from "react-usestateref";
-import { View, Text } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import Stars from "react-native-stars";
 import { getDoc, doc, collection } from "@firebase/firestore";
@@ -21,12 +20,19 @@ import {
 import { db, auth } from "../config/firebase";
 
 // we should pass in the user and populate the page with their specifc stuff
-const ProfileScreen = ({ item }) => {
+const GenericProfileScreen = ({ dynamicUser }) => {
+  return (
+    <View>
+      <Text>hello</Text>
+    </View>
+  );
   const navigation = useNavigation();
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [thisUserInfo, setThisUserInfo] = useState(null);
   const [image, setImage] = useState(null);
+  const docRef = doc(db, "users", item.uidUser);
+
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
 
   const pickImage = async () => {
@@ -48,8 +54,6 @@ const ProfileScreen = ({ item }) => {
       // setImage(result.assets[0].uri);
     }
   };
-
-  const docRef = doc(db, "users", item.uidUser);
 
   // get the user's profile information
   useEffect(() => {
@@ -122,7 +126,7 @@ const ProfileScreen = ({ item }) => {
   );
 };
 
-export default ProfileScreen;
+export default GenericProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
