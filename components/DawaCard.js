@@ -1,20 +1,34 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Alert,
+  Text,
+  Image,
+  TouchableOpacity,
+  Touchable,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MessagesScreen from "../screens/MessagesScreen";
+import { useNavigation } from "@react-navigation/native";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const DawaCard = ({ item }) => {
-  //console.log('------------ this is an item')
-  //console.log(item)
+  const navigation = useNavigation();
+
+  //console.log("------------ this is an item");
+  console.log(item.uidUser);
   starIcon = item.starred ? "star" : "star-outline";
 
+  const goToUserProfileScreen = (uidUser) => {
+    console.log(uidUser);
+    navigation.navigate('Profile')
+  };
   // if free
   if (item.price.buyPrice == null && item.price.rentalPrice == null) {
     const price = "FREE:";
     return (
       <View
         style={{
-          flex: 1,
-          alignItems: "center",
           backgroundColor: "#f8f8f8",
           padding: 20,
           borderRadius: "10%",
@@ -24,16 +38,21 @@ const DawaCard = ({ item }) => {
           marginRight: 5,
         }}
       >
-        <Image
-          style={{
-            width: "100%",
-            height: 200,
-            marginTop: 5,
-            borderRadius: "10%",
-            marginBottom: "5%",
-          }}
-          source={{ uri: item.itemImage }}
-        />
+        <View>
+          <TouchableOpacity onPress={goToUserProfileScreen}>
+            <Image
+              style={{
+                alignSelf: "center",
+                width: "100%",
+                height: 200,
+                marginTop: 5,
+                borderRadius: "10%",
+                marginBottom: "5%",
+              }}
+              source={{ uri: item.itemImage }}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={{ flexDirection: "row", width: "100%" }}>
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "green" }}>
             FREE
@@ -77,18 +96,21 @@ const DawaCard = ({ item }) => {
           marginRight: 5,
         }}
       >
-        <Image
-          style={{
-            alignSelf: "center",
-            width: "100%",
-            height: 200,
-            marginTop: 5,
-            borderRadius: "10%",
-            marginBottom: "5%",
-          }}
-          source={{ uri: item.itemImage }}
-        />
-
+        <View>
+          <TouchableOpacity onPress={() => console.log(item.uidUser)}>
+            <Image
+              style={{
+                alignSelf: "center",
+                width: "100%",
+                height: 200,
+                marginTop: 5,
+                borderRadius: "10%",
+                marginBottom: "5%",
+              }}
+              source={{ uri: item.itemImage }}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontSize: 13, fontWeight: "bold", color: "#b22222" }}>
             {" "}

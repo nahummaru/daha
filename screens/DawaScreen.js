@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
-  Text,
+  TextInput,
   ScrollView,
   SafeAreaView,
   Button,
@@ -29,7 +29,11 @@ const DawaScreen = () => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true);
   const list = [];
-  const [posts, setPosts, postsReff] = useState([]);
+  // represents the posts we get intially and will display if nothing is searched
+  const [masterPosts, setMasterPosts] = useState([]);
+
+  // the posts we display
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     // get info user info
@@ -50,6 +54,17 @@ const DawaScreen = () => {
       };
     });
     return users;
+  };
+
+  const sortPostsByDate = (unSortedPosts) => {
+    // sorts posts with newest on the top
+    return unSortedPosts.sort((p1, p2) =>
+      p1.postTime.getTime() < p2.postTime.getTime()
+        ? 1
+        : p1.postTime.getTime() > p2.postTime.getTime()
+        ? -1
+        : 0
+    );
   };
 
   const fetchPosts = async () => {
@@ -80,6 +95,7 @@ const DawaScreen = () => {
           // id; doc.id,
           id: list.length,
           userName: userInfo[uidUser].username,
+          uidUser: uidUser,
           itemName: itemName,
           listType: listType,
           price: price,
@@ -94,28 +110,8 @@ const DawaScreen = () => {
         });
       });
 
-      // sorts posts with newest on the top
-      let sortedPosts = list.sort((p1, p2) =>
-        p1.postTime.getTime() < p2.postTime.getTime()
-          ? 1
-          : p1.postTime.getTime() > p2.postTime.getTime()
-          ? -1
-          : 0
-      );
-
-      //  let v = sortedPosts[1].needByDate
-      // let x = sortedPosts[1].returnByDate
-
-      // const f = format(new Date(v), "LLLL Ko, hbb")
-      // const d = format(v, "LLLL Ko, hbb")
-      //console.log(v)
-      //console.log(f)
-      //console.log(d)
-
-      // console.log(sortedPosts)
-      console.log(sortedPosts.length);
-
-      // console.log(sortedPosts[1])
+      let sortedPosts = sortPostsByDate(list);
+      setMasterPosts(sortedPosts);
       setPosts(sortedPosts);
     });
 
@@ -123,32 +119,75 @@ const DawaScreen = () => {
       setLoading(false);
     }
   };
+
+  const handleSearch = (searchText) => {
+
+    // if nothing was entered, do nothing
+    if (!searchText.length) {
+      setPosts(masterPosts);
+      return;
+    }
+
+    // parses through the name
+    const filteredPosts = posts.filter((item) => {
+      return item.itemName.toLowerCase().includes(searchText.toLowerCase()) || item.description.toLowerCase().includes(searchText.toLowerCase());
+    });
+    
+    if (filteredPosts.length) {
+      console.log("FOUND " + filteredPosts.length + " posts");
+      setPosts(filteredPosts);
+    } else {
+      console.log("FOUND NONE");
+      setPosts(masterPosts);
+    }
+  };
   return (
-    //<Container>
-    <FlatList
-      numColumns={2}
-      key={2}
-      columnWrapperStyle={{ justifyContent: "space-between" }}
-      data={posts}
-      renderItem={({ item }) => (
-        <View style={{ flex: 0.5 }}>
-          <DawaCard item={item} />
-        </View>
-      )}
-      keyExtractor={(item) => item.id}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-    />
-    //</Container>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: "column",
+        backgroundColor: "#fff",
+        borderRadius: 5,
+      }}
+    >
+      <FlatList
+        numColumns={2}
+        key={2}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        data={posts}
+        renderItem={({ item }) => (
+          <View style={{ flex: 0.5 }}>
+            <DawaCard item={item} />
+          </View>
+        )}
+        keyExtractor={(item) => item.id}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      />
+      <View style={{ justifyContent: "center", backgroundColor: "#a5353a" }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Does anyone want a..."
+          autoCapitalize="none"
+          autoFocus={true}
+          // value={firstName}
+          onChangeText={(text) => handleSearch(text)}
+        />
+      </View>
+    </View>
   );
 };
 
 export default DawaScreen;
 
-/*const DawaScreen = () => {
-  return (
-    <Text>dawa!!</Text>
-  )
-}
-
-export default DawaScreen*/
+const styles = StyleSheet.create({
+  input: {
+    backgroundColor: "#E28F8F",
+    height: 45,
+    marginVertical: 12,
+    marginHorizontal: 10,
+    fontSize: 16,
+    borderRadius: 10,
+    padding: 12,
+  },
+});

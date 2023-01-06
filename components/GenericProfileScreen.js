@@ -25,6 +25,7 @@ const ProfileScreen = ({ item }) => {
   const navigation = useNavigation();
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
+  const [thisUserInfo, setThisUserInfo] = useState(null);
   const [image, setImage] = useState(null);
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
 
@@ -40,12 +41,35 @@ const ProfileScreen = ({ item }) => {
     }
   };
 
+  const docRef = doc(db, "users", item.uidUser);
+
+  // get the user's profile information
+  useEffect(() => {
+    const getUserInfo = async () => {
+      try {
+        const docSnap = await getDoc(docRef);
+        const data = docSnap.data();
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^");
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^");
+        console.log(data);
+        console.log(item.uidUser);
+        setThisUserInfo(data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    getUserInfo();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <TouchableOpacity>
-            <Avatar.Image source={{ uri: userInfo.profilePic }} size={100} />
+            <Avatar.Image
+              source={{ uri: thisUserInfo.profilePic }}
+              size={100}
+            />
           </TouchableOpacity>
           <View pointerEvents="none" style={{ marginLeft: 20 }}>
             <Title
@@ -58,7 +82,7 @@ const ProfileScreen = ({ item }) => {
                 },
               ]}
             >
-              {userInfo.username}
+              {thisUserInfo.username}
             </Title>
             <Stars
               default={2.5}
