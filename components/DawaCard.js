@@ -21,8 +21,9 @@ const DawaCard = ({ item }) => {
 
   const goToUserProfileScreen = (uidUser) => {
     console.log(uidUser);
-    navigation.navigate('Profile')
+    navigation.navigate("Profile");
   };
+
   // if free
   if (item.price.buyPrice == null && item.price.rentalPrice == null) {
     const price = "FREE:";
@@ -54,7 +55,7 @@ const DawaCard = ({ item }) => {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "row", width: "100%" }}>
-          <Text style={{ fontSize: 13, fontWeight: "bold", color: "green" }}>
+          <Text style={{ fontSize: 11, fontWeight: "bold", color: "green" }}>
             FREE
           </Text>
 
@@ -112,20 +113,20 @@ const DawaCard = ({ item }) => {
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "row" }}>
-          <Text style={{ fontSize: 13, fontWeight: "bold", color: "#b22222" }}>
+          <Text style={{ fontSize: 11, fontWeight: "bold", color: "#b22222" }}>
             {" "}
             {buyPrefix}
           </Text>
-          <Text style={{ fontSize: 13, fontWeight: "bold", color: "#b22222" }}>
+          <Text style={{ fontSize: 11, fontWeight: "bold", color: "#b22222" }}>
             {" "}
             {buyPrice}
           </Text>
 
-          <Text style={{ fontSize: 13, fontWeight: "bold", color: "#b22222" }}>
+          <Text style={{ fontSize: 11, fontWeight: "bold", color: "#b22222" }}>
             {" "}
             {rentPrefix}
           </Text>
-          <Text style={{ fontSize: 13, fontWeight: "bold", color: "#b22222" }}>
+          <Text style={{ fontSize: 11, fontWeight: "bold", color: "#b22222" }}>
             {" "}
             {rentPrice}
           </Text>

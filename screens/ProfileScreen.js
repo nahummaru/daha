@@ -35,11 +35,19 @@ const ProfileScreen = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+      aspect: [3, 3],
       allowsEditing: true,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const file = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 200, height: 200 } }],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
+      setImage(file.uri);
+      // setImage(result.assets[0].uri);
     }
   };
 

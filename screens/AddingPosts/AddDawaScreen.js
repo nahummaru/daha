@@ -57,6 +57,8 @@ function AddDawaScreen({ navigation }) {
   const [isFree, setIsFree] = useState(false);
   const [itemRentPrice, setItemRentPrice] = useState(null);
   // const [itemDelivery, setItemDelivery] = useState('');
+  const [image, setImage] = useState(null);
+
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
   // const { userInfo } = useContext(UserInfoContext)
@@ -67,7 +69,6 @@ function AddDawaScreen({ navigation }) {
     </TouchableOpacity>
   );
 
-  const [image, setImage] = useState(null);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -80,7 +81,7 @@ function AddDawaScreen({ navigation }) {
     if (!result.canceled) {
       const file = await ImageManipulator.manipulateAsync(
         result.assets[0].uri,
-        [{ resize: { width: 270, height: 200 } }],
+        [{resize: {width: 200, height: 200}}],
         { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
       );
 
@@ -132,7 +133,7 @@ function AddDawaScreen({ navigation }) {
 
     const itemImage = await uploadImage();
     console.log(itemImage);
-    return;
+    
     const listType = {
       isRental: isRental,
       isBuy: isBuy,
@@ -381,7 +382,7 @@ function AddDawaScreen({ navigation }) {
                     autoCapitalize="none"
                     keyboardType="number"
                     autoFocus={true}
-                    onChangeText={(newText) => setItemPrice(newText)}
+                    onChangeText={(newText) => setItemBuyPrice(newText)}
                   />
                 </View>
               </View>
