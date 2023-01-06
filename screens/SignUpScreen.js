@@ -30,9 +30,9 @@ import {
 } from "@firebase/firestore";
 import { uploadBytes, ref, getDownloadURL } from "@firebase/storage";
 import Login from "./LoginScreen";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
 import { AuthenticatedUserContext } from "../App.js";
+import * as ImageManipulator from "expo-image-manipulator";
+
 
 export default function SignUpScreen({ navigation }) {
   const [image, setImage] = useState(null);
@@ -103,7 +103,6 @@ export default function SignUpScreen({ navigation }) {
     console.log(profilePic);
     // connects us to "users" in the a document with a key of the user.uid (unique)
     const docRef = doc(db, "users", user.uid);
-    const filename = userName + "-profile-picture";
 
     // the userdata we are adding
     const userData = {
@@ -135,6 +134,7 @@ export default function SignUpScreen({ navigation }) {
       })
       .catch((error) => {
         console.log(error);
+        Alert.alert('SIGN UP FAILED')
       });
   }
 

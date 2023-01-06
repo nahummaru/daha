@@ -22,6 +22,7 @@ import ProfileTopTabNavigator from "../navigator/ProfileTopTabNavigator";
 import * as ImagePicker from "expo-image-picker";
 import useState from "react-usestateref";
 import { UserInfoContext } from "../App";
+import { connectStorageEmulator } from "@firebase/storage";
 
 // we should pass in the user and populate the page with their specifc stuff
 const ProfileScreen = () => {
@@ -30,6 +31,9 @@ const ProfileScreen = () => {
   const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [image, setImage] = useState(null);
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
+
+  // process profile image
+  const profilePic = userInfo.profilePic == null ? "../assets/blank-avatar.jpg" : userInfo.profilePic
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -56,7 +60,7 @@ const ProfileScreen = () => {
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <TouchableOpacity>
-            <Avatar.Image source={{ uri: userInfo.profilePic }} size={100} />
+            <Avatar.Image source={{ uri: profilePic }} size={100} />
           </TouchableOpacity>
           <View pointerEvents="none" style={{ marginLeft: 20 }}>
             <Title
