@@ -35,22 +35,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { AuthenticatedUserContext } from "../App.js";
 
 export default function SignUpScreen({ navigation }) {
-  // const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
-  // console.log('-------------hello')
-  // console.log(user)
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      allowsEditing: true,
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
-  };
-
   const [image, setImage] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,6 +46,29 @@ export default function SignUpScreen({ navigation }) {
 
   const [uploading, setUploading] = useState(null);
   const [url, setUrl] = useState(null);
+  // const { user, setUser, userRef } = useContext(AuthenticatedUserContext);
+  // console.log('-------------hello')
+  // console.log(user)
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      aspect: [3, 3],
+      allowsEditing: true,
+    });
+
+    if (!result.canceled) {
+      const file = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 200, height: 200 } }],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
+      setImage(file.uri);
+      // setImage(result.assets[0].uri);
+    }
+  };
 
   const uploadImage = async () => {
     setUploading(true);
@@ -116,6 +123,9 @@ export default function SignUpScreen({ navigation }) {
         dawas: [],
       },
     };
+
+    console.log("the user being posted: ");
+    console.log(userData);
 
     // sets the doc we refernced with the data
     await setDoc(docRef, userData)

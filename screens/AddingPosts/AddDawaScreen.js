@@ -1,16 +1,26 @@
-
-import React, { useState, useContext, Fragment } from 'react'
-import { StatusBar } from 'expo-status-bar';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons, FontAwesome } from 'react-native-vector-icons';
-import { Dropdown } from 'react-native-element-dropdown';
-import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { UserInfoContext, AuthenticatedUserContext } from '../../App';
-import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import { db, storage } from '../../config/firebase.js';
-import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import React, { useState, useContext, Fragment } from "react";
+import { StatusBar } from "expo-status-bar";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons, FontAwesome } from "react-native-vector-icons";
+import { Dropdown } from "react-native-element-dropdown";
+import {
+  View,
+  Text,
+  Alert,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { UserInfoContext, AuthenticatedUserContext } from "../../App";
+import { addDoc, Timestamp, collection } from "@firebase/firestore";
+import { db, storage } from "../../config/firebase.js";
+import { uploadBytes, ref, getDownloadURL } from "@firebase/storage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const categoryData = [
   { label: "Apparel", value: "0" },
@@ -57,18 +67,25 @@ function AddDawaScreen({ navigation }) {
     </TouchableOpacity>
   );
 
-
   const [image, setImage] = useState(null);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+      aspect: [4, 3],
       allowsEditing: true,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const file = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 270, height: 200 } }],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
+      setImage(file.uri);
+      // setImage(result.assets[0].uri);
     }
   };
 
@@ -105,18 +122,17 @@ function AddDawaScreen({ navigation }) {
     isNew ? setIsNew(false) : setIsNew(false);
   };
 
-
   const buyFunc = () => {
     setIsBuy(!isBuy);
   };
 
-  
-
   async function postDawa() {
     console.log("--- FUNC HELLLLO");
+    console.log(image);
 
     const itemImage = await uploadImage();
     console.log(itemImage);
+    return;
     const listType = {
       isRental: isRental,
       isBuy: isBuy,
@@ -192,305 +208,306 @@ function AddDawaScreen({ navigation }) {
   }
 
   return (
-      <View style={styles.container}>
-        <View style={styles.whiteSheet} />
-        <ScrollView style={styles.ScrollView}>
-          <SafeAreaView style={styles.form}>
-            <Text style={styles.item}> ITEM NAME </Text>
-            <TextInput
-              style={styles.itemInput}
-              autoCapitalize="none"
-              autoFocus={true}
-              onChangeText={(newText) => setItemName(newText)}
+    <View style={styles.container}>
+      <View style={styles.whiteSheet} />
+      <ScrollView style={styles.ScrollView}>
+        <SafeAreaView style={styles.form}>
+          <Text style={styles.item}> ITEM NAME </Text>
+          <TextInput
+            style={styles.itemInput}
+            autoCapitalize="none"
+            autoFocus={true}
+            onChangeText={(newText) => setItemName(newText)}
+          />
+
+          <Text style={styles.photo}> ADD A PHOTO </Text>
+
+          <StatusBar hidden={true} />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 100, height: 100 }}
             />
-
-            <Text style={styles.photo}> ADD A PHOTO </Text>
-
-            <StatusBar hidden={true} />
-            {image && (
-              <Image
-                source={{ uri: image }}
-                style={{ width: 100, height: 100 }}
-              />
-            )}
-            <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
-              <Ionicons
-                name={"add"}
-                size={20}
-                color="#a5353a"
-                style={{ top: -3, right: 1 }}
-              />
-            </TouchableOpacity>
-            <StatusBar style="auto" />
-
-            <Text style={styles.category}> CATEGORY </Text>
-
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={categoryData}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? "Select item" : "..."}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={(item) => {
-                setValue(item.value);
-                setItemCategory(item.value);
-                setIsFocus(false);
-              }}
+          )}
+          <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
+            <Ionicons
+              name={"add"}
+              size={20}
+              color="#a5353a"
+              style={{ top: -3, right: 1 }}
             />
+          </TouchableOpacity>
+          <StatusBar style="auto" />
 
-            <Text style={styles.condition}> CONDITION </Text>
+          <Text style={styles.category}> CATEGORY </Text>
 
-            <TouchableOpacity
-              onPress={newFunc}
-              style={[
-                styles.newButton,
-                { backgroundColor: isNew ? "#a5353a" : "transparent" },
-              ]}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isNew ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                NEW
-              </Text>
-            </TouchableOpacity>
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={categoryData}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select item" : "..."}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setItemCategory(item.value);
+              setIsFocus(false);
+            }}
+          />
 
-            <TouchableOpacity
-              onPress={usedFunc}
-              style={[
-                styles.usedButton,
-                { backgroundColor: isUsed ? "#a5353a" : "transparent" },
-              ]}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isUsed ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                USED
-              </Text>
-            </TouchableOpacity>
+          <Text style={styles.condition}> CONDITION </Text>
 
-            <Text style={styles.listingType}> LISTING TYPE </Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                setIsRental(!isRental);
-              }}
-              style={[
-                styles.rentButton,
-                { backgroundColor: isRental ? "#a5353a" : "transparent" },
-              ]}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isRental ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                RENT
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={buyFunc}
-              style={[
-                styles.buyButton,
-                { backgroundColor: isBuy ? "#a5353a" : "transparent" },
-              ]}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isBuy ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                BUY
-              </Text>
-            </TouchableOpacity>
-
-            <Text style={styles.listingType}> PRICE </Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                setIsFree(!isFree);
-              }}
-              style={[
-                styles.rentButton,
-                { backgroundColor: isFree ? "#a5353a" : "transparent" },
-              ]}
-            >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isFree ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                FREE
-              </Text>
-            </TouchableOpacity>
-
-
-
-
-            {isBuy && !isFree &&
-        <Fragment>
-      <View style={{flex: 1}}>
-    <Text style={styles.priceType}> BUY PRICE </Text>
-    <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
-          <FontAwesome name={"dollar"} size={20} color="#a5353a" />
-            <TextInput
-              style={styles.priceInput}
-              autoCapitalize="none"
-              keyboardType="number"
-              autoFocus={true}
-              onChangeText={newText => setItemPrice(newText)}  />
-              </View>
-              </View>
-    </Fragment>
-    }
-          {isRental && 
-          <Fragment>
-            <View style={{flex: 1}}>
-            <Text style={styles.priceType}> RENTAL PRICE </Text>
-            <View
+          <TouchableOpacity
+            onPress={newFunc}
+            style={[
+              styles.newButton,
+              { backgroundColor: isNew ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
               style={{
-                flexDirection: "row",
-                marginLeft: 5,
-                alignItems: "center",
+                fontWeight: "bold",
+                color: isNew ? "white" : "black",
+                fontSize: 10,
               }}
             >
-              <FontAwesome name={"dollar"} size={20} color="#a5353a" />
-              <TextInput
-                style={styles.priceInput}
-                autoCapitalize="none"
-                keyboardType="number"
-                autoFocus={true}
-                onChangeText={(newText) => setItemRentPrice(newText)}
-              />
+              NEW
+            </Text>
+          </TouchableOpacity>
 
-              <Text
-                style={{ fontWeight: "bold", marginLeft: 10, fontSize: 15 }}
-              >
-                per
-              </Text>
-              <Dropdown
-                style={{
-                  width: "40%",
-                  marginLeft: 5,
-                  borderColor: "gray",
-                  borderWidth: 0.5,
-                  borderRadius: 8,
-                }}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={rentalOptions}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value2"
-                placeholder={!isFocus2 ? "  Time Frame" : "..."}
-                searchPlaceholder="Search..."
-                value2={value2}
-                onFocus={() => setIsFocus2(true)}
-                onBlur={() => setIsFocus2(false)}
-                onChange={(item) => {
-                  setValue2(item.value2);
-                  setTimeFrame(item.value2);
-                  setIsFocus2(false);
-                }}
-              />
-            </View>
-            </View>
+          <TouchableOpacity
+            onPress={usedFunc}
+            style={[
+              styles.usedButton,
+              { backgroundColor: isUsed ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isUsed ? "white" : "black",
+                fontSize: 10,
+              }}
+            >
+              USED
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.listingType}> LISTING TYPE </Text>
+
+          <TouchableOpacity
+            onPress={() => {
+              setIsRental(!isRental);
+            }}
+            style={[
+              styles.rentButton,
+              { backgroundColor: isRental ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isRental ? "white" : "black",
+                fontSize: 10,
+              }}
+            >
+              RENT
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={buyFunc}
+            style={[
+              styles.buyButton,
+              { backgroundColor: isBuy ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isBuy ? "white" : "black",
+                fontSize: 10,
+              }}
+            >
+              BUY
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.listingType}> PRICE </Text>
+
+          <TouchableOpacity
+            onPress={() => {
+              setIsFree(!isFree);
+            }}
+            style={[
+              styles.rentButton,
+              { backgroundColor: isFree ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isFree ? "white" : "black",
+                fontSize: 10,
+              }}
+            >
+              FREE
+            </Text>
+          </TouchableOpacity>
+
+          {isBuy && !isFree && (
+            <Fragment>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.priceType}> BUY PRICE </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginLeft: 5,
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+                  <TextInput
+                    style={styles.priceInput}
+                    autoCapitalize="none"
+                    keyboardType="number"
+                    autoFocus={true}
+                    onChangeText={(newText) => setItemPrice(newText)}
+                  />
+                </View>
+              </View>
             </Fragment>
+          )}
+          {isRental && (
+            <Fragment>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.priceType}> RENTAL PRICE </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginLeft: 5,
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+                  <TextInput
+                    style={styles.priceInput}
+                    autoCapitalize="none"
+                    keyboardType="number"
+                    autoFocus={true}
+                    onChangeText={(newText) => setItemRentPrice(newText)}
+                  />
 
+                  <Text
+                    style={{ fontWeight: "bold", marginLeft: 10, fontSize: 15 }}
+                  >
+                    per
+                  </Text>
+                  <Dropdown
+                    style={{
+                      width: "40%",
+                      marginLeft: 5,
+                      borderColor: "gray",
+                      borderWidth: 0.5,
+                      borderRadius: 8,
+                    }}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={rentalOptions}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value2"
+                    placeholder={!isFocus2 ? "  Time Frame" : "..."}
+                    searchPlaceholder="Search..."
+                    value2={value2}
+                    onFocus={() => setIsFocus2(true)}
+                    onBlur={() => setIsFocus2(false)}
+                    onChange={(item) => {
+                      setValue2(item.value2);
+                      setTimeFrame(item.value2);
+                      setIsFocus2(false);
+                    }}
+                  />
+                </View>
+              </View>
+            </Fragment>
+          )}
 
-              }
+          <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
+          <TextInput
+            multiline
+            style={styles.descriptionInput}
+            autoCapitalize="none"
+            keyboardType="default"
+            autoFocus={true}
+            onChangeText={(newText) => setItemDescription(newText)}
+          />
 
+          <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
 
-            <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
-            <TextInput
-              multiline
-              style={styles.descriptionInput}
-              autoCapitalize="none"
-              keyboardType="default"
-              autoFocus={true}
-              onChangeText={(newText) => setItemDescription(newText)}
-            />
-
-            <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
-
-            <TouchableOpacity
-              onPress={() => {
-                setIsPickup(!isPickup);
+          <TouchableOpacity
+            onPress={() => {
+              setIsPickup(!isPickup);
+            }}
+            style={[
+              styles.pickUpButton,
+              { backgroundColor: isPickup ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isPickup ? "white" : "black",
+                fontSize: 10,
               }}
-              style={[
-                styles.pickUpButton,
-                { backgroundColor: isPickup ? "#a5353a" : "transparent" },
-              ]}
             >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isPickup ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                {" "}
-                PICK UP{" "}
-              </Text>
-            </TouchableOpacity>
+              {" "}
+              PICK UP{" "}
+            </Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={() => {
-                setIsDropOff(!isDropOff);
+          <TouchableOpacity
+            onPress={() => {
+              setIsDropOff(!isDropOff);
+            }}
+            style={[
+              styles.dropOffButton,
+              { backgroundColor: isDropOff ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isDropOff ? "white" : "black",
+                fontSize: 10,
               }}
-              style={[
-                styles.dropOffButton,
-                { backgroundColor: isDropOff ? "#a5353a" : "transparent" },
-              ]}
             >
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  color: isDropOff ? "white" : "black",
-                  fontSize: 10,
-                }}
-              >
-                {" "}
-                DROP OFF
-              </Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </ScrollView>
+              {" "}
+              DROP OFF
+            </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </ScrollView>
 
-        <TouchableOpacity style={styles.button} onPress={postDawa}>
-          <Text style={{ fontWeight: "bold", color: "white", fontSize: 18 }}>
-            {" "}
-            List it!
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={postDawa}>
+        <Text style={{ fontWeight: "bold", color: "white", fontSize: 18 }}>
+          {" "}
+          List it!
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
