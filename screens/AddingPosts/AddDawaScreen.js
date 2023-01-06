@@ -1,25 +1,37 @@
-import React, { useState, useContext, Fragment } from 'react'
-import { StatusBar } from 'expo-status-bar';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons, FontAwesome } from 'react-native-vector-icons';
-import { Dropdown } from 'react-native-element-dropdown';
-import { View, Text, Alert, StyleSheet, Image, SafeAreaView, TextInput, Button, TouchableOpacity, ScrollView } from 'react-native';
-import { UserInfoContext, AuthenticatedUserContext } from '../../App';
-import { addDoc, Timestamp, collection } from '@firebase/firestore';
-import { db, storage } from '../../config/firebase.js';
-import { uploadBytes, ref, getDownloadURL } from '@firebase/storage';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { useState, useContext, Fragment } from "react";
+import { StatusBar } from "expo-status-bar";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons, FontAwesome } from "react-native-vector-icons";
+import { Dropdown } from "react-native-element-dropdown";
+import {
+  View,
+  Text,
+  Alert,
+  StyleSheet,
+  Image,
+  SafeAreaView,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { UserInfoContext, AuthenticatedUserContext } from "../../App";
+import { addDoc, Timestamp, collection } from "@firebase/firestore";
+import { db, storage } from "../../config/firebase.js";
+import { uploadBytes, ref, getDownloadURL } from "@firebase/storage";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as ImageManipulator from "expo-image-manipulator";
 
 const categoryData = [
-  { label: 'Apparel', value: '0' },
-  { label: 'Tech', value: '1' },
-  { label: 'Dorm Essentials', value: '2' },
-  { label: 'Other', value: '3' },
+  { label: "Apparel", value: "0" },
+  { label: "Tech", value: "1" },
+  { label: "Dorm Essentials", value: "2" },
+  { label: "Other", value: "3" },
 ];
 
 const rentalOptions = [
-  { label: '  hour', value2: '0' },
-  { label: '  day', value2: '1' },
+  { label: "  hour", value2: "0" },
+  { label: "  day", value2: "1" },
 ];
 
 function AddDawaScreen({ navigation }) {
@@ -34,17 +46,19 @@ function AddDawaScreen({ navigation }) {
   const [isDropOff, setIsDropOff] = useState(false);
   const [value2, setValue2] = useState(null);
 
-  const [itemName, setItemName] = useState('');
-  const [itemCategory, setItemCategory] = useState('');
+  const [itemName, setItemName] = useState("");
+  const [itemCategory, setItemCategory] = useState("");
   // const [itemCondition, setItemCondition] = useState('');
   // const [itemListType, setItemListType] = useState('');
   const [itemBuyPrice, setItemBuyPrice] = useState(null);
-  const [itemDescription, setItemDescription] = useState('');
+  const [itemDescription, setItemDescription] = useState("");
   const [timeFrame, setTimeFrame] = useState(null);
   const [uploading, setUploading] = useState(null);
   const [isFree, setIsFree] = useState(false);
-  const [itemRentPrice, setItemRentPrice] = useState(null)
+  const [itemRentPrice, setItemRentPrice] = useState(null);
   // const [itemDelivery, setItemDelivery] = useState('');
+  const [image, setImage] = useState(null);
+
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
   // const { userInfo } = useContext(UserInfoContext)
@@ -56,42 +70,47 @@ function AddDawaScreen({ navigation }) {
   );
 
 
-  const [image, setImage] = useState(null);
-
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
-      allowsEditing: true
+      aspect: [4, 3],
+      allowsEditing: true,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
-    }
+      const file = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [{resize: {width: 200, height: 200}}],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
 
+      setImage(file.uri);
+      // setImage(result.assets[0].uri);
+    }
   };
 
   const uploadImage = async () => {
-    setUploading(true)
-    const filename = image.substring(image.lastIndexOf('/') + 1)
-    const reference = ref(storage, 'dawas/' + filename)
-    const img = await fetch(image)
-    const blob = await img.blob()
+    setUploading(true);
+    const filename = image.substring(image.lastIndexOf("/") + 1);
+    const reference = ref(storage, "dawas/" + filename);
+    const img = await fetch(image);
+    const blob = await img.blob();
     const newFile = new File([blob], `${filename}.jpeg`, {
-      type: 'image/jpeg',
-})
+      type: "image/jpeg",
+    });
 
     try {
-      await uploadBytes(reference, newFile)
-      setUploading(false)
-      setImage(null)
-      const url = await getDownloadURL(reference)
-      console.log('---- url: ' + url)
-      return url
+      await uploadBytes(reference, newFile);
+      setUploading(false);
+      setImage(null);
+      const url = await getDownloadURL(reference);
+      console.log("---- url: " + url);
+      return url;
     } catch {
-      console.log(console.error)
+      console.log(console.error);
     }
-  }
+  };
 
   // changes the calue of isNew to the opposite
   const newFunc = () => {
@@ -104,54 +123,55 @@ function AddDawaScreen({ navigation }) {
     isNew ? setIsNew(false) : setIsNew(false);
   };
 
-
   const buyFunc = () => {
     setIsBuy(!isBuy);
   };
 
-  
-
   async function postDawa() {
-    console.log('--- FUNC HELLLLO')
+    console.log("--- FUNC HELLLLO");
+    console.log(image);
 
-    const itemImage = await uploadImage()
-    console.log(itemImage)
+    const itemImage = await uploadImage();
+    console.log(itemImage);
+    
     const listType = {
       isRental: isRental,
-      isBuy: isBuy
-    }
-    
+      isBuy: isBuy,
+    };
+
     var price;
     // if not a relevent type, will be set to null
     if (isFree) {
       price = {
         rentalPrice: null,
         rentalTimeframe: null,
-        buyPrice: null
-      }
-
+        buyPrice: null,
+      };
     } else {
       price = {
         rentalPrice: itemRentPrice,
         // converts it onto a readable timeframe string
-        rentalTimeframe: rentalOptions[Number(timeFrame)].label.replaceAll(' ', ''),
-        buyPrice: itemBuyPrice
-      }
+        rentalTimeframe: rentalOptions[Number(timeFrame)].label.replaceAll(
+          " ",
+          ""
+        ),
+        buyPrice: itemBuyPrice,
+      };
     }
 
     const delivery = {
       isPickup: isPickup,
-      isDropOff: isDropOff
-    }
+      isDropOff: isDropOff,
+    };
 
     const condition = {
       isNew: isNew,
-      isUsed: isUsed
-    }
-    console.log('#########-----------------------')
-    console.log(itemCategory)
-    console.log(Number(itemCategory))
-    console.log(categoryData[Number(itemCategory)].label)
+      isUsed: isUsed,
+    };
+    console.log("#########-----------------------");
+    console.log(itemCategory);
+    console.log(Number(itemCategory));
+    console.log(categoryData[Number(itemCategory)].label);
     // console.log(categoryData[Number(itemCategory)])
 
     const data = {
@@ -165,209 +185,330 @@ function AddDawaScreen({ navigation }) {
       postTime: Timestamp.now(),
       price: price,
       description: itemDescription,
-      // gets the filename that it is being referenced 
-      itemImage: itemImage
-    }
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    console.log(data)
+      // gets the filename that it is being referenced
+      itemImage: itemImage,
+    };
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log(data);
 
-    const docRef = await addDoc(collection(db, "dawas"), data).catch(() => console.log('Error: ' + error))
+    const docRef = await addDoc(collection(db, "dawas"), data).catch(() =>
+      console.log("Error: " + error)
+    );
     console.log("Document written with ID: ", docRef.id);
     console.log("Dawa Post has been added to the DB!!");
-    Alert.alert('DAWA posted successfully!!')
+    Alert.alert("DAWA posted successfully!!");
 
     // resets the post screen
     navigation.reset({
       index: 0,
-      routes: [{ name: 'PostStack' }],
+      routes: [{ name: "PostStack" }],
     });
-
 
     // TODO: After they post, navigate them to the home screen
     // navigation.navigate('Home');
-
   }
 
-
-
-
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.whiteSheet} />
+      <ScrollView style={styles.ScrollView}>
+        <SafeAreaView style={styles.form}>
+          <Text style={styles.item}> ITEM NAME </Text>
+          <TextInput
+            style={styles.itemInput}
+            autoCapitalize="none"
+            autoFocus={true}
+            onChangeText={(newText) => setItemName(newText)}
+          />
 
-        <View style={styles.whiteSheet} />
-        <ScrollView style={styles.ScrollView}>
-          <SafeAreaView style={styles.form}>
-            <Text style={styles.item}> ITEM NAME </Text>
-            <TextInput
-              style={styles.itemInput}
-              autoCapitalize="none"
-              autoFocus={true}
-              onChangeText={newText => setItemName(newText)} />
+          <Text style={styles.photo}> ADD A PHOTO </Text>
 
-            <Text style={styles.photo}> ADD A PHOTO </Text>
+          <StatusBar hidden={true} />
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 100, height: 100 }}
+            />
+          )}
+          <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
+            <Ionicons
+              name={"add"}
+              size={20}
+              color="#a5353a"
+              style={{ top: -3, right: 1 }}
+            />
+          </TouchableOpacity>
+          <StatusBar style="auto" />
 
+          <Text style={styles.category}> CATEGORY </Text>
 
-            <StatusBar hidden={true} />
-            {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-            <TouchableOpacity style={styles.iconButton} onPress={pickImage}>
-              <Ionicons name={"add"} size={20} color="#a5353a" style={{ top: -3, right: 1 }} />
-            </TouchableOpacity>
-            <StatusBar style="auto" />
+          <Dropdown
+            style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={categoryData}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? "Select item" : "..."}
+            searchPlaceholder="Search..."
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={(item) => {
+              setValue(item.value);
+              setItemCategory(item.value);
+              setIsFocus(false);
+            }}
+          />
 
-            <Text style={styles.category}> CATEGORY </Text>
+          <Text style={styles.condition}> CONDITION </Text>
 
-            <Dropdown
-              style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={categoryData}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!isFocus ? 'Select item' : '...'}
-              searchPlaceholder="Search..."
-              value={value}
-              onFocus={() => setIsFocus(true)}
-              onBlur={() => setIsFocus(false)}
-              onChange={item => {
-                setValue(item.value);
-                setItemCategory(item.value);
-                setIsFocus(false);
+          <TouchableOpacity
+            onPress={newFunc}
+            style={[
+              styles.newButton,
+              { backgroundColor: isNew ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isNew ? "white" : "black",
+                fontSize: 10,
               }}
-            />
-
-            <Text style={styles.condition}> CONDITION </Text>
-
-            <TouchableOpacity onPress={newFunc} style={[styles.newButton, { backgroundColor: isNew ? "#a5353a" : "transparent" }]}
             >
-              <Text style={{ fontWeight: 'bold', color: isNew ? 'white' : 'black', fontSize: 10 }}>NEW</Text>
-            </TouchableOpacity>
+              NEW
+            </Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={usedFunc} style={[styles.usedButton, { backgroundColor: isUsed ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={usedFunc}
+            style={[
+              styles.usedButton,
+              { backgroundColor: isUsed ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isUsed ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isUsed ? 'white' : 'black', fontSize: 10 }}>USED</Text>
-            </TouchableOpacity>
+              USED
+            </Text>
+          </TouchableOpacity>
 
-            <Text style={styles.listingType}> LISTING TYPE </Text>
+          <Text style={styles.listingType}> LISTING TYPE </Text>
 
-            <TouchableOpacity onPress={() => { setIsRental(!isRental) }} style={[styles.rentButton, { backgroundColor: isRental ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={() => {
+              setIsRental(!isRental);
+            }}
+            style={[
+              styles.rentButton,
+              { backgroundColor: isRental ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isRental ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isRental ? 'white' : 'black', fontSize: 10 }}>RENT</Text>
-            </TouchableOpacity>
+              RENT
+            </Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={buyFunc} style={[styles.buyButton, { backgroundColor: isBuy ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={buyFunc}
+            style={[
+              styles.buyButton,
+              { backgroundColor: isBuy ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isBuy ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isBuy ? 'white' : 'black', fontSize: 10 }}>BUY</Text>
-            </TouchableOpacity>
+              BUY
+            </Text>
+          </TouchableOpacity>
 
-            <Text style={styles.listingType}> PRICE </Text>
+          <Text style={styles.listingType}> PRICE </Text>
 
-            <TouchableOpacity onPress={() => { setIsFree(!isFree) }} style={[styles.rentButton, { backgroundColor: isFree ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={() => {
+              setIsFree(!isFree);
+            }}
+            style={[
+              styles.rentButton,
+              { backgroundColor: isFree ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isFree ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isFree ? 'white' : 'black', fontSize: 10 }}>FREE</Text>
-            </TouchableOpacity>
+              FREE
+            </Text>
+          </TouchableOpacity>
 
-
-
-            {isBuy && !isFree &&
-        <Fragment>
-      <View style={{flex: 1}}>
-    <Text style={styles.priceType}> BUY PRICE </Text>
-    <View style={{flexDirection: 'row', marginLeft: 5, alignItems: 'center'}}>
-          <FontAwesome name={"dollar"} size={20} color="#a5353a" />
-            <TextInput
-              style={styles.priceInput}
-              autoCapitalize="none"
-              keyboardType="number"
-              autoFocus={true}
-              onChangeText={newText => setItemPrice(newText)}  />
+          {isBuy && !isFree && (
+            <Fragment>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.priceType}> BUY PRICE </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginLeft: 5,
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+                  <TextInput
+                    style={styles.priceInput}
+                    autoCapitalize="none"
+                    keyboardType="number"
+                    autoFocus={true}
+                    onChangeText={(newText) => setItemBuyPrice(newText)}
+                  />
+                </View>
               </View>
-              </View>
-    </Fragment>
-    }
-          {isRental && 
-          <Fragment>
-            <View style={{flex: 1}}>
-            <Text style={styles.priceType}> RENTAL PRICE </Text>
-            <View style={{ flexDirection: 'row', marginLeft: 5, alignItems: 'center' }}>
-              <FontAwesome name={"dollar"} size={20} color="#a5353a" />
-              <TextInput
-                style={styles.priceInput}
-                autoCapitalize="none"
-                keyboardType="number"
-                autoFocus={true}
-                onChangeText={newText => setItemRentPrice(newText)}
-              />
-
-
-              <Text style={{ fontWeight: 'bold', marginLeft: 10, fontSize: 15 }}>per</Text>
-              <Dropdown
-                style={{
-                  width: '40%', marginLeft: 5, borderColor: 'gray',
-                  borderWidth: 0.5,
-                  borderRadius: 8,
-                }}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={rentalOptions}
-                search
-                maxHeight={300}
-                labelField="label"
-                valueField="value2"
-                placeholder={!isFocus2 ? '  Time Frame' : '...'}
-                searchPlaceholder="Search..."
-                value2={value2}
-                onFocus={() => setIsFocus2(true)}
-                onBlur={() => setIsFocus2(false)}
-                onChange={item => {
-                  setValue2(item.value2);
-                  setTimeFrame(item.value2);
-                  setIsFocus2(false);
-                }}
-              />
-            </View>
-            </View>
             </Fragment>
+          )}
+          {isRental && (
+            <Fragment>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.priceType}> RENTAL PRICE </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginLeft: 5,
+                    alignItems: "center",
+                  }}
+                >
+                  <FontAwesome name={"dollar"} size={20} color="#a5353a" />
+                  <TextInput
+                    style={styles.priceInput}
+                    autoCapitalize="none"
+                    keyboardType="number"
+                    autoFocus={true}
+                    onChangeText={(newText) => setItemRentPrice(newText)}
+                  />
 
-              }
+                  <Text
+                    style={{ fontWeight: "bold", marginLeft: 10, fontSize: 15 }}
+                  >
+                    per
+                  </Text>
+                  <Dropdown
+                    style={{
+                      width: "40%",
+                      marginLeft: 5,
+                      borderColor: "gray",
+                      borderWidth: 0.5,
+                      borderRadius: 8,
+                    }}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.iconStyle}
+                    data={rentalOptions}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value2"
+                    placeholder={!isFocus2 ? "  Time Frame" : "..."}
+                    searchPlaceholder="Search..."
+                    value2={value2}
+                    onFocus={() => setIsFocus2(true)}
+                    onBlur={() => setIsFocus2(false)}
+                    onChange={(item) => {
+                      setValue2(item.value2);
+                      setTimeFrame(item.value2);
+                      setIsFocus2(false);
+                    }}
+                  />
+                </View>
+              </View>
+            </Fragment>
+          )}
 
-            <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
-            <TextInput
-              multiline
-              style={styles.descriptionInput}
-              autoCapitalize="none"
-              keyboardType="default"
-              autoFocus={true}
-              onChangeText={newText => setItemDescription(newText)}
-            />
+          <Text style={styles.descriptionHeader}> DESCRIPTION </Text>
+          <TextInput
+            multiline
+            style={styles.descriptionInput}
+            autoCapitalize="none"
+            keyboardType="default"
+            autoFocus={true}
+            onChangeText={(newText) => setItemDescription(newText)}
+          />
 
-            <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
+          <Text style={styles.deliveryTitle}> MEETUP & DELIVERY </Text>
 
-            <TouchableOpacity onPress={() => { setIsPickup(!isPickup) }} style={[styles.pickUpButton, { backgroundColor: isPickup ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={() => {
+              setIsPickup(!isPickup);
+            }}
+            style={[
+              styles.pickUpButton,
+              { backgroundColor: isPickup ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isPickup ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isPickup ? 'white' : 'black', fontSize: 10 }}> PICK UP </Text>
-            </TouchableOpacity>
+              {" "}
+              PICK UP{" "}
+            </Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { setIsDropOff(!isDropOff) }} style={[styles.dropOffButton, { backgroundColor: isDropOff ? "#a5353a" : "transparent" }]}
+          <TouchableOpacity
+            onPress={() => {
+              setIsDropOff(!isDropOff);
+            }}
+            style={[
+              styles.dropOffButton,
+              { backgroundColor: isDropOff ? "#a5353a" : "transparent" },
+            ]}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: isDropOff ? "white" : "black",
+                fontSize: 10,
+              }}
             >
-              <Text style={{ fontWeight: 'bold', color: isDropOff ? 'white' : 'black', fontSize: 10 }}> DROP OFF</Text>
-            </TouchableOpacity>
+              {" "}
+              DROP OFF
+            </Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      </ScrollView>
 
-
-          </SafeAreaView>
-        </ScrollView>
-
-        <TouchableOpacity style={styles.button} onPress={postDawa} >
-          <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 18 }}> List it!</Text>
-        </TouchableOpacity>
-
-      </View>
-
+      <TouchableOpacity style={styles.button} onPress={postDawa}>
+        <Text style={{ fontWeight: "bold", color: "white", fontSize: 18 }}>
+          {" "}
+          List it!
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -376,13 +517,13 @@ const styles = StyleSheet.create({
     flex: 1,
     flexShrink: 1,
     backgroundColor: "#fff",
-    flexDirection: 'row',
-    justifyContent: 'center'
+    flexDirection: "row",
+    justifyContent: "center",
   },
 
   item: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     top: 30,
@@ -390,7 +531,7 @@ const styles = StyleSheet.create({
   },
   photo: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 15,
@@ -399,7 +540,7 @@ const styles = StyleSheet.create({
 
   category: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 30,
@@ -408,15 +549,15 @@ const styles = StyleSheet.create({
 
   listingType: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 25,
-    marginBottom: 10
+    marginBottom: 10,
   },
   priceType: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 10,
@@ -431,7 +572,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginBottom: 10,
-    marginTop: 20
+    marginTop: 20,
   },
 
   photoInput: {
@@ -444,28 +585,28 @@ const styles = StyleSheet.create({
   },
 
   whiteSheet: {
-    width: '100%',
-    height: '75%',
+    width: "100%",
+    height: "75%",
     position: "absolute",
     bottom: 0,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderTopLeftRadius: 60,
   },
   form: {
     flex: 1,
-    justifyContent: 'top',
+    justifyContent: "top",
     marginHorizontal: 30,
   },
   button: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 10,
     backgroundColor: "#a5353a",
     height: 58,
-    width: '90%',
+    width: "90%",
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center'
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
 
   iconButton: {
@@ -473,14 +614,14 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     bottomMargin: 10,
     padding: 12,
   },
   dropdown: {
     height: 50,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 8,
@@ -489,8 +630,8 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   label: {
-    position: 'absolute',
-    backgroundColor: 'white',
+    position: "absolute",
+    backgroundColor: "white",
     left: 22,
     top: 8,
     zIndex: 999,
@@ -514,80 +655,80 @@ const styles = StyleSheet.create({
 
   condition: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 20,
   },
   newButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 15,
   },
 
   usedButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: -38,
     right: -90,
   },
 
   buyButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: -35,
     left: 87,
     bottom: 38,
   },
 
   rentButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 0,
   },
 
   freeButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: -38,
-    right: -175
+    right: -175,
   },
 
   borrowButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: -38,
-    right: -260
+    right: -260,
   },
 
   priceInput: {
@@ -597,17 +738,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginTop: 0,
-    width: '20%',
-    marginBottom: '1%',
+    width: "20%",
+    marginBottom: "1%",
     marginLeft: 5,
   },
 
   descriptionHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
-    marginTop: 20
+    marginTop: 20,
   },
 
   descriptionInput: {
@@ -620,42 +761,41 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     flexWrap: "wrap",
     overflow: "scroll",
-    flexShrink: 1
+    flexShrink: 1,
   },
 
   deliveryTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "black",
     alignSelf: "left",
     marginTop: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   pickUpButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   dropOffButton: {
-    borderColor: 'black',
+    borderColor: "black",
     borderWidth: 1,
     height: 38,
     width: 80,
     borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 0,
     marginBottom: 100,
     left: 87,
-    top: -38
+    top: -38,
   },
+});
 
-})
-
-export default AddDawaScreen
+export default AddDawaScreen;
