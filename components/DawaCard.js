@@ -12,6 +12,7 @@ import MessagesScreen from "../screens/MessagesScreen";
 import { useNavigation } from "@react-navigation/native";
 import ProfileScreen from "../screens/ProfileScreen";
 
+
 const DawaCard = ({ item }) => {
   const navigation = useNavigation();
 
@@ -22,6 +23,7 @@ const DawaCard = ({ item }) => {
   const goToUserProfileScreen = (uidUser) => {
     console.log(uidUser);
     navigation.navigate("Profile");
+    navigation.navigate('DawaNavigator', { screen: 'UserProfile' })
   };
 
   // if free

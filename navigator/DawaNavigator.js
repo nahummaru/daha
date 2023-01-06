@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 const Dawanavigator = ({}) => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="UserProile" component={PostModal} />
+      <Stack.Screen name="UserProfile" component={PostModal(item)} />
     </Stack.Navigator>
   );
 };
