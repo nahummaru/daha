@@ -9,6 +9,7 @@ import MessagesStack from "./MessageStack";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import PostStack from "./PostStack";
 import ProfileStack from "./ProfileStack";
+import FeedStack from "./FeedStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -43,8 +44,8 @@ const TabNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Main"
+        component={FeedStack}
         options={{
           title: "",
           tabBarIcon: ({}) => (

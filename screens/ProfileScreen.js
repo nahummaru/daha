@@ -32,9 +32,7 @@ const ProfileScreen = () => {
   const [image, setImage] = useState(null);
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
 
-  // process profile image
-  const profilePic = userInfo.profilePic == null ? "../assets/blank-avatar.jpg" : userInfo.profilePic
-
+  
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -55,12 +53,21 @@ const ProfileScreen = () => {
     }
   };
 
+  if (userInfo == null) {
+    console.log("it has not been loaded!!!");
+    return <ActivityIndicator size="large" style={{}} />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <TouchableOpacity>
-            <Avatar.Image source={{ uri: profilePic }} size={100} />
+            <Avatar.Image source={{ uri: 
+    userInfo.profilePic == null
+      ? "../assets/blank-avatar.jpg"
+      : userInfo.profilePic
+ }} size={100} />
           </TouchableOpacity>
           <View pointerEvents="none" style={{ marginLeft: 20 }}>
             <Title
