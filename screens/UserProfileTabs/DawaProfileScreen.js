@@ -87,6 +87,7 @@ const DawaProfileScreen = ({ uidUser, navigation }) => {
           userName: userInfo[uidUser].username,
           itemName: itemName,
           listType: listType,
+          uidUser: uidUser,
           price: price,
           postTime: postTime.toDate(),
           itemCategory: itemCategory,

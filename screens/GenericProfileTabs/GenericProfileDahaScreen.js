@@ -73,7 +73,7 @@ const GenericDahaProfileScreen = ({ route, navigation }) => {
 
     onSnapshot(q, (docsSnap) => {
       docsSnap.forEach((doc) => {
-        const { postText, postTime, uidUser } = doc.data();
+        const { postText, postTime, uidUser, needByDate, returnByDate } = doc.data();
         list.push({
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
@@ -81,6 +81,8 @@ const GenericDahaProfileScreen = ({ route, navigation }) => {
           userName: userInfo[uidUser].username,
           postTime: postTime.toDate(),
           post: postText,
+          needByDate: needByDate,
+          returnByDate: returnByDate,
           bookmarked: true,
           profilePic: userInfo[uidUser].profilePic,
         });
