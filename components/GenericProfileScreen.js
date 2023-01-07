@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import { Avatar, Title, Caption, TouchableRipple } from "react-native-paper";
 import { AuthenticatedUserContext } from "../App";
-import ProfileTopTabNavigator from "../navigator/ProfileTopTabNavigator";
-import * as ImagePicker from "expo-image-picker";
+import GenericProfileTopTabNavigator from "../navigator/GenericProfileTopTabNavigator";
 import useState from "react-usestateref";
-import { View, Text } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import Stars from "react-native-stars";
 import { getDoc, doc, collection } from "@firebase/firestore";
 import {
-  Button,
+  ActivityIndicator,
   SafeAreaView,
   Image,
   ScrollView,
@@ -19,65 +17,64 @@ import {
   StyleSheet,
 } from "react-native";
 import { db, auth } from "../config/firebase";
+import LoadingScreen from "./LoadingScreen";
 
 // we should pass in the user and populate the page with their specifc stuff
-const ProfileScreen = ({ item }) => {
-  const navigation = useNavigation();
-  const { user, setUser } = useContext(AuthenticatedUserContext);
-  const { userInfo, setUserInfo } = useContext(UserInfoContext);
+const GenericProfileScreen = ({ route, navigation }) => {
+  console.log("hello");
+  const uidUser = route.params.uidUser;
+  console.log(uidUser);
+  console.log("--------");
+
+  // const { user, setUser } = useContext(AuthenticatedUserContext);
+  // const { userInfo, setUserInfo } = useContext(UserInfoContext);
   const [thisUserInfo, setThisUserInfo] = useState(null);
+  const [profilePic, setProfilePic] = useState(null);
+
   const [image, setImage] = useState(null);
+
+  // process profile image
+
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect: [3, 3],
-      allowsEditing: true,
-    });
-
-    if (!result.canceled) {
-      const file = await ImageManipulator.manipulateAsync(
-        result.assets[0].uri,
-        [{ resize: { width: 200, height: 200 } }],
-        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
-      );
-
-      setImage(file.uri);
-      // setImage(result.assets[0].uri);
-    }
-  };
-
-  const docRef = doc(db, "users", item.uidUser);
 
   // get the user's profile information
   useEffect(() => {
     const getUserInfo = async () => {
       try {
+        console.log("^^^^^^^^^^^^^^^^^^^^^^^^");
+        const docRef = doc(db, "users", uidUser);
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();
         console.log("^^^^^^^^^^^^^^^^^^^^^^^^");
         console.log("^^^^^^^^^^^^^^^^^^^^^^^^");
         console.log(data);
-        console.log(item.uidUser);
+        // process profile image
+        const pic =
+          data.profilePic == null
+            ? "../assets/blank-avatar.jpg"
+            : data.profilePic;
+        setProfilePic(pic);
         setThisUserInfo(data);
       } catch (error) {
         console.log("error", error);
       }
     };
+    console.log("we are at least getting here");
     getUserInfo();
   }, []);
+  console.log(thisUserInfo);
+
+  if (thisUserInfo == null) {
+    console.log("it has not been loaded!!!");
+    return <LoadingScreen></LoadingScreen>;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <TouchableOpacity>
-            <Avatar.Image
-              source={{ uri: thisUserInfo.profilePic }}
-              size={100}
-            />
+            <Avatar.Image source={{ uri: profilePic }} size={100} />
           </TouchableOpacity>
           <View pointerEvents="none" style={{ marginLeft: 20 }}>
             <Title
@@ -114,15 +111,14 @@ const ProfileScreen = ({ item }) => {
           </View>
         </View>
       </View>
-
-      <ProfileTopTabNavigator>
+      <GenericProfileTopTabNavigator uidUser={uidUser}>
         <Text>hello</Text>
-      </ProfileTopTabNavigator>
+      </GenericProfileTopTabNavigator>
     </SafeAreaView>
   );
 };
 
-export default ProfileScreen;
+export default GenericProfileScreen;
 
 const styles = StyleSheet.create({
   container: {

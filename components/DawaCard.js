@@ -11,6 +11,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MessagesScreen from "../screens/MessagesScreen";
 import { useNavigation } from "@react-navigation/native";
 import ProfileScreen from "../screens/ProfileScreen";
+import GenericProfileTopTabNavigator from "../navigator/GenericProfileTopTabNavigator";
+import FeedStack from "../navigator/FeedStack";
 
 const DawaCard = ({ item }) => {
   const navigation = useNavigation();
@@ -19,9 +21,16 @@ const DawaCard = ({ item }) => {
   console.log(item.uidUser);
   starIcon = item.starred ? "star" : "star-outline";
 
-  const goToUserProfileScreen = (uidUser) => {
-    console.log(uidUser);
-    navigation.navigate("Profile");
+  const goToDescription = (uidUser) => {
+    console.log("bruh");
+
+    //console.log(uidUser);
+    //console.log(item);
+    console.log('----------')
+    console.log(item.uidUser)
+    navigation.navigate("DawaDescription", {
+      item: item,  
+    });
   };
 
   // if free
@@ -40,7 +49,7 @@ const DawaCard = ({ item }) => {
         }}
       >
         <View>
-          <TouchableOpacity onPress={goToUserProfileScreen}>
+          <TouchableOpacity onPress={goToDescription}>
             <Image
               style={{
                 alignSelf: "center",
@@ -80,10 +89,13 @@ const DawaCard = ({ item }) => {
     );
   } else {
     const buyPrefix = item.price.buyPrice == null ? "" : "BUY";
-    const buyPrice = item.price.buyPrice + "$";
+    const buyPrice =
+      item.price.buyPrice == null ? "" : item.price.buyPrice + "$";
     const rentPrefix = item.price.rentalPrice == null ? "" : "RENT";
     const rentPrice =
-      item.price.rentalPrice + "$" + "/" + item.price.rentalTimeframe + " ";
+      item.price.rentalPrice == null
+        ? ""
+        : item.price.rentalPrice + "$" + "/" + item.price.rentalTimeframe + " ";
 
     return (
       <View
@@ -98,7 +110,7 @@ const DawaCard = ({ item }) => {
         }}
       >
         <View>
-          <TouchableOpacity onPress={() => console.log(item.uidUser)}>
+          <TouchableOpacity onPress={goToDescription}>
             <Image
               style={{
                 alignSelf: "center",

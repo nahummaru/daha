@@ -121,7 +121,7 @@ const DahaScreen = () => {
     }
 
     const filteredPosts = posts.filter((item) => {
-      console.log("======" + item.post + '-----' + text);
+      console.log("======" + item.post + "-----" + text);
       return item.post.toLowerCase().includes(text.toLowerCase());
     });
     if (filteredPosts.length) {

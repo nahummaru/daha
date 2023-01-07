@@ -22,7 +22,9 @@ import {
 import { AuthenticatedUserContext } from "../../App";
 import DawaCard from "../../components/DawaCard";
 
-const DawaProfileScreen = () => {
+const GenericDawaProfileScreen = ({ route, navigatoin }) => {
+  
+  const { uidUser } = route?.params;
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true);
   const list = [];
@@ -59,7 +61,7 @@ const DawaProfileScreen = () => {
     const userInfo = await fetchUserInfo();
     //console.log(userInfo)
 
-    const q = query(dbRefDawas, where("uidUser", "==", user.uid)); // orderBy("field2", "asc")
+    const q = query(dbRefDawas, where("uidUser", "==", uidUser)); // orderBy("field2", "asc")
 
     onSnapshot(q, (docsSnap) => {
       docsSnap.forEach((doc) => {
@@ -178,7 +180,7 @@ const DawaProfileScreen = () => {
         </TouchableOpacity>
       </View>
     );
-  }
+  } 
 };
 
 const styles = StyleSheet.create({
@@ -194,4 +196,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DawaProfileScreen;
+export default GenericDawaProfileScreen;

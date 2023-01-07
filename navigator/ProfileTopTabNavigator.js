@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import DahaProfileScreen from "../screens/ProfileTabs/DahaProfileScreen";
-import DawaProfileScreen from "../screens/ProfileTabs/DawaProfileScreen";
-import ReviewsProfileScreen from "../screens/ProfileTabs/ReviewsProfileScreen";
+import DahaProfileScreen from "../screens/UserProfileTabs/DahaProfileScreen";
+import DawaProfileScreen from "../screens/UserProfileTabs/DawaProfileScreen";
+import ReviewsProfileScreen from "../screens/UserProfileTabs/ReviewsProfileScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
