@@ -10,11 +10,24 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Timestamp, toDate } from "firebase/firestore";
 import TimeAgo from "@andordavoti/react-native-timeago";
-import { format } from "date-fns";
 import moment from "moment";
+import { NavigationContainer } from "@react-navigation/native";
+import FeedStack from "../navigator/FeedStack";
+import { useNavigation } from "@react-navigation/core";
 
 const DahaCard = ({ item }) => {
   //setSelectedDate(moment(item.needByDate).format('DD-MM-YYYY hh:mm A'));
+  const navigation = useNavigation();
+  console.log('--------- what the fuck')
+  console.log(item)
+
+  const goToProfile = () => {
+    navigation.navigate('UsersProfileScreen', { uidUser: item.uidUser });
+  };
+
+  console.log("------- item");
+  console.log(item.profilePic);
+  console.log(navigation);
 
   return (
     <View
@@ -30,14 +43,22 @@ const DahaCard = ({ item }) => {
     >
       <View style={{ flexDirection: "row", paddingTop: 10 }}>
         <View style={{ flexDirection: "row", width: "80%" }}>
-          <Image
-            style={{ width: 50, borderRadius: 25, height: 50 }}
-            source={{ uri: item.profilePic }}
-          />
+          <TouchableOpacity>
+            <Image
+              style={{ width: 50, borderRadius: 25, height: 50 }}
+              source={{ uri: item.profilePic }}
+            />
+          </TouchableOpacity>
           <View style={{ flexDirection: "column", marginLeft: 10 }}>
-            <Text style={{ fontWeight: "bold", marginBottom: 3, fontSize: 17 }}>
-              {item.userName}
-            </Text>
+            <TouchableOpacity
+              onPress={goToProfile}
+            >
+              <Text
+                style={{ fontWeight: "bold", marginBottom: 3, fontSize: 17 }}
+              >
+                {item.userName}
+              </Text>
+            </TouchableOpacity>
             <TimeAgo dateTo={item.postTime} />
           </View>
         </View>

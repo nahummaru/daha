@@ -28,7 +28,7 @@ const dbRefDahas = collection(db, "dahas");
 const dbRefUsers = collection(db, "users");
 
 // query for all the posts
-const DahaScreen = () => {
+const DahaScreen = ({ navigation }) => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true);
   const list = [];
@@ -89,6 +89,7 @@ const DahaScreen = () => {
           //  FIX THIS: IT IS NOT A GOOD LONG TERM FIX -- WHY IS THERE DUPLICATE DOC.IDs?. THIS COULD MEAN DUPLICATE POSTS BEING RENDER -- HOWEVER COULD ALSO JUST A WARNING WE CAN IGNORE
           // id; doc.id,
           id: list.length,
+          uidUser: uidUser,
           userName: userInfo[uidUser].username,
           postTime: postTime.toDate(),
           post: postText,
@@ -111,8 +112,8 @@ const DahaScreen = () => {
 
   const handleSearch = (text) => {
     // value is what was searched for
-    console.log(text);
-    console.log(posts);
+    // console.log(text);
+    // console.log(posts);
 
     // if nothing was entered, do nothing
     if (!text.length) {
@@ -138,7 +139,7 @@ const DahaScreen = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: "#fff",
       }}
     >
       <FlatList

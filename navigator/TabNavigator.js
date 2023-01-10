@@ -48,6 +48,7 @@ const TabNavigator = () => {
         component={FeedStack}
         options={{
           title: "",
+
           tabBarIcon: ({}) => (
             <Ionicons
               name="home"

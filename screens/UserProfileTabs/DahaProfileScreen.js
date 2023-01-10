@@ -25,8 +25,7 @@ import PostStack from "../../navigator/PostStack";
 const dbRefDahas = collection(db, "dahas");
 const dbRefUsers = collection(db, "users");
 
-const DahaProfileScreen = ({  navigation }) => {
-
+const DahaProfileScreen = ({ navigation }) => {
   const { user, setUser } = useContext(AuthenticatedUserContext);
   const [loading, setLoading] = useState(true);
   const list = [];
@@ -51,6 +50,7 @@ const DahaProfileScreen = ({  navigation }) => {
         : 0
     );
   };
+
   // ORDER POSTS BY MOST RECENT, ADD CATEGORIES TO DAHAS
   const fetchUserInfo = async () => {
     // create a object of userInfo to be accessed when fetching posts
@@ -105,7 +105,7 @@ const DahaProfileScreen = ({  navigation }) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: '#fff'
+          backgroundColor: "#fff",
         }}
       >
         <FlatList
@@ -119,9 +119,7 @@ const DahaProfileScreen = ({  navigation }) => {
         />
       </View>
     );
-  } 
-
-  else {
+  } else {
     return (
       <View
         style={{
@@ -134,6 +132,7 @@ const DahaProfileScreen = ({  navigation }) => {
           style={{
             fontSize: 30,
             textAlign: "center",
+            alignItems: 'center',
             fontWeight: "bold",
             marginTop: 40,
             color: "#a5353a",
@@ -142,15 +141,20 @@ const DahaProfileScreen = ({  navigation }) => {
           {" "}
           You haven't posted any dahas yet!{" "}
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("PostStack");
+          }}
+        >
           <Text style={{ fontWeight: "bold", color: "#fff", fontSize: 18 }}>
             {" "}
-            Post a daha or dawa!!
+            Post a DAHA!
           </Text>
         </TouchableOpacity>
       </View>
     );
-  } 
+  }
 };
 
 const styles = StyleSheet.create({
