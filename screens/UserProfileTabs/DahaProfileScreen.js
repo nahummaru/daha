@@ -105,9 +105,7 @@ const DahaProfileScreen = ({  navigation }) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: "#fff",
-          padding: 15,
-          borderRadius: 5,
+          backgroundColor: '#fff'
         }}
       >
         <FlatList

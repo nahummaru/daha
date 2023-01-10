@@ -21,11 +21,11 @@ const DahaCard = ({ item }) => {
       style={{
         flex: 1,
         alignItems: "left",
-        backgroundColor: "#f8f8f8",
-        padding: 10,
-        marginBottom: 15,
+        margin: 10,
         borderRadius: 25,
         alignContent: "stretch",
+        backgroundColor: "#f8f8f8",
+        padding: 15,
       }}
     >
       <View style={{ flexDirection: "row", paddingTop: 10 }}>

@@ -42,10 +42,10 @@ const DawaCard = ({ item }) => {
           backgroundColor: "#f8f8f8",
           padding: 20,
           borderRadius: "10%",
-          marginTop: 5,
-          marginBottom: 5,
-          marginLeft: 5,
-          marginRight: 5,
+          marginTop: 10,
+          marginBottom: 10,
+          marginLeft: 10,
+          marginRight: 10,
         }}
       >
         <View>
@@ -103,9 +103,9 @@ const DawaCard = ({ item }) => {
           backgroundColor: "#f8f8f8",
           padding: 20,
           borderRadius: "10%",
-          marginTop: 5,
+          marginTop: 10,
           marginBottom: 5,
-          marginLeft: 5,
+          marginLeft: 10,
           marginRight: 5,
         }}
       >

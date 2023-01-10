@@ -138,9 +138,7 @@ const DahaScreen = () => {
     <View
       style={{
         flex: 1,
-        flexDirection: "column",
-        backgroundColor: "#fff",
-        borderRadius: 5,
+        backgroundColor: '#fff'
       }}
     >
       <FlatList
