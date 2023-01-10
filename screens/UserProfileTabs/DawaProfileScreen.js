@@ -131,7 +131,6 @@ const DawaProfileScreen = ({ uidUser, navigation }) => {
 
   if (posts.length > 0) {
     return (
-      //<Container>
       <FlatList
         numColumns={2}
         key={2}
@@ -147,7 +146,6 @@ const DawaProfileScreen = ({ uidUser, navigation }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-      //</Container>
     );
   } else {
     return (
@@ -168,12 +166,17 @@ const DawaProfileScreen = ({ uidUser, navigation }) => {
           }}
         >
           {" "}
-          You haven't posted any dahas yet!{" "}
+          You haven't posted any dawas yet!{" "}
         </Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("PostStack");
+          }}
+        >
           <Text style={{ fontWeight: "bold", color: "#fff", fontSize: 18 }}>
             {" "}
-            Post a daha or dawa!!
+            Post a dawa!
           </Text>
         </TouchableOpacity>
       </View>
