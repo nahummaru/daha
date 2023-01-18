@@ -126,6 +126,7 @@ const DahaProfileScreen = ({ navigation }) => {
           justifyContent: "center",
           alignContent: "center",
           alignSelf: "center",
+          textAlign: 'center',
         }}
       >
         <Text

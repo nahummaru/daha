@@ -176,7 +176,7 @@ const DawaProfileScreen = ({ uidUser, navigation }) => {
         >
           <Text style={{ fontWeight: "bold", color: "#fff", fontSize: 18 }}>
             {" "}
-            Post a dawa!
+            Post a DAWA!
           </Text>
         </TouchableOpacity>
       </View>

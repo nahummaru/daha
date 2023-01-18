@@ -8,7 +8,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import TabNavigator from "./navigator/TabNavigator";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AuthStack from "./navigator/AuthStack";
-import { set } from "@firebase/database";
+import LoadingScreen from "./components/LoadingScreen";
 
 export const AuthenticatedUserContext = createContext({});
 export const UserInfoContext = createContext({});
@@ -52,11 +52,7 @@ function RootNavigator() {
   }, [user]);
 
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <LoadingScreen></LoadingScreen>;
   }
 
   if (user) {

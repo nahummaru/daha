@@ -22,7 +22,7 @@ import ProfileTopTabNavigator from "../navigator/ProfileTopTabNavigator";
 import * as ImagePicker from "expo-image-picker";
 import useState from "react-usestateref";
 import { UserInfoContext } from "../App";
-import { connectStorageEmulator } from "@firebase/storage";
+import LoadingScreen from "../components/LoadingScreen";
 
 // we should pass in the user and populate the page with their specifc stuff
 const ProfileScreen = () => {
@@ -32,7 +32,6 @@ const ProfileScreen = () => {
   const [image, setImage] = useState(null);
   //const [userInfo, setUserInfo, userInfoRef] = useState(null)
 
-  
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -55,7 +54,7 @@ const ProfileScreen = () => {
 
   if (userInfo == null) {
     console.log("it has not been loaded!!!");
-    return <ActivityIndicator size="large" style={{}} />;
+    return <LoadingScreen></LoadingScreen>;
   }
 
   return (
@@ -63,11 +62,15 @@ const ProfileScreen = () => {
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
           <TouchableOpacity>
-            <Avatar.Image source={{ uri: 
-    userInfo.profilePic == null
-      ? "../assets/blank-avatar.jpg"
-      : userInfo.profilePic
- }} size={100} />
+            <Avatar.Image
+              source={{
+                uri:
+                  userInfo.profilePic == null
+                    ? "../assets/blank-avatar.jpg"
+                    : userInfo.profilePic,
+              }}
+              size={100}
+            />
           </TouchableOpacity>
           <View pointerEvents="none" style={{ marginLeft: 20 }}>
             <Title
