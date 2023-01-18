@@ -25,7 +25,7 @@ const HomeScreen = () => {
         console.log(user.uid);
         setUserInfo(data);
       } catch (error) {
-        console.log("error", error);
+        console.log("User Information cannot be loaded", error);
       }
     };
     contextUserInfo();

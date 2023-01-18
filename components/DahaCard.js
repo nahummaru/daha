@@ -42,7 +42,7 @@ const DahaCard = ({ item }) => {
       }}
     >
       <View style={{ flexDirection: "row", paddingTop: 10 }}>
-        <View style={{ flexDirection: "row", width: "80%" }}>
+        <View style={{ flexDirection: "row", width: "80%" , marginTop: -10}}>
           <TouchableOpacity>
             <Image
               style={{ width: 50, borderRadius: 25, height: 50 }}
@@ -59,7 +59,7 @@ const DahaCard = ({ item }) => {
                 {item.userName}
               </Text>
             </TouchableOpacity>
-            <TimeAgo dateTo={item.postTime} />
+            <TimeAgo style={{fontSize: 13}} dateTo={item.postTime} />
           </View>
         </View>
 
